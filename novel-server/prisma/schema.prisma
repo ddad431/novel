@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated/prisma" // 相对于 schema.prisma 文件路径
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Novel {
+  source   String
+  origin   String
+  id       String
+  cover    String
+  name     String
+  author   String
+  desc     String
+  status   String
+  tag      String
+  total    Int
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  // 关系
+  catalog  NovelCatalog? // 一对一
+  chapters NovelChapter[] // 一对多
+
+  // 主键
+  @@id([origin, id])
+}
+
+model NovelCatalog {
+  content  Json // [{cid: '', title: ''}, ...]
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  // 关系
+  novel       Novel  @relation(fields: [novelOrigin, novelId], references: [origin, id])
+  novelOrigin String // 外键 
+  novelId     String // 外键
+
+  // 主键
+  @@id([novelOrigin, novelId])
+}
+
+model NovelChapter {
+  cid      String
+  content  Json // [{line: ''}, ...]
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  // 关系
+  novel       Novel  @relation(fields: [novelOrigin, novelId], references: [origin, id])
+  novelId     String // 外键
+  novelOrigin String // 外键
+
+  // 主键
+  @@id([novelOrigin, novelId, cid])
+}

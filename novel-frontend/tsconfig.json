@@ -1,0 +1,30 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.json",
+    "compilerOptions": {
+        // Fix: Options 'importsNotUsedAsValues' has been removed
+        // See: https://github.com/vuejs/tsconfig/issues/6#issuecomment-1508628229
+        "preserveValueImports": false,
+        "importsNotUsedAsValues": "remove",
+
+        "sourceMap": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        },
+        "lib": [
+            "esnext",
+            "dom"
+        ],
+        "types": [
+            "@dcloudio/types",
+        ],
+    },
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.d.ts",
+        "src/**/*.tsx",
+        "src/**/*.vue"
+    ]
+}

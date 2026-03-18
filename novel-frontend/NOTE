@@ -1,0 +1,47 @@
+
+docker 使用记录
+---
+
+    docker ps # 查看正在运行的容器
+    docker ps -a # 查看所有容器
+
+
+    docker docker build -t novel-frontend . # 构建 novel-frontend 镜像
+    docker run -d -p 8080:80 --name novel-frontend novel-frontend # 启动 novel-fronted 服务
+
+    这里需要注意的是，你每次重新 build 镜像。你之前的服务不会关闭，因为他们是不同的镜像。此时，你就需要停止、删除之前的服务，然后根据新镜像启动服务即可。
+
+        docker stop novel-frontend
+        docker rm novel-frontend
+        docker run -d -p 8080:80 --name novel-frontend novel-frontend
+
+部署
+---
+
+    # 问题 0：Cannot find module @rollup/rollup-linux-x64-musl.
+
+        1.435 Cannot find module @rollup/rollup-linux-x64-musl. npm has a bug related to optional dependencies (https://github.com/npm/cli/issues/4828). Please try `npm i` again after removing both package-lock.json and node_modules directory.
+        1.435 Build failed with errors.
+
+        # 原因：这是因为（推测的）我们在 docker 环境 npm install 时，根据的不仅是 package.json, 还有 package-lock.json。由于本地是在 windows 环境中的，所以 lock 文件锁定的版本是 windows的，而在 docker 这里是在 linux 环境的，这导致她发现没有 windows 版本的包，然后就跳过了，没有自动去安装对应的 linux 版本的包
+
+        # 方案
+            # 方案1：构建时安装对应的 linux 版本包，然后再 npm install。即 npm install @rollup/rollup-linux-x64-musl && npm install
+            # 方案2：在 npm install 不要依赖 lock 文件。即 COPY package.json ./ 。
+
+
+    # 问题 1：docker 编译阶段找不到 pinia 导出
+
+        3.629 x Build failed in 292ms
+        3.629 [commonjs--resolver] Package subpath './dist/pinia.mjs' is not defined by "exports" in /app/node_modules/pinia/package.json
+        3.629 Build failed with errors.
+    
+        # 原因：移除 pinia 包后，发现 @dcloudio/uni-cli-shared @dcloudio/vite-plugin-uni 依赖 pinia。推测可能的原因是 dcloud 的插件用的是 commonjs, 而当前 pinia 3.0 用的 ESM，因此 pinia 没有 commonjs 需要的导出。
+        # 方案：降级 pinia 到 2.0.x
+
+
+    # 问题 2：Conflicting peer dependency 依赖冲突
+
+        # 方案：npm install xx --legacy-peer-deps
+
+    

@@ -1,0 +1,125 @@
+{
+    "home": {
+        "书架": "BOOKSHELF",
+        "历史": "HISTORY"
+    },
+    "dialog": {
+        "取消": "Cancel",
+        "确认": "Confirm"
+    },
+    "book": {
+        "未读": "Unread",
+        "已读至最新章": "Up to date",
+        "已读完": "Finished",
+        "本地": "Local",
+        "完结": "Completed",
+        "连载": "On-going",
+        "chapter_progress": "Ch. {current} / {total}"
+    },
+    "group_panel": {
+        "分组管理": "Group Edit",
+        "新建分组": "New",
+        "移出分组": "Move out",
+        "分组名": "Name"
+    },
+    "bookcover": {
+        "书源": "Source",
+        "标签": "Tag",
+        "简介": "Description",
+        "已在书架": "In Bookshelf",
+        "加入书架": "Add in",
+        "开始阅读": "Reading"
+    },
+    "bookpage": {
+        "平移翻页": "Slide",
+        "覆盖翻页": "Cover",
+        "无动画": "None",
+        "已在书架": "Added",
+        "加入书架": "Add"
+    },
+    "bookgroup": {
+        "全选": "ALL",
+        "取消全选": "NONE",
+        "置顶": "TOP",
+        "取消置顶": "UNTOP",
+        "分组": "GROUP",
+        "取消": "CANCEL",
+        "移除": "DEL",
+        "重命名": "RENAME",
+        "管理": "EDIT",
+        "解散分组": "DISSLOVE",
+        "删除分组": "DELETE",
+        "dialog": {
+            "重命名": "Rename Group",
+            "解散分组": "Disslove Group",
+            "分组书籍将移动到书架": "Group books will be moved to booksehlf!",
+            "删除分组": "Delete Group",
+            "分组与分组内书籍都将被删除！": "Group and group books will be removed!",
+            "删除书籍": "Delete Book",
+            "确认要删除选中书籍吗？": "Selected books will be removed!"
+        }
+    },
+    "bookshelf": {
+        "全选": "ALL",
+        "取消全选": "NONE",
+        "置顶": "TOP",
+        "取消置顶": "UNTOP",
+        "分组": "GROUP",
+        "取消": "CANCEL",
+        "移除": "DEL",
+        "删除书籍": "Delete Book",
+        "确认要删除选中书籍吗？": "Selected books will be removed!",
+        "管理": "EDIT",
+        "去书城": "SEARCH",
+        "导入书籍": "IMPORT",
+        "group_book_count": "1 Book | {n} Books"
+    },
+    "history": {
+        "加入书架": "Add",
+        "已在书架": "Added",
+        "管理": "EDIT",
+        "清空": "CLEAR",
+        "全选": "ALL",
+        "取消全选": "NONE",
+        "取消": "CANCEL",
+        "移除": "DEL",
+        "删除历史": "Delete History",
+        "清空历史": "Clear History",
+        "确认要删除选中历史吗？": "Selected history will be removed！",
+        "确认要清空浏览历史吗？": "All history will be removed！",
+        "今天看过": "Today",
+        "昨天看过": "Yesterday",
+        "最近一周看过": "Last 7 Days",
+        "最近一个月看过": "Last 30 days"
+    },
+    "bookcity": {
+        "搜索小说": "Search Novel",
+        "empty_search_list": "Nothing but tumbleweeds...",
+        "empty_search_result": "No result found.",
+        "fail_search": "Error loading. Tap to retry."
+    },
+    "profile": {
+        "我的": "Profile",
+
+        "通用": "GENERAL",
+        "语言": "Language",
+        "选择语言": "LANGUAGE",
+        "简体中文": "Simplified Chinese",
+        "English": "English",
+        "外观": "Appearance",
+        "选择主题样式": "THEME",
+        "浅色": "Light",
+        "深色": "Dark",
+        "跟随系统": "System",
+        "动画": "Animation",
+
+        "功能": "FEATURES",
+        "书源": "Booksource",
+        "已加载书源": "LOADED",
+        "添加书源": "ADD",
+
+        "关于": "ABOUT",
+        "版本": "Version",
+        "开发者": "Developer"
+    }
+}

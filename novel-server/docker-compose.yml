@@ -1,0 +1,55 @@
+services:
+  mysql:
+    image: mysql:8.4.7
+    container_name: mysql
+    environment:
+      # MYSQL_XX 是这个镜像本身依赖的环境变量（不是乱写的...）
+      # https://hub.docker.com/_/mysql#environment-variables
+      #
+      # NOTE
+      # - MYSQL_USER, MYSQL_PASSWORD 用于非 root 用户
+      # - root 用户直接使用 MYSQL_ROOT_PASSWORD
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      # 本地:容器
+      - "${DB_PORT}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    # mysql 服务健康检查（用于确定数据库是否初始化成功）
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD}"]
+      timeout: 5s
+      retries: 10
+      interval: 5s
+
+  backend:
+    build: .
+    container_name: novel-server
+    environment:
+      # 覆盖 .env 的 DB_HOST 环境变量，容器中的 DB_HOST 不再是 localhost
+      - DB_HOST=mysql
+    ports:
+      - "${PORT}:3000"
+    # 我们需要在 mysql 服务启动后，backend 服务启动时将 Prisma 的 schema 同步到数据库。
+    # 因为这个要等 mysql 启动才能执行，所以我们不能放在 dockerfile 对应的构建阶段里。
+    #
+    # NOTE
+    # - 这里的 backend 服务启动执行命令是在 mysql 启动后立即执行的，这就有可能出现数据库初始化还没完成就执行命令，此时就会失败。
+    #   由于服务启动时命令先执行，所以此时服务就是启动失败了。
+    #   - 方案一：使用 restart: on-failure 指令，在容器启动失败时重启，直到数据库初始化成功，此时重启成功。
+    #   - 方案二：监测 mysql 服务等数据库初始化成功，建立连接时，我们才准备启动 backend 服务
+    #     - 这里我们利用 healthcheck 指令对 mysql 服务进行检查。我们 backend 服务在等待 mysql 的健康检查通过时，才启动服务。
+    command: sh -c "npx prisma db push && npm run dev"
+    depends_on:
+      mysql:
+        condition: service_healthy # 只有等 mysql 健康检查通过，backend 才开始启动
+    
+    # 方案一
+    # command: sh -c "npx prisma db push && npm run dev"
+    # restart: on-failure  # 或者 always
+    # depends_on:
+    #  mysql
+
+volumes:
+  mysql_data:

@@ -1,0 +1,74 @@
+{
+    "pages": [
+        {
+            "path": "pages/home/home",
+            "style": {
+                "navigationStyle": "custom"
+            }
+        },
+        {
+            "path": "pages/bookcity/bookcity",
+            "style": {
+                "navigationStyle": "custom"
+            }
+        },
+        {
+            "path": "pages/profile/profile",
+            "style": {
+                "navigationStyle": "custom"
+            }
+        },
+        {
+            "path": "pages/bookcover/bookcover",
+             "style": {
+                "navigationStyle": "custom"
+            }
+        },
+        {
+            "path": "pages/bookpage/bookpage",
+            "style": {
+                "navigationStyle": "custom"
+            }
+        },
+        {
+            "path": "pages/bookgroup/bookgroup",
+            "style": {
+                "navigationStyle": "custom"
+            }
+        },
+        {
+            "path": "pages/test/test",
+            "style": {
+                "navigationStyle": "custom"
+            }
+        }
+    ],
+    "globalStyle": {
+        "navigationBarTextStyle": "black",
+        "navigationBarTitleText": "",
+        "navigationBarBackgroundColor": "#F8F8F8",
+        "backgroundColor": "#F8F8F8"
+    },
+    // docs: https://uniapp.dcloud.net.cn/collocation/pages.html#tabbar
+    // NOTE
+    // - 自定义 tabbar
+    //  - pages.json 里的 tabBar 配置不能删
+    //  - 在 onLanuch 时，就直接隐藏 tabBar
+    //  - 然后使用自己的 tabBar 即可
+    "tabBar": {
+        "height": "0px",
+        "backgroundColor": "#fff",  // 应用初次加载时隐藏原始 tabbar 背景色（让其与页面背景色相同）
+        "borderStyle": "white",     // 应用初次加载时隐藏原始 tababr 顶部 border（让其与背景色相近）可选值 (black/white) 
+        "list": [
+            {
+                "pagePath": "pages/bookcity/bookcity"
+            },
+            {
+                "pagePath": "pages/home/home"
+            },
+            {
+                "pagePath": "pages/profile/profile"
+            }
+        ]
+    }
+}

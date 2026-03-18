@@ -1,0 +1,22 @@
+{
+    // Allow comment in json
+    "files.associations": {
+        "*.json": "jsonc"
+    },
+
+    // Disable the default formatter
+    "editor.formatOnSave": false,
+
+    // Use Eslint as the default formatter
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+    },
+
+    "eslint.validate": [
+        "javascript",
+        "typescript",
+        "vue",
+    ],
+
+    "unocss.underline": false
+}

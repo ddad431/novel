@@ -1,0 +1,104 @@
+:root {
+    --bookpage-reader-bg: #fff;
+    --bookpage-reader-color: #2c3e50;
+
+    --bookpage-top-bar-bg: #fff;
+    --bookpage-top-bar-color: #2c3e50;
+
+    --bookpage-bottom-bar-bg: #f8f8f8;
+    --bookpage-bottom-bar-color: #000;
+    
+    --bookpage-bottom-preference-bg: #f8f8f8;
+    --bookpage-bottom-preference-color: #000;
+    --bookpage-bottom-preference-item-bg: #fff;
+    --bookpage-bottom-preference-item-active-bg: #f8f8f8;
+    --bookpage-bottom-preference-item-outline-color: #eaeaea;
+
+    --bookpage-bottom-chapterlist-bg: #f8f8f8;
+    --bookpage-bottom-chapterlist-color: #000;
+    --bookpage-bottom-chapterlist-active-color: #444;
+}
+
+.green-reader {
+    --bookpage-reader-bg: #e5ebde;
+    --bookpage-reader-color: #2c3e50;
+
+    --bookpage-top-bar-bg: #e5ebde;
+    --bookpage-top-bar-color: #2c3e50;
+
+    --bookpage-bottom-bar-bg: #dce5d3;
+    --bookpage-bottom-bar-color: #2c3e50;
+
+    --bookpage-bottom-preference-bg: #dce5d3;
+    --bookpage-bottom-preference-color: #2c3e50;
+    --bookpage-bottom-preference-item-bg: #e5ebde;
+    --bookpage-bottom-preference-item-active-bg: #f5f7f3;
+    --bookpage-bottom-preference-item-outline-color: #f8f8f8;
+
+    --bookpage-bottom-chapterlist-bg: #dce5d3;
+    --bookpage-bottom-chapterlist-color: #2c3e50;
+    --bookpage-bottom-chapterlist-active-color: #878f7f;
+}
+
+.brown-reader {
+    --bookpage-reader-bg: #efece5;
+    --bookpage-reader-color: #2c3e50;
+
+    --bookpage-top-bar-bg: #efece5;
+    --bookpage-top-bar-color: #2c3e50;
+
+    --bookpage-bottom-bar-bg: #eae6dc;
+    --bookpage-bottom-bar-color: #171716;
+
+    --bookpage-bottom-preference-bg: #eae6dc;
+    --bookpage-bottom-preference-color: #171716;
+    --bookpage-bottom-preference-item-bg: #efece5;
+    --bookpage-bottom-preference-item-active-bg: #f8f7f5;
+    --bookpage-bottom-preference-item-outline-color: #f8f8f8;
+
+    --bookpage-bottom-chapterlist-bg: #eae6dc;
+    --bookpage-bottom-chapterlist-color: #171716;
+    --bookpage-bottom-chapterlist-active-color: #91876f;
+}
+
+.blue-reader {
+    --bookpage-reader-bg: #e3e7eb;
+    --bookpage-reader-color: #1e2d3d;
+
+    --bookpage-top-bar-bg: #e3e7eb;
+    --bookpage-top-bar-color: #1e2d3d;
+
+    --bookpage-bottom-bar-bg: #d7dde3;
+    --bookpage-bottom-bar-color: #161616;
+
+    --bookpage-bottom-preference-bg: #d7dde3;
+    --bookpage-bottom-preference-color: #161616;
+    --bookpage-bottom-preference-item-bg: #e3e7eb;
+    --bookpage-bottom-preference-item-active-bg: #f5f6f7;
+    --bookpage-bottom-preference-item-outline-color: #f8f8f8;
+
+    --bookpage-bottom-chapterlist-bg: #d7dde3;
+    --bookpage-bottom-chapterlist-color: #161616;
+    --bookpage-bottom-chapterlist-active-color: #7b8ea1;
+}
+
+.dark-reader {
+    --bookpage-reader-bg: #121212;
+    --bookpage-reader-color: #d2d2d2;
+
+    --bookpage-top-bar-bg: #121212;
+    --bookpage-top-bar-color: #d2d2d2;
+
+    --bookpage-bottom-bar-bg: #282828;
+    --bookpage-bottom-bar-color: #f4f4f4;
+
+    --bookpage-bottom-preference-bg: #282828;
+    --bookpage-bottom-preference-color: #f4f4f4;
+    --bookpage-bottom-preference-item-bg: #1e1e1e;
+    --bookpage-bottom-preference-item-active-bg: #3f3f3f;
+    --bookpage-bottom-preference-item-outline-color: #3d3d3d;
+
+    --bookpage-bottom-chapterlist-bg: #282828;
+    --bookpage-bottom-chapterlist-color: #f4f4f4;
+    --bookpage-bottom-chapterlist-active-color: #dadada;
+}

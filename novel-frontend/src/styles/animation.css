@@ -1,0 +1,50 @@
+.no-animation, 
+.no-animation * {
+    transition: none !important;
+    animation: none !important;
+}
+
+@keyframes slide-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slide-out {
+    from { transform: translateX(0);}
+    to { transform: translateX(100vw);}
+}
+
+@keyframes drop-out {
+    0% {
+        transform: translateY(0) scale(0.7);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100%) scale(0);
+        opacity: 0;
+    }
+}
+
+::view-transition-old(root) { animation: none; }
+::view-transition-new(root) { animation: 300ms ease-out both slide-in; }
+
+.is-back::view-transition-old(root) {
+    animation: 200ms ease both slide-out;
+    z-index: 2;
+}
+.is-back::view-transition-new(root) {
+    animation: none;
+    z-index: 1;
+}
+
+.is-back2::view-transition-old(root) {
+    border-radius: 12px;
+    overflow: hidden;
+    transform-origin: bottom center;    /* 变换点放到底部 */
+    animation: 300ms ease-out both drop-out;
+    z-index: 2;
+}
+.is-back2::view-transition-new(root) {
+    animation: none;
+    z-index: 1;
+}

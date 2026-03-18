@@ -1,0 +1,88 @@
+/**
+ * vue transition 组件
+ * - .x-enter/leave (from, to, active)
+ * - 始态、终态、过渡效果
+ *
+ * 已完成
+ * - fade   (opictiy,   淡入淡出 )
+ * - zoom   (sacle,     缩放）
+ * - slide  (transform, 底部滑入、顶部滑入、 TODO)
+ */
+
+/* 淡入淡出 */
+.fade-enter-from {
+    opacity: 0;
+}
+.fade-enter-to {
+    opacity: 1;
+}
+.fade-leave-from {
+    opacity: 1;
+}
+.fade-leave-to {
+    opacity: 0;
+}
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .3s ease-in;
+}
+
+/* 缩放 */
+.zoom-enter-from {
+    scale: 0;
+    opacity: 0;
+}
+.zoom-enter-to {
+    scale: 1;
+    opacity: 1;
+}
+.zoom-leave-from {
+    scale: 1;
+    opacity: 1;
+}
+.zoom-leave-to {
+    scale: 0;
+    opacity: 0;
+}
+.zoom-enter-active,
+.zoom-from-active {
+    transition: scale .3s, opacity .3s;
+}
+
+ /* 底部滑入 */
+.slide-bottom-enter-from {
+    transform: translateY(100%);
+}
+.slide-bottom-enter-to {
+    transform: translateY(0);
+}
+.slide-bottom-leave-from {
+    transform: translateY(0);
+}
+.slide-bottom-leave-to {
+    transform: translateY(100%);
+}
+.slide-bottom-enter-active {
+    transition: transform .4s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.slide-bottom-leave-active {
+    transition: transform .3s cubic-bezier(0,1.23,1,.98);
+}
+
+/* 顶部滑入 */
+.slide-top-enter-from {
+    transform: translateY(-100%);
+}
+.slide-top-enter-to {
+    transform: translateY(0);
+}
+.slide-top-leave-from {
+    transform: translateY(0);
+}
+.slide-top-leave-to {
+    transform: translateY(-100%);
+}
+.slide-top-enter-active,
+.slide-top-leave-active {
+    transition: transform .3s ease;
+}

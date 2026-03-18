@@ -1,0 +1,10 @@
+# other
+uploads
+test.http
+
+# basic
+node_modules
+dist
+
+# prisma
+prisma/generated

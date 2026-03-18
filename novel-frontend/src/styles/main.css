@@ -1,0 +1,200 @@
+:root {
+    --tabbar-bg: #fff;
+    --tabbar-color: #9ca3af;
+    --tabbar-active-color: #000;
+
+    --home-bg: #fff;
+    --home-header-bg: #fff;
+    --home-header-color: #000;
+    --home-body-bg: #fff;
+
+    --history-bg: #fff;
+    --history-info-color-1: #333;
+    --history-info-color-2: #444;
+    --history-add-bg: #f5f5f5;
+    --history-add-color: #606060;
+    --history-add-active-color: #aaa;
+    --history-select-color: #a79b9b;
+
+    --bookcity-bg: #fff;
+    --bookcity-search-bg: #f5f5f5;
+    --bookcity-search-color: #333;
+    --bookcity-search-icon-color: #9ca3af;
+    --bookcity-search-placeholder-color: #878380;
+    --bookcity-search-history-bg-color: #f5f5f5;
+    --bookcity-search-history-item-bg: #eee;
+    --bookcity-search-history-item-color: #888;
+    --bookcity-list-bg: #fff;
+    --bookcity-list-color: #333;
+    --bookcity-placeholder-color: #aaa;
+    
+    --bookshelf-cover-status-bg: rgba(255, 255, 255, .4);
+    --bookshelf-cover-status-color: rgba(0, 0, 0, .4);
+    --bookshelf-cover-select-color: rgba(255, 255, 255, .9);
+    --bookshelf-group-bg-color: #f5f5f5;
+    --bookshelf-info-color-1: #333;
+    --bookshelf-info-color-2: #444;
+    --bookshelf-v-cover-bg: transparent;
+    --bookshelf-v-cover-border-color: #d1d5db;
+    --bookshelf-v-cover-center-color: #9ca3af;
+    --bookshelf-v-cover-active-bg: #e5e7eb;
+    --bookshelf-v-cover-active-border-color: #9ca3af;
+    --bookshelf-v-cover-active-center-color: #6b7280;
+
+    --bookgroup-bg: #fff;
+    --bookgroup-info-color-1: #333;
+    --bookgroup-info-color-2: #444;
+    --bookgroup-cover-status-bg: rgba(255, 255, 255, .4);
+    --bookgroup-cover-status-color: rgba(0, 0, 0, .4);
+    --bookgroup-cover-select-color: rgba(255, 255, 255, .9);
+
+    --bookcover-bg: transparent;;
+    --bookcover-header-color: #fff; 
+    --bookcover-detail-bg: #fff;
+    --bookcover-detail-lable-bg: #666;
+    --bookcover-detail-title-color: #333;
+    --bookcover-detail-content-color: #666;
+    --bookcover-action-bg: #fff;
+    --bookcover-action-add-color: #333;
+    --bookcover-action-added-color: #777;
+    --bookcover-action-reading-bg: #f5f5f5;
+    --bookcover-action-reading-color: rgba(0, 0, 0, .6);
+
+    --profile-bg: #f2f2f3;
+    --profile-color: #353535;
+    --profile-setting-group-title-color: #8c8b8f;
+    --profile-setting-group-bg: #fff;
+    --profile-setting-group-color: #353535;
+    --profile-setting-seperate-color: #eee;
+    --profile-setting-value-color: #8b8a8f;
+
+        /* eaeaea(f3f3f3), _, 808080, #666 */
+    --action-panel-bg: #f3f3f2; /* #f3f3f3 */
+    --action-panel-icon-color: #333;
+    --action-panel-icon-disable-color: #808080;
+    --action-panel-text-color: #666;
+    --action-panel-delete-color: darkred;
+
+    /* #f5f5f5, 555, #0088ff 555  */
+    --group-panel-bg: #f5f5f5;
+    --group-panel-title-color: #555; 
+    --group-panel-action-color: #0088ff;
+    --group-panel-list-color: #555; 
+
+    /* #f5f5f5, darkred f0f0f0  #555 darkred */
+    --delete-dialog-bg: #f5f5f5;
+    --delete-dialog-title-color: darkred;
+    --delete-dialog-content-color: #555;
+    --delete-dialog-action-bg: #f0f0f0;
+    --delete-dialog-action-color: #444;
+    --delete-dialog-action-confirm-color: darkred;
+
+    /* f5f5f5 #0088ff f0f0f0 */
+    --input-dialog-bg: #f5f5f5;
+    --input-dialog-title-color: #0088ff;
+    --input-input-color: #333;
+    --input-input-placeholder-color: #555;
+    --input-dialog-action-bg: #f0f0f0;
+    --input-dialog-action-color: #555;
+    --input-dialog-action-active-confirm-color: #333;
+}
+
+.dark-mode {
+    --tabbar-bg: #121212;
+    --tabbar-color: #a9aaac;
+    --tabbar-active-color: #eee;
+
+    --home-bg: #121212;
+    --home-header-bg: #121212;
+    --home-header-color: #e0e0e0;
+    --home-body-bg: #121212;
+
+    --bookcity-bg: #121212;
+    --bookcity-search-bg: #222;
+    --bookcity-search-color: #f4f4f4;
+    --bookcity-search-icon-color: #9ca3af;
+    --bookcity-search-placeholder-color: #878380;
+    --bookcity-search-history-bg-color: #222;
+    --bookcity-search-history-item-bg: #333;
+    --bookcity-search-history-item-color: #f4f4f4;
+    --bookcity-list-bg: #121212;
+    --bookcity-list-color: #bbb;
+    --bookcity-placeholder-color: rgba(255, 255, 255, .3);
+
+    --history-bg: #121212;
+    --history-info-color-1: #bbb;
+    --history-info-color-2: #aaa;
+    --history-add-bg: #1d1d1d;
+    --history-add-color: #aaa;
+    --history-add-active-color: #606060;
+    --history-select-color: rgba(255, 255, 255, .4);
+
+    --bookshelf-cover-status-bg: rgba(255, 255, 255, .6);
+    --bookshelf-cover-status-color: rgba(0, 0, 0, .3);
+    --bookshelf-cover-select-color: rgba(255, 255, 255, .4);
+    --bookshelf-group-bg-color: #222;
+    --bookshelf-info-color-1: #bbb;
+    --bookshelf-info-color-2: #aaa;
+    --bookshelf-v-cover-bg: transparent;
+    --bookshelf-v-cover-border-color: #333336;
+    --bookshelf-v-cover-center-color: #52525b;
+    --bookshelf-v-cover-active-bg: #1e2128;
+    --bookshelf-v-cover-active-border-color: #4b5563;
+    --bookshelf-v-cover-active-center-color: #788ead;
+
+    --bookgroup-bg: #121212;
+    --bookgroup-header-color: #e0e0e0;
+    --bookgroup-info-color-1: #bbb;
+    --bookgroup-info-color-2: #aaa;
+    --bookgroup-cover-status-bg: rgba(255, 255, 255, .6);
+    --bookgroup-cover-status-color: rgba(0, 0, 0, .3);
+    --bookgroup-cover-select-color: rgba(255, 255, 255, .4);
+
+    --bookcover-bg: transparent;
+    --bookcover-header-color: #eee; 
+    --bookcover-detail-bg: #181818;
+    --bookcover-detail-lable-bg: #aaa;
+    --bookcover-detail-title-color: #bbb;
+    --bookcover-detail-content-color: #aaa;
+    --bookcover-action-bg: #181818;
+    --bookcover-action-add-color: #bbb;
+    --bookcover-action-added-color: #666;
+    --bookcover-action-reading-bg: #202020;
+    --bookcover-action-reading-color: #bbb;
+
+    --profile-bg: #121212;
+    --profile-color: #f4f4f4;
+    --profile-setting-group-title-color: #8b8a8f;
+    --profile-setting-group-bg: #252628;
+    --profile-setting-group-color: #f4f4f4;
+    --profile-setting-seperate-color: #333436;
+    --profile-setting-value-color: #8b8a8f;
+
+    --action-panel-bg: #252628;
+    --action-panel-icon-color: #eaeaea;
+    --action-panel-icon-disable-color: #666;
+    --action-panel-text-color: #999;
+    --action-panel-delete-color: #7f3131;
+
+    --group-panel-bg: #161816;
+    --group-panel-title-color: #aaa; 
+    --group-panel-action-color: #0088ff;
+    --group-panel-list-color: #aaa; 
+
+    /* #f5f5f5, darkred f0f0f0  #555 darkred */
+    --delete-dialog-bg: #141414;
+    --delete-dialog-title-color: #7f3131;
+    --delete-dialog-content-color: #888;
+    --delete-dialog-action-bg: #161616;
+    --delete-dialog-action-color: #555;
+    --delete-dialog-action-confirm-color: #7f3131;
+
+    /* f5f5f5 #0088ff f0f0f0 */
+    --input-dialog-bg: #141414;
+    --input-dialog-title-color: #0088ff;
+    --input-input-color: #aaa;
+    --input-input-placeholder-color: #555;
+    --input-dialog-action-bg: #161616;
+    --input-dialog-action-color: #555;
+    --input-dialog-action-active-confirm-color: #999;
+}
