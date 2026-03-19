@@ -134,10 +134,10 @@
                         <view class="">{{ $t('group_panel.新建分组') }}</view>
                     </view>
                 </view>
-                <view class="groups color-[var(--group-panel-list-color)] flex flex-col gap-[8px] items-center">
+                <view class="groups color-[var(--group-panel-list-color)] flex flex-col gap-[8px]">
                     <view
                         v-for="(value, index) in groups.map(v => v.name)"
-                        class="group h-[24px] flex gap-[8px]"
+                        class="group h-[24px] flex gap-[8px] items-center"
                         :key="index"
                         @click="handleGroupMgrPanelMoveToGroup(value)"
                     >

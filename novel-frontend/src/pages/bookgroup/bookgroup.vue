@@ -108,7 +108,7 @@
                         <!-- NOTE 这里的分组列表不显示当前分组（毕竟没有移动到自己分组这件事） -->
                         <view
                             v-for="(value, index) in groups.map(v => v.name).filter(v => v !== bookgroup?.name)"
-                            class="group h-[24px] flex gap-[8px]"
+                            class="group h-[24px] flex gap-[8px] items-center"
                             :key="index"
                             @click="handleGroupMgrChangeBookGroup(value)"
                         >
