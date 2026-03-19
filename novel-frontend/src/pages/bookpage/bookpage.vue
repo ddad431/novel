@@ -220,7 +220,7 @@ onLoad(async (options) => {
 
     // NOTE 更新历史记录
     book.value.visit = Date.now();
-    BookHistoryStorage.updateBookHistory([book.value]);
+    BookHistoryStorage.addBookHistory(book.value);
     bookhistorys.value = BookHistoryStorage.getBookHistory();
 
     initReaderPreference();
