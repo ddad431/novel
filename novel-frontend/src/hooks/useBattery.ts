@@ -14,6 +14,8 @@ export function useBattery() {
         isCharging:false,
     });
 
+    const isSupportBatteryAPI = navigator.getBattery ? true : false;
+
     const batteryStyle = computed(() => {
         if (batteryInfo.value.level < 15) {
             return 'battery-1';
@@ -39,20 +41,23 @@ export function useBattery() {
     });
 
     // TODO firefox 不支持该 API，还有当前的实现只是 H5 的
-    navigator.getBattery().then((battery: any) => {
-        batteryInfo.value.level = battery.level * 100;
-        batteryInfo.value.isCharging = battery.charging;
-
-        battery.addEventListener("levelchange", () => {
+    if (isSupportBatteryAPI) {
+        navigator.getBattery().then((battery: any) => {
             batteryInfo.value.level = battery.level * 100;
-        });
-
-        battery.addEventListener("chargingchange", () => {
             batteryInfo.value.isCharging = battery.charging;
+
+            battery.addEventListener("levelchange", () => {
+                batteryInfo.value.level = battery.level * 100;
+            });
+
+            battery.addEventListener("chargingchange", () => {
+                batteryInfo.value.isCharging = battery.charging;
+            });
         });
-    });
+    }
 
     return {
+        isSupportBatteryAPI,
         batteryInfo,
         batteryStyle,
     }

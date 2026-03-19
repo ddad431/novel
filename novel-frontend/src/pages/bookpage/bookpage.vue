@@ -61,7 +61,7 @@
                             <view>{{ state === 'success' ? chapterProgress(key) : ' ' }}</view>
                         </view>
                         <view class="right flex items-center gap-1.5">
-                            <view class="battery flex items-center">
+                            <view v-if="isSupportBatteryAPI" class="battery flex items-center">
                                 <view :class="batteryStyle" class="scale-120"></view>
                                 <view v-if="batteryInfo.isCharging" class="battery-charging scale-70"></view>
                             </view>
@@ -112,7 +112,7 @@ const book = ref<Book>({} as Book);
 const state = ref<'loading' | 'success' | 'fail'>('loading');
 
 const { curTime } = useTime();
-const { batteryInfo, batteryStyle } = useBattery();
+const { batteryInfo, batteryStyle, isSupportBatteryAPI } = useBattery();
 const { READER_LAYOUT, curFontSize, initFontSize, changeFontSize, titleLineStyles, titleLastLineStyles, paragraphLineStyles, paragraphLastLineStyles, paragraphCompressLineStyles } = useReaderPageConfig();
 const { pages, curPageIndex, curChapterIndex, catalog, gotoChapter, isFirstChapterFirstPage, isLastChapterLastPage, initNovelCatalog, initNovelChapters, resetNovelChapters, goPrevPage, goNextPage, pageProgress, chapterProgress } = useReader(book);
 const { actionBarVisible, toggleActionBar } = useActionBar();
