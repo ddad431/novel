@@ -27,6 +27,7 @@ export function usePageTurning(book: Ref<Book>) {
     const offsetX = ref<number>(0);
     const offsetY = ref<number>(0);
     const isDragging = ref<boolean>(false); // 拖拽动画不需要 transition，用一个全局变量来区分
+    let lastMoveTime = 0;
     
     const baseStyles = computed(() => {
         const base = { 'transform': `translateX(${offsetX.value}px)` }
@@ -118,6 +119,9 @@ export function usePageTurning(book: Ref<Book>) {
         const _offsetX = moveX - startX.value;
         const _offsetY = moveY - startY.value;
 
+        // NOTE 计算末尾划动速度而不是平均划动速度（有可能用户的手势是先慢后快这种）
+        lastMoveTime = Date.now();
+
         // NOTE 如果是垂直位移大于竖屏位移，则属于上下滑动，对应的不要触发翻页的拖动效果。
         if (Math.abs(_offsetY) > Math.abs(_offsetX)) {
             offsetX.value = 0;
@@ -137,17 +141,17 @@ export function usePageTurning(book: Ref<Book>) {
     }
 
     function onTouchEnd() {
-        if (offsetX.value > uni.getWindowInfo().screenWidth * (1 / 2)) {
-            offsetX.value = 0;  // NOTE: 先置 0 后加载页面
-            isDragging.value = false;
-            goPrevPage();
-            return;
-        }
+        const duration = Date.now() - lastMoveTime;
+        const finalVelocity = Math.abs(offsetX.value) / duration;
+        const isQuickSwipeGesture = Math.abs(offsetX.value) > 10 && finalVelocity > 0.8;
+        const isDragGesture = Math.abs(offsetX.value) > uni.getWindowInfo().screenWidth * 0.5;
+        const gestureDirection = offsetX.value >= 0 ? 'right' : 'left';
+        const updatePage = gestureDirection === 'right' ? goPrevPage : goNextPage;
 
-        if (-1 * offsetX.value > uni.getWindowInfo().screenWidth * (1 / 2)) {
+        if (isQuickSwipeGesture || isDragGesture) {
             offsetX.value = 0;
             isDragging.value = false;
-            goNextPage();
+            updatePage();
             return;
         }
 
@@ -157,18 +161,7 @@ export function usePageTurning(book: Ref<Book>) {
     }
 
     function onTouchCancel() {
-        offsetX.value = 0; // NOTE: 先置 0 后加载页面
-        isDragging.value = false;
-       
-        if (offsetX.value >+ uni.getWindowInfo().screenWidth * (1 / 2)) {
-            goPrevPage();
-            return;
-        }
-
-        if (-1 * offsetX.value > uni.getWindowInfo().screenWidth * (1 / 2)) {
-            goNextPage();
-            return;
-        }
+        onTouchEnd();
     }
 
     return {
