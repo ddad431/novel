@@ -23,7 +23,9 @@ export function usePageTurning(book: Ref<Book>) {
     const pageTurningKinds = ['平移翻页', '覆盖翻页', '无动画'];
     const curPageTurning = ref<'无动画' | '平移翻页' | '覆盖翻页'>('覆盖翻页');
     const startX = ref<number>(0);
+    const startY = ref<number>(0);
     const offsetX = ref<number>(0);
+    const offsetY = ref<number>(0);
     const isDragging = ref<boolean>(false); // 拖拽动画不需要 transition，用一个全局变量来区分
     
     const baseStyles = computed(() => {
@@ -106,23 +108,32 @@ export function usePageTurning(book: Ref<Book>) {
     function onTouchStart(event: TouchEvent) {
         isDragging.value = true;
         startX.value = event.touches[0].clientX;
-        
+        startY.value = event.touches[0].clientY;
     }
 
     function onTouchMove(event: TouchEvent) {
-        const moveX  = event.touches[0].clientX; 
+        const moveX  = event.touches[0].clientX;
+        const moveY = event.touches[0].clientY;
 
-        const offset = moveX - startX.value;
-        if (offset > 0 && isFirstChapterFirstPage.value) {
+        const _offsetX = moveX - startX.value;
+        const _offsetY = moveY - startY.value;
+
+        // NOTE 如果是垂直位移大于竖屏位移，则属于上下滑动，对应的不要触发翻页的拖动效果。
+        if (Math.abs(_offsetY) > Math.abs(_offsetX)) {
+            offsetX.value = 0;
+            return;
+        }
+
+        if (_offsetX > 0 && isFirstChapterFirstPage.value) {
             uni.showToast({ title: '已经是第一页了', icon: 'error', mask: false });
             return;
         }
-        if (offset < 0 && isLastChapterLastPage.value) {
+        if (_offsetX < 0 && isLastChapterLastPage.value) {
             uni.showToast({ title: '已经是最后一页了', icon: 'error', mask: false });
             return;
         }
 
-        offsetX.value = offset;
+        offsetX.value = _offsetX;
     }
 
     function onTouchEnd() {
