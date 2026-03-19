@@ -14,7 +14,11 @@
      </Transition>
 
     <self-overlay v-model="preferencePanelVisible" :mask="false" position="bottom" offsetBottom="72px">
-        <view class="bg-[var(--bookpage-bottom-preference-bg)] color-[var(--bookpage-bottom-preference-color)] h-[216px] w-full box-border p-[24px] p-b-0 rounded-t-[16px] flex flex-col justify-between items-center gap-[24px]">
+        <view 
+            class="bg-[var(--bookpage-bottom-preference-bg)] color-[var(--bookpage-bottom-preference-color)] h-[216px] w-full box-border p-[24px] p-b-0 rounded-t-[16px] flex flex-col justify-between items-center gap-[24px]"
+            @touchmove.prevent
+        >
+		
             <!-- <view class="preference-font h-[42px] flex items-center w-full rounded-[8px]" style="background: #fff;"></view> -->
             <SelfSlider 
                 class="preference-font"
