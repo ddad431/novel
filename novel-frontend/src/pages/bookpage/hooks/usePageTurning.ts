@@ -144,7 +144,7 @@ export function usePageTurning(book: Ref<Book>) {
         const duration = Date.now() - startMoveTime;
         const finalVelocity = Math.abs(offsetX.value) / duration;
         const isQuickSwipeGesture = Math.abs(offsetX.value) > 10 && finalVelocity > 0.5;
-        const isDragGesture = Math.abs(offsetX.value) > screenWidth * 0.5;
+        const isDragGesture = Math.abs(offsetX.value) > screenWidth * 0.25;
         const gestureDirection = offsetX.value >= 0 ? 'right' : 'left';
         const updatePage = gestureDirection === 'right' ? goPrevPage : goNextPage;
 
