@@ -62,8 +62,8 @@
     </self-overlay>
 
     <self-overlay v-model="chapterlistPanelVisible" position="bottom" offsetBottom="72px">
-        <view class="book-info bg-[var(--bookpage-bottom-chapterlist-bg)] color-[var(--bookpage-bottom-chapterlist-color)]  h-[65vh] w-full box-border p-[24px] p-b-[12px] rounded-t-[16px] flex flex-col gap-[24px]">
-            <view class="book-meta h-[90px] flex gap-[12px]">
+        <view class="book-info bg-[var(--bookpage-bottom-chapterlist-bg)] color-[var(--bookpage-bottom-chapterlist-color)]  h-[calc(90px+300px+24px+16px)] w-full box-border p-[24px] p-b-[0] rounded-t-[16px]">
+            <view class="book-meta h-[90px] m-b-[16px] flex gap-[12px]">
                 <view class="cover h-[90px] w-[70px] rounded-[4px]" :style="bookCoverStyles(props.book)"></view>
                 <view class="info flex-grow flex flex-col justify-between" >
                     <view class="w-full h-[60px]">
@@ -79,7 +79,7 @@
                 </view>
             </view>
 
-            <view class="book-chapter flex-grow relative">
+            <view class="book-chapter flex-grow relative h-[300px]">
                 <self-virtuallist :data="props.catalog?.map((v, index) => ({...v, index}))" :height="300" :itemHeight="30" :curIndex="props.curChapterIndex">
                     <template #default="{ data }">
                         <div class="h-[30px] truncate text-[14px]" :style="data.index === props.curChapterIndex ? 'color: var(--bookpage-bottom-chapterlist-active-color);' : ''" @click="handleCatalogClick(data.index + 1)"> {{ data.title }}</div>
