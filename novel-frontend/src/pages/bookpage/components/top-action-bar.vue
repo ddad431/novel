@@ -4,7 +4,7 @@
             nav
             - nav 图标浪费了部分左侧空间，使得视觉上 nav 图标距离边界过远。（借助相对定位向左调整）
         -->
-        <view class="icon-nav scale-80 relative right-[8px]" @click="handleNavBack"/>
+        <view class="icon-nav relative right-[8px]" @click="handleNavBack"/>
 
         <!-- actions -->
         <view class="flex items-center gap-[16px]">
