@@ -35,7 +35,10 @@
         "覆盖翻页": "Cover",
         "无动画": "None",
         "已在书架": "Added",
-        "加入书架": "Add"
+        "加入书架": "Add in",
+        "toast": {
+            "添加成功": "Added successfully"
+        }
     },
     "bookgroup": {
         "全选": "ALL",

@@ -8,8 +8,8 @@
 
         <!-- actions -->
         <view class="flex items-center gap-[16px]">
-            <view v-if="props.book.isadded" class="text-[15px] relative bottom-[1px] color-[gray]">已在书架</view>
-            <view v-else class="text-[15px] relative bottom-[1px]" @click="handleAddToBookshelf">加入书架</view>
+            <view v-if="props.book.isadded" class="text-[15px] relative bottom-[1px] color-[gray]">{{ $t('bookpage.已在书架')}}</view>
+            <view v-else class="text-[15px] relative bottom-[1px]" @click="handleAddToBookshelf">{{ $t('bookpage.加入书架') }}</view>
             <view class="icon-dots" @click="handleGotoBookcover"></view>
         </view> 
     </view>
@@ -19,12 +19,14 @@
 import { useBookHisotry, useBookshelf } from '@/pages/home/hooks';
 import { Book, BookShelfStore } from '@/store';
 import { BookHistoryStorage } from '@/store/history';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
     hideActionBar: any, // NOTE 返回主页执行的副作用
     book: Book,
 }>();
 
+const { t } = useI18n();
 const { bookshelf } = useBookshelf();
 const { bookhistorys } = useBookHisotry();
 
@@ -72,9 +74,11 @@ function handleAddToBookshelf() {
     props.book.isadded = true;
     BookShelfStore.addBook(props.book);
     bookshelf.value = BookShelfStore.getBookshelf();
-
+    
     BookHistoryStorage.addBookHistory(props.book);
     bookhistorys.value = BookHistoryStorage.getBookHistory();
+
+    uni.showToast({ icon: 'none', title: t('bookpage.toast.添加成功') });
 }
 </script>
 
