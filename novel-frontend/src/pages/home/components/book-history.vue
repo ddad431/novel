@@ -1,6 +1,7 @@
 <template>
-    <view class="book-history bg-[var(--history-bg)] flex flex-col gap-[16px]">
-        <template v-for="(book, index) in bookhistorys.filter(v => v.visit - Date.now() < 30 * 24 * 60 * 60 * 1000)" :key="index" >
+    <view class="book-history h-full bg-[var(--history-bg)] flex flex-col gap-[16px]">
+        <view v-if="showingHistorys.length === 0" class="h-full color-[var(--history-placeholder-color)] flex items-center justify-center relative bottom-[32px] tracking-widest">{{ $t('history.empty_history') }}</view>
+        <template v-else v-for="(book, index) in showingHistorys" :key="index" >
             <view class="w-full h-[75px] flex" @click="handleClickHistory(book)" @longpress="handleLongPress">
                 <!-- 选择 -->
                 <view 
@@ -111,6 +112,7 @@ const isEditing = defineModel<boolean>('editing');
 const { bookhistorys, removeBookHistory, clearBookHistory, isSelectAllHistory, seletedHistoryCounts, toggleSelectAllHistory, clearSelectState, } = useBookHisotry();
 const { bookshelf } = useBookshelf();
 
+const showingHistorys = computed(() => bookhistorys.value.filter(v => v.visit - Date.now() < 30 * 24 * 60 * 60 * 1000));
 const historyActionPanelVisible = defineModel<boolean>({ default: false });
 
 const confirmDialogVisible = ref<boolean>(false);

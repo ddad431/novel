@@ -15,6 +15,7 @@
     --history-add-color: #606060;
     --history-add-active-color: #aaa;
     --history-select-color: #a79b9b;
+    --history-placeholder-color: #aaa;
 
     --bookcity-bg: #fff;
     --bookcity-search-bg: #f5f5f5;
@@ -128,6 +129,7 @@
     --history-add-color: #aaa;
     --history-add-active-color: #606060;
     --history-select-color: rgba(255, 255, 255, .4);
+    --history-placeholder-color: rgba(255, 255, 255, .3);
 
     --bookshelf-cover-status-bg: rgba(255, 255, 255, .6);
     --bookshelf-cover-status-color: rgba(0, 0, 0, .3);

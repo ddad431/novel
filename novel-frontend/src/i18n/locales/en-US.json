@@ -90,7 +90,8 @@
         "今天看过": "Today",
         "昨天看过": "Yesterday",
         "最近一周看过": "Last 7 Days",
-        "最近一个月看过": "Last 30 days"
+        "最近一个月看过": "Last 30 days",
+        "empty_history": "No history yet"
     },
     "bookcity": {
         "搜索小说": "Search Novel",
