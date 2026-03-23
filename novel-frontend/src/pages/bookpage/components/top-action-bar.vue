@@ -16,8 +16,9 @@
 </template>
 
 <script setup lang="ts">
-import { useBookshelf } from '@/pages/home/hooks';
+import { useBookHisotry, useBookshelf } from '@/pages/home/hooks';
 import { Book, BookShelfStore } from '@/store';
+import { BookHistoryStorage } from '@/store/history';
 
 const props = defineProps<{
     hideActionBar: any, // NOTE 返回主页执行的副作用
@@ -25,6 +26,7 @@ const props = defineProps<{
 }>();
 
 const { bookshelf } = useBookshelf();
+const { bookhistorys } = useBookHisotry();
 
 function handleNavBack() {
     const pages = getCurrentPages();
@@ -71,7 +73,8 @@ function handleAddToBookshelf() {
     BookShelfStore.addBook(props.book);
     bookshelf.value = BookShelfStore.getBookshelf();
 
-    uni.showToast({ icon: 'none', title: '添加成功'});
+    BookHistoryStorage.addBookHistory(props.book);
+    bookhistorys.value = BookHistoryStorage.getBookHistory();
 }
 </script>
 
