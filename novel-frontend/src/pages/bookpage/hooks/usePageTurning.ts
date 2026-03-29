@@ -32,7 +32,7 @@ export function usePageTurning(book: Ref<Book>) {
     let startMoveTime = 0;
     
     const baseStyles = computed(() => {
-        const base = { 'transform': `translateX(${offsetX.value}px)` }
+        const base = { 'transform': `translateX(${offsetX.value}px)`, 'will-change': 'transform' }
         return isDragging.value ? base : { ...base, 'transition': 'transform 0.3s ease', }
     });
     const coverStyle = computed(() => {
