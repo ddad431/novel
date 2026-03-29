@@ -25,11 +25,11 @@ const READER_LAYOUT = {
     gap: 12,
 }
 
-const readerPageConfig: Ref<ReaderConfig> = computed(() => {
-    return {
+function createReaderConfig(width: Ref<number>, height: Ref<number>) {
+    return computed(() => ({
         page: {
-            width: window.innerWidth - 2 * READER_LAYOUT.padding,
-            height: window.outerHeight - (2 * READER_LAYOUT.padding + 2 * READER_LAYOUT.gap + READER_LAYOUT.headerHeight + READER_LAYOUT.footerHeight),
+            width: width.value - 2 * READER_LAYOUT.padding,
+            height: height.value - (2 * READER_LAYOUT.padding + 2 * READER_LAYOUT.gap + READER_LAYOUT.headerHeight + READER_LAYOUT.footerHeight),
         },
         title: {
             font: curFont.value,
@@ -43,8 +43,8 @@ const readerPageConfig: Ref<ReaderConfig> = computed(() => {
             ratio: curLineHeightRatio.value,
             gap: paragraphGap.value,
         }
-    }
-});
+    }));
+}
 
 export function useReaderPageConfig() {
     const titleLineStyles = computed(() => {
@@ -101,7 +101,7 @@ export function useReaderPageConfig() {
         curFontSize,
         initFontSize,
         changeFontSize,
-        readerPageConfig,
+        createReaderConfig,
         titleLineStyles,
         titleLastLineStyles,
         paragraphLineStyles,

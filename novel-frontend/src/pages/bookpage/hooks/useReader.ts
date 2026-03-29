@@ -1,10 +1,11 @@
-import { ref, computed, watch, Ref, Raw } from 'vue';
+import { ref, computed, watch, Ref, Raw, onMounted, onUnmounted } from 'vue';
 import { type Page, type Line, calcPages } from '@/reader/reader';
 import { useReaderPageConfig } from './useReaderPageConfig';
 import { type Book, BookShelfStore, type Catalog, catalogStore, chapterStore } from '@/store';
 import { fetchNovelCatalog, fetchNovelChapter } from '@/services/apis/novel.api';
 import { useBookHisotry, useBookshelf } from '@/pages/home/hooks';
 import { BookHistoryStorage } from '@/store/history';
+import { useWindowSize } from '@/hooks/useWindowSize';
 
 type RawChapters = Record<'prev' | 'cur' | 'next', {
     title: string,
@@ -86,7 +87,9 @@ const isLastChapterLastPage = computed(() => curChapterIndex.value + 1 === catal
 
 export function useReader(book: Ref<Book>) {
     // dependicies
-    const { curFontSize, readerPageConfig } = useReaderPageConfig();
+    const { createReaderConfig } = useReaderPageConfig();
+    const { vwidth, vheight } = useWindowSize();
+    const readerPageConfig = createReaderConfig(vwidth, vheight); // NOTE createXX 里涉及了 onMountedXX，因此要确保与 setup 同步加载。
     const { bookshelf } = useBookshelf();       // 同步阅读进度
     const { bookhistorys } = useBookHisotry();  // 同步阅读进度
 
@@ -141,9 +144,10 @@ export function useReader(book: Ref<Book>) {
     });
 
     // lifetime
-    watch(curFontSize, () => {
+    watch(readerPageConfig, () => {
+        // NOTE 不需要单独监听某一项更改，因为任一项的更改都会回到 readerPageConfig。
         updatePages();
-    });
+    }, { deep: true });
 
     watch(curChapterIndex, (value) => {
         saveReadProgress(value + 1);
