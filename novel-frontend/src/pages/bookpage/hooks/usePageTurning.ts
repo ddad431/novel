@@ -2,6 +2,7 @@ import { ref, computed, Ref } from 'vue';
 import { useReader } from './useReader';
 import { PageTurning, PreferenceStore } from '@/store/preference';
 import { Book } from '@/store';
+import { useI18n } from 'vue-i18n';
 
 // 动画
 // 1. 平移
@@ -18,6 +19,7 @@ import { Book } from '@/store';
 export function usePageTurning(book: Ref<Book>) {
     // dependencies
     const { goPrevPage, goNextPage, isFirstChapterFirstPage, isLastChapterLastPage } = useReader(book);
+    const { t } = useI18n();
 
     // states
     const pageTurningKinds = ['平移翻页', '覆盖翻页', '无动画'];
@@ -89,7 +91,7 @@ export function usePageTurning(book: Ref<Book>) {
                 }
 
             }
-            else {
+            else if (curPageTurning.value === '无动画') {
                 return {};
             }
         }
@@ -99,11 +101,21 @@ export function usePageTurning(book: Ref<Book>) {
     function initPageTurning() {
         curPageTurning.value = PreferenceStore.getPreference().pageTurning;
     }
-    function changePageTurning(style: PageTurning): void {
-        curPageTurning.value = style;
+    function changePageTurning(style: string): void {
+        // NOTE 需要优化
+        const _maps: Record<string, PageTurning> = {
+            'Cover': '覆盖翻页',
+            'Slide': '平移翻页',
+            'None': '无动画',
+        };
+        
+        if (Object.keys(_maps).includes(style)) {
+            style = _maps[style];
+        }
+        curPageTurning.value = style as PageTurning;
 
         const preference = PreferenceStore.getPreference();
-        preference.pageTurning = style;
+        preference.pageTurning = style as PageTurning;
         PreferenceStore.updatePreference(preference);
     }
     function onTouchStart(event: TouchEvent) {

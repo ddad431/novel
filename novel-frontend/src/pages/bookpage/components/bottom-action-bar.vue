@@ -112,7 +112,7 @@ interface Props {
     // page turning
     curPageTurning: PageTurning,
     pageTurningKinds: string[],
-    changePageTurning: (value: PageTurning) => void,
+    changePageTurning: (value: string) => void,
 
     // reader theme
     themes: Record<ReaderTheme, string>,
