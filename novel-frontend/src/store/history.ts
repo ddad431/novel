@@ -19,19 +19,18 @@ function updateBookHistory(history: Book[]) {
 }
 
 function addBookHistory(book: Book) {
-    // NOTE
-    // - 头插入
-    // - 插入前别忘了删除旧记录
-
     book.visit = Date.now();
 
     let historys = getBookHistory();
     const record = historys.find(v => v.origin === book.origin && v.id === book.id);
 
     if (record) {
-        historys = historys.filter(v => !(v.origin === book.origin && v.id === book.id));
+        record.isadded = true;
     }
-    historys.unshift(book);
+    else {
+        historys.unshift(book);
+    }
+
     updateBookHistory(historys);
 }
 

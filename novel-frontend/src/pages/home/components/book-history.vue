@@ -105,6 +105,7 @@ import { computed, ref, watch } from 'vue';
 
 import defaultBookCover from '../../../static/default_cover.png'
 import { useI18n } from 'vue-i18n';
+import { BookHistoryStorage } from '@/store/history';
 
 const { t } = useI18n();
 
@@ -147,6 +148,9 @@ function handleAddBookToBookshelf(book: Book) {
     book.isadded = true;
     BookShelfStore.addBook(book);
     bookshelf.value = BookShelfStore.getBookshelf();
+
+    BookHistoryStorage.addBookHistory(book);
+    bookhistorys.value = BookHistoryStorage.getBookHistory();
 }
 
 function handleClickHistory(book: Book) {
