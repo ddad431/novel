@@ -1,3 +1,6 @@
+import { useBookHisotry } from "@/pages/home/hooks";
+import { BookHistoryStorage } from "./history";
+
 export type BookShelfBook = { 
     type: 'book',
     data: Book,
@@ -84,6 +87,8 @@ export const BookShelfStore = {
     moveBookToGroup,
     changeBookGroup,
 };
+
+const { bookhistorys } = useBookHisotry();
 
 function getBookshelf(): BookShelf {
     return JSON.parse(uni.getStorageSync('bookshelf') || '[]');
@@ -187,6 +192,16 @@ function removeGroup(name: string) {
     const newBookShelf = bookshelf.filter(v => !(v.type === 'group' && v.name === name));
 
     updateBookshelf(newBookShelf);
+
+    // 阅读历史要更新对应书籍的添加状态
+    const group = bookshelf.find(v => v.type === 'group' && v.name === name) as BookShelfGroup;
+    group.data.forEach(v => {
+        const record = bookhistorys.value.find(u => u.origin === v.origin && u.id === v.id);
+        if (record) {
+            record.isadded = false;
+        }
+    })
+    BookHistoryStorage.updateBookHistory(bookhistorys.value);
 }
 
 function renameGroup(oldName: string, newName: string) {
@@ -233,6 +248,15 @@ function removeGroupBook(books: Book[]) {
    
     group.data = group.data.filter(v => !books.find(item => item.origin === v.origin && item.id === v.id));
     updateBookshelf(bookshelf);
+
+    // NOTE 阅读历史要更新对应书籍的添加状态
+    books.forEach(v => {
+        const record = bookhistorys.value.find(u => u.origin === v.origin && u.id === v.id);
+        if (record) {
+            record.isadded = false;
+        }
+    })
+    BookHistoryStorage.updateBookHistory(bookhistorys.value);
 
     return group;
 }
