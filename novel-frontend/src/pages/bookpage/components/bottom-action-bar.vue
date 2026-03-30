@@ -4,11 +4,12 @@
         <view
             v-show="actionBarVisible"
             class="bg-[var(--bookpage-bottom-bar-bg)] color-[var(--bookpage-bottom-bar-color)] fixed bottom-0 z-9999 w-screen h-[72px]  box-border p-[16px] flex items-center transition-colors"
+            @click.stop
         >
             <view class="h-full w-full flex items-center justify-around ">
-                <view :class="[chapterlistPanelVisible === true ? 'icon-list-actived' : 'icon-list']" @click="toggleChapterListPanel"></view>
+                <view :class="[chapterlistPanelVisible === true ? 'icon-list-actived' : 'icon-list']" @click.stop="toggleChapterListPanel"></view>
                 <view :class="[props.curMode === 'dark' ? 'icon-sun' : 'icon-moon']" @click="toggleLightDarkMode"></view>
-                <view :class="[preferencePanelVisible === true ? 'icon-adjustment-actived' : 'icon-adjustment']" @click="togglePreferencePanel"></view>
+                <view :class="[preferencePanelVisible === true ? 'icon-adjustment-actived' : 'icon-adjustment']" @click.stop="togglePreferencePanel"></view>
             </view>
         </view>
      </Transition>

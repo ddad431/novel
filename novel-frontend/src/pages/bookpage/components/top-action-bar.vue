@@ -1,5 +1,8 @@
 <template>
-    <view class="top-action-bar fixed top-0 h-[48px] w-full box-border p-[16px] bg-[var(--bookpage-top-bar-bg)] color-[var(--bookpage-top-bar-color)] flex justify-between items-center">
+    <view 
+        class="top-action-bar fixed top-0 z-[99] h-[48px] w-full box-border p-[16px] bg-[var(--bookpage-top-bar-bg)] color-[var(--bookpage-top-bar-color)] flex justify-between items-center"
+        @click.stop
+    >
         <!--
             nav
             - nav 图标浪费了部分左侧空间，使得视觉上 nav 图标距离边界过远。（借助相对定位向左调整）
