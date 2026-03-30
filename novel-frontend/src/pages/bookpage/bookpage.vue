@@ -295,9 +295,41 @@ onLoad(async (options) => {
 }
 
 /** 拖动时给上层添加阴影，制造层次感 */
-.reader-viewport.mode-cover[data-direction="left"] .cur,
+/* .reader-viewport.mode-cover[data-direction="left"] .cur,
 .reader-viewport.mode-cover[data-direction="right"] .prev {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+} */
+
+/**
+ * 拖动时给下层添加蒙层，制造层次感
+ *
+ * NOTE
+ * - 借助 after 伪类 + filter 滤镜给页面添加蒙层
+ * - 默认情况下不显示（opacity: 0)，当拖动时激活（opacity)
+ * - 蒙层与翻页动画同步
+ *  - 都是依赖 is-dragging 动态太耐、删除动画
+ *  - 动画 duration 相同
+ */
+.page-slot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: transparent;
+    backdrop-filter: brightness(0.85);
+    -webkit-backdrop-filter: brightness(0.85);
+    opacity: 0;
+    z-index: 5;
+    transition: opacity .3s ease;
+}
+
+.reader-viewport.is-dragging .page-slot .next::after,
+.reader-viewport.is-dragging .page-slot .cur::after {
+    transition: none !important;
+}
+
+.reader-viewport.mode-cover[data-direction="left"] .next::after,
+.reader-viewport.mode-cover[data-direction="right"] .cur::after {
+    opacity: 1;
 }
 
 .mode-cover {
