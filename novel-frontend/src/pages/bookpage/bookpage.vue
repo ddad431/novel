@@ -20,7 +20,7 @@
                 :style="`height: ${READER_LAYOUT.headerHeight}px; margin-bottom: ${READER_LAYOUT.gap}px`"
             >
                 <!-- <view class="icon-nav scale-60"></view> -->
-                <view class="title">{{ curPageIndex === 0 ? '' : page.title }}</view>
+                <view v-if="state === 'success'" class="title">{{ curPageIndex === 0 ? '' : page.title }}</view>
             </view>
 
             <!-- Page body -->
