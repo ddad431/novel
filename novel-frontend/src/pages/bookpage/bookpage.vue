@@ -290,10 +290,10 @@ onLoad(async (options) => {
 }
 
 /** 拖动时给上层添加阴影，制造层次感 */
-/* .reader-viewport.mode-cover[data-direction="left"] .cur,
-.reader-viewport.mode-cover[data-direction="right"] .prev {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-} */
+.reader-viewport.is-dragging.mode-cover[data-direction="left"] .cur,
+.reader-viewport.is-dragging.mode-cover[data-direction="right"] .prev {
+    box-shadow: -8px 0 20px rgba(0, 0, 0, 0.15);
+}
 
 /**
  * 拖动时给下层添加蒙层，制造层次感
@@ -305,6 +305,7 @@ onLoad(async (options) => {
  *  - 都是依赖 is-dragging 动态太耐、删除动画
  *  - 动画 duration 相同
  */
+ /*
 .page-slot::after {
     content: "";
     position: absolute;
@@ -326,6 +327,7 @@ onLoad(async (options) => {
 .reader-viewport.mode-cover[data-direction="right"] .cur::after {
     opacity: 1;
 }
+*/
 
 .mode-cover {
     .prev {
