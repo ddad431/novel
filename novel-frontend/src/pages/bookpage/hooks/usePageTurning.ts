@@ -94,43 +94,74 @@ export function usePageTurning(book: Ref<Book>) {
     }
 
     function onTouchEnd() {
-        if (!isDragging.value) {
+        if (!isDragging.value || isAnimation.value) {
             return;
         }
 
-        isDragging.value = false;   // 开启动画
-        isAnimation.value = true;   // 开启动画锁定（无论成功还是
-
         const screenWidth = uni.getWindowInfo().screenWidth;
         const duration = Date.now() - startMoveTime;
-        const velocity = Math.abs(offsetX.value) / duration;
+        const absX =  Math.abs(offsetX.value);
+        const velocity = absX / duration;
 
         const isQuickSwipeGesture = Math.abs(offsetX.value) > 10 && velocity > 0.5;
         const isDragGesture = Math.abs(offsetX.value) > screenWidth * 0.25;
 
-        const updatePage = gestureDirection.value === 'right' ? goPrevPage : goNextPage;
+        const isNext = offsetX.value < 0;
+        const updatePage = isNext ? goNextPage : goPrevPage;
 
         if (isQuickSwipeGesture || isDragGesture) {
-            offsetX.value = gestureDirection.value === 'left' ? -1 * screenWidth : screenWidth;
+            // 开启并锁定动画
+            isDragging.value = false;
+            isAnimation.value = true;
 
+            // 设置动画结束位置（offsetX 变更，触发动画）
+            offsetX.value = isNext ? -1 * screenWidth : screenWidth;   
+
+            // 等待动画完成 (300ms)
             setTimeout(() => {
-                offsetX.value = 0;
-                isDragging.value = true;
-                nextTick(() => {
-                    isDragging.value = true;    // NOTE 在页面离开动画完成后（offsetX=0)，就要更新页面，在更新前必须立即关闭动画。（否则更新页面就会被附加动画）
-                    updatePage();
-                })
+                isDragging.value = true;    // 关闭动画 (防止 offsetX 重置时再次触发动画)
+                offsetX.value = 0;          // 重置 offsetX
+                updatePage();               // 更新页面
+
+                isAnimation.value = false;  // 关锁
+
+                // NOTE 这必须要用宏任务等待页面更新完成后再重置，否则 offsetX 重置就会触发动画
+                setTimeout(() => {
+                    isDragging.value = false;   // 重置拖拽状态（开启动画）
+                }, 50);
             }, 300)
         }
-        else {
-            offsetX.value = 0;
-            
-        }
+        // case 失败回弹
+        else if (absX > 5) {
+            // 开启并锁定动画
+            isDragging.value = false;
+            isAnimation.value = true;
 
-        // 重置状态
-        gestureDirection.value = '';
-        isDragging.value = false; 
-        isAnimation.value = false;
+            // 设置动画结束位置（回弹动画）
+            offsetX.value = 0;
+
+            // 等待动画完成
+            setTimeout(() => {
+                isAnimation.value = false;  // 关锁
+
+                setTimeout(() => {
+                    isDragging.value = false; // 重置拖拽状态（开启动画）
+                }, 50);
+            }, 300);
+        }
+        // NOTE
+        // - click 事件是在 touchEnd 事件之后才触发的。
+        // - 必须要区分失败回弹与点击事件，否则 touchEnd 这里走了失败回弹分支，那么 click 事件会被吞掉。（即 click 事件失效了）
+        //  - 为啥会被吞掉？
+        //      - 因为这里的回弹动画是 300ms，而 click 的判定事件也恰好是 300ms。如果走了失败回弹的分支，
+        //        就会用掉 300ms，300ms 后系统就判定不是 click 事件了。
+        //
+        // case 点击事件
+        else {
+            // 重置状态，确保 click 事件正常触发（判断条件通过）
+            offsetX.value = 0;
+            isDragging.value = false;
+        }
     }
 
     function onTouchCancel() {
