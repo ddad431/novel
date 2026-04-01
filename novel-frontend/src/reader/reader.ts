@@ -148,35 +148,19 @@ export function calcPages(_title: string, paragraphs: string[], options: ReaderC
             const height = pages.length === 0 ? pheight + theight : pheight;
 
             if (height > page.height) {
-                // console.log('plines', plines);
-                // console.log('pnum', pnum);
-
                 // 空白行处理
-                // - margin-bottom（段间距）的影响 -> paragraph-last-line 转化成 paragraph-line
-                // - line-height（行高）的影响 -> paragraph-line 转化成 paragraph-compress-line (只有字高)
-                // - margin-bottom 与 line-height 的双重影响 -> paragraph-last-line 转化成 paragraph-compress-line
+                // - 我们不应该改变最后一行与上一行的间距（即上一段落的 gap，自身的 lineheight)
+                // - 我们只在最后一行是段最后一行的情况下舍去段间距
+                // 
                 const lastLine = lines[lines.length-1];
-                switch (lastLine.type) {
-                    case 'paragraph-last-line':
-                        if (height - paragraph.gap <= page.height) {
-                            lastLine.type = 'paragraph-line';
-                            return;
-                        }
-                        else if (height - paragraph.gap - (paragraph.ratio - 1) * paragraph.size <= page.height) {
-                            lastLine.type = 'paragraph-compress-line';
-                            return;
-                        }
-                        break;
-                    case 'paragraph-line': 
-                        if (height - (paragraph.ratio - 1) * paragraph.size <= page.height) {
-                            lastLine.type = 'paragraph-compress-line';
-                            return;
-                        }
-                        break;
+                if (lastLine.type === 'paragraph-last-line' && height - paragraph.gap <= page.height) {
+                    lastLine.type = 'paragraph-line';
+                    return;
                 }
 
-                pages.push(lines.slice(0, lines.length - 1));
-                lines = lines.slice(-1);
+                const _last = lines.splice(-1, 1);
+                pages.push(lines);
+                lines = _last;
 
                 lwidth = 0;
                 lchars = [];
