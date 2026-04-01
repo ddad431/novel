@@ -174,53 +174,44 @@ function handlePageClick(e: any): void {
          return;
     }
 
+    // NOTE 在动画期间不应触发 toggleActionBar, 因此必须先判定 isAnimation
     const screenWidth = uni.getWindowInfo().screenWidth;
     const x = e.detail.x;
-
-    if (x < screenWidth * (1 / 3) || x > screenWidth * (2 / 3)) {
-        if (isFirstChapterFirstPage.value) {
-            uni.showToast({ title: '已经是第一页了', icon: 'error', mask: false });
-            return;
-        }
-
-        if (isLastChapterLastPage.value) {
-            uni.showToast({ title: '已经是最后一页了', icon: 'error', mask: false })
-            return;
-        }
-
-        if (curPageTurning.value === '无动画') {
-            isDragging.value = true; // 确保关闭动画
-            if (x < screenWidth * (1 / 3)) {
-                goPrevPage();
-            }
-            else {
-                goNextPage();
-            }
-            return;
-        }
-
-        isDragging.value = false;   // 开启动画
-        offsetX.value = x < screenWidth * (1 / 3) ? screenWidth : -1 * screenWidth;
-        setTimeout(() => {
-            offsetX.value = 0;
-            nextTick(() => {
-                isDragging.value = true; // 确保关闭动画
-                if (x < screenWidth * (1 / 3)) {
-                    goPrevPage();
-                }
-                else {
-                    goNextPage();
-                }
-            })
-        }, 300)
-
-        // 重置状态
-        isDragging.value = false;
-
+    if (x >= screenWidth * (1 / 3) && x <= screenWidth * (2 / 3)) {
+        toggleActionBar();
         return;
     }
 
-    toggleActionBar();
+    if (isFirstChapterFirstPage.value || isLastChapterLastPage.value) {
+        const _title = isFirstChapterFirstPage.value ? '已经是第一页了' : '已经是最后一页了';
+
+        uni.showToast({ title: _title, icon: 'error', mask: false });
+        return;
+    }
+
+    const isNext = x > screenWidth * (2/3)
+    const updatePage = isNext ? goNextPage : goPrevPage;
+    if (curPageTurning.value === '无动画') {
+        updatePage();
+        return;
+    }
+
+    // 开启并锁定动画
+    isAnimation.value = true;
+    isDragging.value = false;
+
+    // 触发动画（设置动画终点）
+    offsetX.value = isNext ? -1 * screenWidth : screenWidth;
+
+    // 等待动画结束
+    setTimeout(() => {
+        isDragging.value = true;    // 关闭动画（防止重置 offsetX 又触发动画）
+
+        offsetX.value = 0;  // 重置 offsetX
+        updatePage();       // 更新页面
+
+        isAnimation.value = false; // 关锁
+    }, 300)
 }
 
 async function handleCatalogClick(progress: number) {
