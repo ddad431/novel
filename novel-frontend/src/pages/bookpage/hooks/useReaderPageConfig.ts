@@ -4,16 +4,19 @@ import { PreferenceStore } from "@/store/preference";
 
 const curFont = ref<string>('Arial');
 const curFontSize = ref<number>(16);
-const curLineHeightRatio = ref<number>(1.7);
+const curLineHeightRatio = ref<number>(1.85);
 
-const titleFontSize = computed(() => curFontSize.value + 8);
+const titleFontSize = computed(() => curFontSize.value * 1.5);
 const titleLineHeightRatio = computed(() => Math.max(1, curLineHeightRatio.value - 0.3));
 const titleGap = computed(() => 2 * curFontSize.value);
-const paragraphGap = computed(() => 1 * curFontSize.value);
+const paragraphGap = computed(() => 1.8 * curFontSize.value);
 
 const READER_LAYOUT = {
-    /** 阅读页边距 */
-    padding: 16,
+    /** 阅读页左右边距 */
+    horizontalPadding: 24, 
+
+    /** 阅读页上下边距 */
+    verticalPadding: 16,
 
     /** 页眉高度 */
     headerHeight: 16,
@@ -22,14 +25,14 @@ const READER_LAYOUT = {
     footerHeight: 16,
 
     /** 页眉、正文、页脚间距 */
-    gap: 12,
+    gap: 16,
 }
 
 function createReaderConfig(width: Ref<number>, height: Ref<number>) {
     return computed(() => ({
         page: {
-            width: width.value - 2 * READER_LAYOUT.padding,
-            height: height.value - (2 * READER_LAYOUT.padding + 2 * READER_LAYOUT.gap + READER_LAYOUT.headerHeight + READER_LAYOUT.footerHeight),
+            width: width.value - 2 * READER_LAYOUT.horizontalPadding,
+            height: height.value - (2 * READER_LAYOUT.verticalPadding + 2 * READER_LAYOUT.gap + READER_LAYOUT.headerHeight + READER_LAYOUT.footerHeight),
         },
         title: {
             font: curFont.value,

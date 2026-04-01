@@ -11,7 +11,7 @@
         <view
             v-for="(page, key) in pages" :key
             :class="['page-slot', key]"
-            :style="{'padding': `${READER_LAYOUT.padding}px` }"
+            :style="{'padding': `${READER_LAYOUT.verticalPadding}px ${READER_LAYOUT.horizontalPadding}px` }"
             @click.stop="handlePageClick"
         >
             <!-- Page header  -->
