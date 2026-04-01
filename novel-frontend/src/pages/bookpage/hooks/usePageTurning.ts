@@ -19,6 +19,7 @@ export function usePageTurning(book: Ref<Book>) {
     let startX = 0;
     let startY = 0;
     let startMoveTime = 0;
+    let ticking = false;
     
     // actions
     function initPageTurning() {
@@ -79,8 +80,17 @@ export function usePageTurning(book: Ref<Book>) {
             return;
         }
 
-        offsetX.value = _offsetX;
-        gestureDirection.value = _offsetX > 0 ? 'right' : (_offsetX < 0 ? 'left' : '');
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                // 只有在拖动状态没结束时才更新
+                if (isDragging.value) {
+                    offsetX.value = _offsetX;
+                    gestureDirection.value = _offsetX > 0 ? 'right' : (_offsetX < 0 ? 'left' : '');
+                }
+                ticking = false;
+            });
+            ticking = true;
+        }
     }
 
     function onTouchEnd() {
