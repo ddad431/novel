@@ -20,7 +20,11 @@
                 :style="`height: ${READER_LAYOUT.headerHeight}px; margin-bottom: ${READER_LAYOUT.gap}px`"
             >
                 <!-- <view class="icon-nav scale-60"></view> -->
-                <view v-if="state === 'success'" class="title">{{ curPageIndex === 0 ? '' : page.title }}</view>
+
+                <view v-if="state === 'success' && isChapterFirstPage" class="title"> {{ key === 'cur' ? '' : page.title }} </view>
+                <view v-else-if="state === 'success' && isChapterLastPage" class="title"> {{ key === 'next' ? '' : page.title }} </view>
+                <view v-else-if="state === 'success' && curPageIndex === 1" class="title"> {{ key === 'prev' ? '' : page.title }} </view>
+                <view v-else-if="state === 'success'"> {{ page.title }}</view>
             </view>
 
             <!-- Page body -->
@@ -115,7 +119,7 @@ const curPageTurningMode = computed(() => {
 const { curTime } = useTime();
 const { batteryInfo, batteryStyle, isSupportBatteryAPI } = useBattery();
 const { READER_LAYOUT, curFontSize, initFontSize, changeFontSize, titleLineStyles, titleLastLineStyles, paragraphLineStyles, paragraphLastLineStyles, paragraphCompressLineStyles } = useReaderPageConfig();
-const { pages, curPageIndex, curChapterIndex, catalog, gotoChapter, isFirstChapterFirstPage, isLastChapterLastPage, initNovelCatalog, initNovelChapters, resetNovelChapters, goPrevPage, goNextPage, pageProgress, chapterProgress } = useReader(book);
+const { pages, curPageIndex, curChapterIndex, catalog, gotoChapter, isChapterFirstPage, isChapterLastPage, isFirstChapterFirstPage, isLastChapterLastPage, initNovelCatalog, initNovelChapters, resetNovelChapters, goPrevPage, goNextPage, pageProgress, chapterProgress } = useReader(book);
 const { actionBarVisible, toggleActionBar } = useActionBar();
 const { offsetX, isDragging, isAnimation, gestureDirection, curPageTurning, pageTurningKinds, changePageTurning, initPageTurning, onTouchStart, onTouchEnd, onTouchMove, onTouchCancel } = usePageTurning(book);
 const { themes, curReaderTheme, readerThemeClass, initReaderTheme, changeReaderTheme, curMode, toggleReaderDarkMode } = useReaderTheme();

@@ -427,6 +427,8 @@ export function useReader(book: Ref<Book>) {
         chapters,
         isFirstChapterFirstPage,
         isLastChapterLastPage,
+        isChapterFirstPage,
+        isChapterLastPage,
         pageProgress,
         chapterProgress,
         initNovelCatalog,
