@@ -124,10 +124,12 @@ export function usePageTurning(book: Ref<Book>) {
 
                 isAnimation.value = false;  // 关锁
 
-                // NOTE 这必须要用宏任务等待页面更新完成后再重置，否则 offsetX 重置就会触发动画
-                setTimeout(() => {
-                    isDragging.value = false;   // 重置拖拽状态（开启动画）
-                }, 50);
+                // NOTE 确保当前帧完成后，在下一帧重绘前重置动画状态 (requestAnimationFrame 是在重绘前执行的，所以这里需要嵌套保证当前帧先执行完)
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        isDragging.value = false;   // 重置拖拽状态（开启动画）
+                    })
+                })
             }, 300)
         }
         // case 失败回弹
@@ -143,9 +145,11 @@ export function usePageTurning(book: Ref<Book>) {
             setTimeout(() => {
                 isAnimation.value = false;  // 关锁
 
-                setTimeout(() => {
-                    isDragging.value = false; // 重置拖拽状态（开启动画）
-                }, 50);
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        isDragging.value = false;   // 重置拖拽状态（开启动画）
+                    })
+                })
             }, 300);
         }
         // NOTE
