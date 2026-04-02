@@ -385,4 +385,9 @@ onLoad(async (options) => {
         transform: translateX(calc(100vw));
     }
 }
+
+.page-header,
+.page-footer {
+    color: var(--bookpage-reader-header-color);
+}
 </style>

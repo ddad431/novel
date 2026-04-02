@@ -1,6 +1,7 @@
 :root {
     --bookpage-reader-bg: #fff;
     --bookpage-reader-color: #2c3e50;
+    --bookpage-reader-header-color: #959ea7;
 
     --bookpage-top-bar-bg: #f8f8f8;
     --bookpage-top-bar-color: #000;
@@ -15,13 +16,14 @@
     --bookpage-bottom-preference-item-outline-color: #eaeaea;
 
     --bookpage-bottom-chapterlist-bg: #f8f8f8;
-    --bookpage-bottom-chapterlist-color: #000;
-    --bookpage-bottom-chapterlist-active-color: #444;
+    --bookpage-bottom-chapterlist-color: #555555;
+    --bookpage-bottom-chapterlist-active-color: #555555;
 }
 
 .green-reader {
     --bookpage-reader-bg: #e5ebde;
-    --bookpage-reader-color: #2c3e50;
+    --bookpage-reader-color: #2c3e50; 
+    --bookpage-reader-header-color: #959ea7;
 
     --bookpage-top-bar-bg: #dce5d3;
     --bookpage-top-bar-color: #2c3e50;
@@ -36,13 +38,14 @@
     --bookpage-bottom-preference-item-outline-color: #f8f8f8;
 
     --bookpage-bottom-chapterlist-bg: #dce5d3;
-    --bookpage-bottom-chapterlist-color: #2c3e50;
-    --bookpage-bottom-chapterlist-active-color: #878f7f;
+    --bookpage-bottom-chapterlist-color: #5b6654;
+    --bookpage-bottom-chapterlist-active-color: #5b6654;
 }
 
 .brown-reader {
     --bookpage-reader-bg: #efece5;
-    --bookpage-reader-color: #2c3e50;
+    --bookpage-reader-color: #2c3e50; 
+    --bookpage-reader-header-color: #959ea7;
 
     --bookpage-top-bar-bg: #eae6dc;
     --bookpage-top-bar-color: #171716;
@@ -57,13 +60,14 @@
     --bookpage-bottom-preference-item-outline-color: #f8f8f8;
 
     --bookpage-bottom-chapterlist-bg: #eae6dc;
-    --bookpage-bottom-chapterlist-color: #171716;
-    --bookpage-bottom-chapterlist-active-color: #91876f;
+    --bookpage-bottom-chapterlist-color: #6d655a;
+    --bookpage-bottom-chapterlist-active-color: #6d655a;
 }
 
 .blue-reader {
     --bookpage-reader-bg: #e3e7eb;
     --bookpage-reader-color: #1e2d3d;
+    --bookpage-reader-header-color: #959ea7;
 
     --bookpage-top-bar-bg: #d7dde3;
     --bookpage-top-bar-color: #161616;
@@ -78,13 +82,14 @@
     --bookpage-bottom-preference-item-outline-color: #f8f8f8;
 
     --bookpage-bottom-chapterlist-bg: #d7dde3;
-    --bookpage-bottom-chapterlist-color: #161616;
-    --bookpage-bottom-chapterlist-active-color: #7b8ea1;
+    --bookpage-bottom-chapterlist-color: #5c6670;
+    --bookpage-bottom-chapterlist-active-color: #5c6670;
 }
 
 .dark-reader {
     --bookpage-reader-bg: #121212;
-    --bookpage-reader-color: #d2d2d2;
+    --bookpage-reader-color: #999;
+    --bookpage-reader-header-color: #666;
 
     --bookpage-top-bar-bg: #282828;
     --bookpage-top-bar-color: #f4f4f4;
@@ -99,6 +104,6 @@
     --bookpage-bottom-preference-item-outline-color: #3d3d3d;
 
     --bookpage-bottom-chapterlist-bg: #282828;
-    --bookpage-bottom-chapterlist-color: #f4f4f4;
-    --bookpage-bottom-chapterlist-active-color: #dadada;
+    --bookpage-bottom-chapterlist-color: #777;
+    --bookpage-bottom-chapterlist-active-color: #a0a0a0;
 }

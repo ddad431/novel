@@ -83,7 +83,7 @@
             <view class="book-chapter flex-grow relative h-[300px]">
                 <self-virtuallist :data="props.catalog?.map((v, index) => ({...v, index}))" :height="300" :itemHeight="30" :curIndex="props.curChapterIndex">
                     <template #default="{ data }">
-                        <div class="h-[30px] truncate text-[14px]" :style="data.index === props.curChapterIndex ? 'color: var(--bookpage-bottom-chapterlist-active-color);' : ''" @click="handleCatalogClick(data.index + 1)"> {{ data.title }}</div>
+                        <div class="h-[30px] truncate text-[14px]" :style="data.index === props.curChapterIndex ? 'color: var(--bookpage-bottom-chapterlist-active-color); font-weight: bold;' : ''" @click="handleCatalogClick(data.index + 1)"> {{ data.title }}</div>
                     </template>
                 </self-virtuallist>
                 <!-- <view class="jumpto absolute bottom-[8px] right-0 bg-white/25 color-dark/80 p-[8px] rounded-[20px] flex justify-center">
