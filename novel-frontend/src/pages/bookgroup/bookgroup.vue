@@ -121,7 +121,7 @@
         </SelfOverlay>
 
         <!-- rename group dialog -->
-        <SelfOverlay v-model="renameGroupDialogVisible" :mask="true" position="center">
+        <SelfOverlay v-model="renameGroupDialogVisible" :mask="true" position="center" :zindex="10">
             <view class="w-screen m-[48px] rounded-[8px] box-border flex flex-col">
                 <view class="bg-[var(--input-dialog-bg)] h-[65%] box-border p-[16px] rounded-t-[8px] color-[#555]  flex flex-col justify-between">
                     <view class="title font-400 color-[var(--input-dialog-title-color)] flex items-center">
@@ -357,7 +357,18 @@ function handleGroupMgrChangeBookGroup(name: string) {
 }
 
 function handleRenameGroupConfirm() {
-    renameGroup(renameGroupDialogInputVal.value);
+    const groupName = renameGroupDialogInputVal.value.trim();
+    if (!groupName) {
+        return;
+    }
+
+    const groups = BookShelfStore.getBookshelf().filter(v => v.type === 'group').map(v => v.name);
+    if (groups.includes(groupName)) {
+        uni.showToast({ title: `${groupName} ${t('bookgroup.分组已存在')}`, icon: 'none', position: 'top'});
+        return;
+    }
+
+    renameGroup(groupName);
     renameGroupDialogVisible.value = false;
 }
 
