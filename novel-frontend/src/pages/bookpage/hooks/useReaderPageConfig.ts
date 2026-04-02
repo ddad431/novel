@@ -13,7 +13,7 @@ const paragraphGap = computed(() => 1.8 * curFontSize.value);
 
 const READER_LAYOUT = {
     /** 阅读页左右边距 */
-    horizontalPadding: 24, 
+    horizontalPadding: 16,
 
     /** 阅读页上下边距 */
     verticalPadding: 16,
