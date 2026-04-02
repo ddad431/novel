@@ -163,7 +163,7 @@
     </SelfOverlay>
 
     <!-- add group dialog -->
-    <SelfOverlay v-model="addGroupDialogVisible" :mask="true" position="center" :teleport="true">
+    <SelfOverlay v-model="addGroupDialogVisible" :mask="true" position="center" :teleport="true" :zindex="10">
         <view class="w-screen m-[48px] rounded-[8px] box-border flex flex-col">
             <view class="bg-[var(--input-dialog-bg)] h-[65%] box-border p-[16px] rounded-t-[8px] color-[#555] flex flex-col justify-between">
                 <view class="title font-400 color-[var(--input-dialog-title-color)] flex items-center">
@@ -182,7 +182,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import type { Book, BookShelfGroup, BookShelfBook } from '@/store';
+import { type Book, type BookShelfGroup, type BookShelfBook, BookShelfStore } from '@/store';
 import { useBookshelf } from '../hooks';
 
 import defaultBookCover from '@/static/default_cover.png';
@@ -284,10 +284,18 @@ function handleRemoveBookCancel() {
 }
 
 function handleAddGroupConfirm() {
-    if (!addGroupDialogInputVal.value.trim()) {
+    const groupName = addGroupDialogInputVal.value.trim();
+    if (!groupName) {
         return;
     }
-    moveBookToGroup(addGroupDialogInputVal.value.trim()); 
+
+    const groups = BookShelfStore.getBookshelf().filter(v => v.type === 'group').map(v => v.name);
+    if (groups.includes(groupName)) {
+        uni.showToast({ title: `${groupName} ${t('bookshelf.分组已存在')}`, icon: 'none', position: 'top'});
+        return;
+    }
+
+    moveBookToGroup(groupName); 
     addGroupDialogVisible.value = false; 
     addGroupDialogInputVal.value = ''; 
 

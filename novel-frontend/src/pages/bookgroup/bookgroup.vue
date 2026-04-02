@@ -138,7 +138,7 @@
         </SelfOverlay>
 
         <!-- add group dialog -->
-        <SelfOverlay v-model="addGroupDialogVisible" :mask="true" position="center">
+        <SelfOverlay v-model="addGroupDialogVisible" :mask="true" position="center" :zindex="10">
             <view class="w-screen m-[48px] rounded-[8px] box-border flex flex-col">
                 <view class="bg-[var(--input-dialog-bg)] h-[65%] box-border p-[16px] rounded-t-[8px] color-[#555] flex flex-col justify-between">
                     <view class="title font-400 color-[#0088ff] flex items-center">
@@ -183,7 +183,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 
-import type { Book } from '@/store';
+import { BookShelfStore, type Book } from '@/store';
 import { onLoad } from '@dcloudio/uni-app';
 import { useBookGroup } from './hooks/useBookGroup';
 
@@ -366,10 +366,18 @@ function handleRenameGroupCancel() {
 }
 
 function handleAddGroupConfirm() {
-    if (!addGroupDialogInputVal.value.trim()) {
+    const groupName = addGroupDialogInputVal.value.trim();
+    if (!groupName) {
         return;
     }
-    changeBookGroup(addGroupDialogInputVal.value.trim());
+
+    const groups = BookShelfStore.getBookshelf().filter(v => v.type === 'group').map(v => v.name);
+    if (groups.includes(groupName)) {
+        uni.showToast({ title: `${groupName} ${t('bookgroup.分组已存在')}`, icon: 'none', position: 'top'});
+        return;
+    }
+
+    changeBookGroup(groupName);
 
     addGroupDialogVisible.value = false;
     addGroupDialogInputVal.value = '';

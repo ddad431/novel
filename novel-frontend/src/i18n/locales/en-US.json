@@ -52,6 +52,7 @@
         "管理": "EDIT",
         "解散分组": "DISSLOVE",
         "删除分组": "DELETE",
+        "分组已存在": "already exists",
         "dialog": {
             "重命名": "Rename Group",
             "解散分组": "Disslove Group",
@@ -75,7 +76,8 @@
         "管理": "EDIT",
         "去书城": "SEARCH",
         "导入书籍": "IMPORT",
-        "group_book_count": "1 Book | {n} Books"
+        "group_book_count": "1 Book | {n} Books",
+        "分组已存在": "already exists"
     },
     "history": {
         "加入书架": "Add",
