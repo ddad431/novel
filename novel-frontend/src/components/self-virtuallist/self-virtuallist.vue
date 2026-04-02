@@ -48,13 +48,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 
 const props = defineProps<{
     curIndex: number,
     data: any[],
     height: number,
     itemHeight: number,
+    reverse: boolean,
 }>();
 
 // scroll-container 滚动条的位置
@@ -73,7 +74,7 @@ const renderListCount = computed(() => {
     return Math.floor(props.height / props.itemHeight);
 });
 const renderListData = computed(() => {
-    const endIdx = renderListStartIdx.value + renderListCount.value + 1;
+    const endIdx = !props.reverse ? renderListStartIdx.value + renderListCount.value + 1 : renderListStartIdx.value + renderListCount.value;
     return props.data.slice(renderListStartIdx.value, endIdx);
 });
 const isCurChapterItemRender = computed(() => {
@@ -102,6 +103,17 @@ function handleClickAnchor() {
     scrollTopVal.value = props.curIndex * props.itemHeight;
     updateRenderListStartIdx(scrollTopVal.value);
 }
+
+watch(() => props.reverse, (newVal) => {
+    if (newVal) {
+        renderListStartIdx.value = props.data.length <= renderListCount.value ? 0 : props.data.length - renderListCount.value;
+        scrollTopVal.value = renderListStartIdx.value * props.itemHeight;
+    }
+    else {
+        renderListStartIdx.value = 0;
+        scrollTopVal.value = 0;
+    }
+})
 
 onMounted(() => {
     // NOTE 每次打开虚拟列表时跳转到 curIndex

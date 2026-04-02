@@ -75,13 +75,13 @@
                         <view v-if="props.book.status">{{ `共 ${book.total} 章` + props.book.status && props.book.status }}</view>
                         <view v-else>{{  `共 ${book.total} 章`}}</view>
                         <!-- TODO 倒序 -->
-                        <!-- <view>倒序</view> -->
+                        <view @click="isReverseChapterList = !isReverseChapterList">{{ !isReverseChapterList ? '倒序' : '正序'}}</view>
                     </view>
                 </view>
             </view>
 
             <view class="book-chapter flex-grow relative h-[300px]">
-                <self-virtuallist :data="props.catalog?.map((v, index) => ({...v, index}))" :height="300" :itemHeight="30" :curIndex="props.curChapterIndex">
+                <self-virtuallist :reverse="isReverseChapterList" :data="props.catalog?.map((v, index) => ({...v, index}))" :height="300" :itemHeight="30" :curIndex="props.curChapterIndex">
                     <template #default="{ data }">
                         <div class="h-[30px] truncate text-[14px]" :style="data.index === props.curChapterIndex ? 'color: var(--bookpage-bottom-chapterlist-active-color); font-weight: bold;' : ''" @click="handleCatalogClick(data.index + 1)"> {{ data.title }}</div>
                     </template>
@@ -150,6 +150,7 @@ const pageTurning = ref<string>('');    // pageTurning 副本（由于是 props 
 const lightDarkMode = ref<'light' | 'dark'>('dark');
 const chapterlistPanelVisible = ref<boolean>(false);
 const preferencePanelVisible = ref<boolean>(false);
+const isReverseChapterList = ref<boolean>(false);
 
 function toggleChapterListPanel() {
     preferencePanelVisible.value = false;
