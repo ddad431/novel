@@ -211,6 +211,12 @@ function handlePageClick(e: any): void {
         updatePage();       // 更新页面
 
         isAnimation.value = false; // 关锁
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                isDragging.value = false;
+            });
+        })
     }, 300)
 }
 
