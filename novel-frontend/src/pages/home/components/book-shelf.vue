@@ -23,13 +23,11 @@
                     </view>
                     <view class="info flex flex-col">
                         <view class="flex-2 text-[14px] color-[var(--bookshelf-info-color-1)] font-500 truncate flex items-center">
-                            <template v-if="bookshelfItem.pinned">
-                                <view class="icon-pin scale-60 relative left-[-6px] top-[1px]"></view>
-                                <view class="relative left-[-10px] truncate">{{ bookshelfItem.data.name }}</view>
-                            </template>
-                            <template v-else>
+                            <view v-if="bookshelfItem.pinned" class="flex items-center gap-[2px]">
+                                <view class="icon-pin"></view>
                                 <view class="truncate">{{ bookshelfItem.data.name }}</view>
-                            </template>
+                            </view>
+                            <view v-else class="truncate">{{ bookshelfItem.data.name }}</view>
                         </view>
                         <view class="flex-1 text-[13px] color-[var(--bookshelf-info-color-2)]">{{ getBookReadProgress(bookshelfItem.data) }}</view>
                     </view>
@@ -63,13 +61,11 @@
                     </view>
                     <view class="info flex flex-col">
                          <view class="flex-2 text-[14px] color-[var(--bookshelf-info-color-1)] font-500 truncate flex items-center">
-                            <template v-if="bookshelfItem.pinned">
-                                <view class="icon-pin scale-60 relative left-[-6px] top-[1px]"></view>
-                                <view class="relative left-[-10px]">{{ bookshelfItem.name }}</view>
-                            </template>
-                            <template v-else>
-                                <view>{{ bookshelfItem.name }}</view>
-                            </template>
+                            <view v-if="bookshelfItem.pinned" class="flex items-center gap-[2px]">
+                                <view class="icon-pin"></view>
+                                <view class="truncate">{{ bookshelfItem.name }}</view>
+                            </view>
+                            <view v-else class="truncate">{{ bookshelfItem.name }}</view>
                         </view>
                         <view class="flex-1 text-[13px] color-[var(--bookshelf-info-color-2)]">{{ $t('bookshelf.group_book_count', { n: bookshelfItem.data.length }, bookshelfItem.data.length) }}</view>
                     </view>
