@@ -81,7 +81,7 @@ const renderListCount = computed(() => {
     return Math.floor(props.height / props.itemHeight);
 });
 const renderListData = computed(() => {
-    const endIdx = !props.reverse ? renderListStartIdx.value + renderListCount.value + 1 : renderListStartIdx.value + renderListCount.value;
+    const endIdx = renderListStartIdx.value + renderListCount.value + 1;
     return props.data.slice(renderListStartIdx.value, endIdx);
 });
 const isCurChapterItemRender = computed(() => {
