@@ -42,7 +42,12 @@
             </view>
         </view>
      </scroll-view>
-    <view v-if="!isCurChapterItemRender" class="anchor absolute bottom-[8px] right-0 bg-white/25 color-dark/80 p-[8px] rounded-[20px] flex justify-center" @click="handleClickAnchor">
+    <view 
+        v-if="!isCurChapterItemRender" 
+        class="anchor absolute bottom-[8px] right-0 p-[8px] rounded-[20px] flex justify-center"
+        :style="{'background-color': 'var(--bookpage-bottom-chapterlist-anchor-bg)', 'color': 'var(--bookpage-bottom-chapterlist-anchor-color)' }"
+        @click="handleClickAnchor"
+    >
         <view class="icon-crosshair"></view>
     </view>
 </template>
@@ -56,6 +61,8 @@ const props = defineProps<{
     height: number,
     itemHeight: number,
     reverse: boolean,
+    anchorBg: string,
+    anchorColor: string,
 }>();
 
 // scroll-container 滚动条的位置

@@ -81,7 +81,15 @@
             </view>
 
             <view class="book-chapter flex-grow relative h-[300px]">
-                <self-virtuallist :reverse="isReverseChapterList" :data="props.catalog?.map((v, index) => ({...v, index}))" :height="300" :itemHeight="30" :curIndex="props.curChapterIndex">
+                <self-virtuallist 
+                    :reverse="isReverseChapterList" 
+                    :data="props.catalog?.map((v, index) => ({...v, index}))" 
+                    :height="300" 
+                    :itemHeight="30" 
+                    :curIndex="props.curChapterIndex"
+                    :anchorBg="props.curMode === 'light' ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.25)'"
+                    :anchorColor="props.curMode === 'light' ? '' : ''"
+                >
                     <template #default="{ data }">
                         <div class="h-[30px] truncate text-[14px]" :style="data.index === props.curChapterIndex ? 'color: var(--bookpage-bottom-chapterlist-active-color); font-weight: bold;' : ''" @click="handleCatalogClick(data.index + 1)"> {{ data.title }}</div>
                     </template>

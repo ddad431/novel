@@ -18,6 +18,8 @@
     --bookpage-bottom-chapterlist-bg: #f8f8f8;
     --bookpage-bottom-chapterlist-color: #555555;
     --bookpage-bottom-chapterlist-active-color: #555555;
+    --bookpage-bottom-chapterlist-anchor-bg: #f3f3f3;
+    --bookpage-bottom-chapterlist-anchor-color: rgba(0, 0, 0, 0.6);
 }
 
 .green-reader {
@@ -40,6 +42,8 @@
     --bookpage-bottom-chapterlist-bg: #dce5d3;
     --bookpage-bottom-chapterlist-color: #5b6654;
     --bookpage-bottom-chapterlist-active-color: #5b6654;
+    --bookpage-bottom-chapterlist-anchor-bg: rgba(255, 255, 255, 0.25);
+    --bookpage-bottom-chapterlist-anchor-color: rgba(0, 0, 0, 0.6);
 }
 
 .brown-reader {
@@ -62,6 +66,8 @@
     --bookpage-bottom-chapterlist-bg: #eae6dc;
     --bookpage-bottom-chapterlist-color: #6d655a;
     --bookpage-bottom-chapterlist-active-color: #6d655a;
+    --bookpage-bottom-chapterlist-anchor-bg: rgba(255, 255, 255, 0.25);
+    --bookpage-bottom-chapterlist-anchor-color: rgba(0, 0, 0, 0.6);
 }
 
 .blue-reader {
@@ -84,6 +90,8 @@
     --bookpage-bottom-chapterlist-bg: #d7dde3;
     --bookpage-bottom-chapterlist-color: #5c6670;
     --bookpage-bottom-chapterlist-active-color: #5c6670;
+    --bookpage-bottom-chapterlist-anchor-bg: rgba(255, 255, 255, 0.25);
+    --bookpage-bottom-chapterlist-anchor-color: rgba(0, 0, 0, 0.8);
 }
 
 .dark-reader {
@@ -106,4 +114,6 @@
     --bookpage-bottom-chapterlist-bg: #282828;
     --bookpage-bottom-chapterlist-color: #777;
     --bookpage-bottom-chapterlist-active-color: #a0a0a0;
+    --bookpage-bottom-chapterlist-anchor-bg: #333;
+    --bookpage-bottom-chapterlist-anchor-color: #777;
 }
