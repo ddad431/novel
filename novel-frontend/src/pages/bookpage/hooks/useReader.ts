@@ -120,7 +120,12 @@ export function useReader(book: Ref<Book>) {
         const calc = (chapIdx: number, pgIdx: number, pgTotal: number) => {
             if (pgTotal <= 0) return (chapIdx / totalChapters * 100).toFixed(2) + '%';
             const progress = (chapIdx / totalChapters) + ((pgIdx + 1) / (pgTotal * totalChapters));
-            return (progress * 100).toFixed(2) + '%';
+
+            const res = (progress * 100).toFixed(2);
+            if (res === '100.00' && progress < 1) { // 100.00
+                return '99.99%';
+            }
+            return (progress >= 1 ? '100' : res) + '%';
         };
 
         return {
