@@ -18,7 +18,7 @@ export function usePageTurning(book: Ref<Book>) {
 
     let startX = 0;
     let startY = 0;
-    let lastMoveTime = 0;
+    let startMoveTime = 0;
     let ticking = false;
     
     // actions
@@ -50,6 +50,8 @@ export function usePageTurning(book: Ref<Book>) {
             return;
         }
 
+        // NOTE 使用 startMove 计算平均速度而不是 lastMove 计算末尾顺时速度（末尾顺时速度判定会与缓慢拖动相冲突）
+        startMoveTime = Date.now();
         isDragging.value = true;
         startX = event.touches[0].clientX;
         startY = event.touches[0].clientY;
@@ -84,7 +86,6 @@ export function usePageTurning(book: Ref<Book>) {
                 if (isDragging.value) {
                     offsetX.value = _offsetX;
                     gestureDirection.value = _offsetX > 0 ? 'right' : (_offsetX < 0 ? 'left' : '');
-                    lastMoveTime = Date.now();
                 }
                 ticking = false;
             });
@@ -98,7 +99,7 @@ export function usePageTurning(book: Ref<Book>) {
         }
 
         const screenWidth = uni.getWindowInfo().screenWidth;
-        const duration = Date.now() - lastMoveTime;
+        const duration = Date.now() - startMoveTime;
         const absX =  Math.abs(offsetX.value);
         const velocity = absX / duration;
 
