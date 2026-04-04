@@ -350,11 +350,6 @@ export function useReader(book: Ref<Book>) {
             return;
         }
 
-        if (isLastChapter.value) {
-            uni.showToast({ title: '没有下一页了', icon: 'error', mask: false });
-            return;
-        }
-
         curChapterIndex.value += 1;
         chapters.value.prev = chapters.value.cur;
         chapters.value.cur = chapters.value.next;
@@ -376,11 +371,6 @@ export function useReader(book: Ref<Book>) {
     async function goPrevPage() {
         if (!isChapterFirstPage.value) {
             curPageIndex.value -= 1;
-            return;
-        }
-
-        if (isFirstChapter.value) {
-            uni.showToast({ title: '已经是第一页了', icon: 'error', mask: false });
             return;
         }
 

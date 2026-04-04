@@ -177,19 +177,22 @@ function handlePageClick(e: any): void {
     // NOTE 在动画期间不应触发 toggleActionBar, 因此必须先判定 isAnimation
     const screenWidth = uni.getWindowInfo().screenWidth;
     const x = e.detail.x;
+    const isNext = x > screenWidth * (2/3)
     if (x >= screenWidth * (1 / 3) && x <= screenWidth * (2 / 3)) {
         toggleActionBar();
         return;
     }
 
-    if (isFirstChapterFirstPage.value || isLastChapterLastPage.value) {
-        const _title = isFirstChapterFirstPage.value ? '已经是第一页了' : '已经是最后一页了';
+    if (!isNext && isFirstChapterFirstPage.value || isNext && isLastChapterLastPage.value) {
+        uni.showToast({ 
+            title: isFirstChapterFirstPage.value ? '已经是第一页了' : '没有下一页了',
+            icon: 'none', 
+            mask: false 
+        });
 
-        uni.showToast({ title: _title, icon: 'error', mask: false });
         return;
     }
 
-    const isNext = x > screenWidth * (2/3)
     const updatePage = isNext ? goNextPage : goPrevPage;
     if (curPageTurning.value === '无动画') {
         updatePage();
