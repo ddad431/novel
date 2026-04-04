@@ -95,52 +95,60 @@ export function useReader(book: Ref<Book>) {
 
     // states
     const pageProgress = computed(() => {
-        return function (key: 'cur' | 'prev' | 'next') {
-            switch (key) {
-                case 'cur': {
-                    return `${curPageIndex.value + 1}/${chapters.value.cur.pages.length}`;
-                }
-                case 'prev': {
-                    if (isFirstChapter.value) {
-                        return '';
-                    }
-                    return isChapterFirstPage.value ? `${chapters.value.prev.pages.length}/${chapters.value.prev.pages.length}` : `${curPageIndex.value + 1 - 1}/${chapters.value.cur.pages.length}`;
-                }
-                case 'next': {
-                    if (isLastChapter.value) {
-                        return '';
-                    } 
-                    return isChapterLastPage.value ? `1/${chapters.value.next.pages.length}` : `${curPageIndex.value + 1 + 1}/${chapters.value.cur.pages.length}`;
-                }
-            }
+        const curIdx = curPageIndex.value;
+        const total = chapters.value.cur?.pages.length || 0;
+
+        return {
+            cur: `${curIdx + 1}/${total}`,
+            // 前一页：如果当前是章节第一页，尝试去拿 prev 章节的最后一页进度
+            prev: isChapterFirstPage.value 
+                ? (chapters.value.prev ? `${chapters.value.prev.pages.length}/${chapters.value.prev.pages.length}` : '')
+                : `${curIdx}/${total}`,
+            // 下一页：同理
+            next: isChapterLastPage.value
+                ? (chapters.value.next ? `1/${chapters.value.next.pages.length}` : '')
+                : `${curIdx + 2}/${total}`
         }
     });
     const chapterProgress = computed(() => {
-        const total = catalog.value?.length;
-        
-        return function (key: 'prev' | 'cur' | 'next') {
-            switch (key) {
-                case 'cur': {
-                    return `${((curChapterIndex.value / total! + (curPageIndex.value + 1) / (chapters.value.cur.pages.length * total!))*100).toFixed(2)}%`
+        const totalChapters = catalog.value?.length || 1;
+        const curChapIdx = curChapterIndex.value;
+        const curPgIdx = curPageIndex.value;
+        const curPgTotal = chapters.value.cur?.pages?.length || 0;
+
+        // 章进度公式：(当前章节索引 / 总章节数) + (当前页贡献度)
+        const calc = (chapIdx: number, pgIdx: number, pgTotal: number) => {
+            if (pgTotal <= 0) return (chapIdx / totalChapters * 100).toFixed(2) + '%';
+            const progress = (chapIdx / totalChapters) + ((pgIdx + 1) / (pgTotal * totalChapters));
+            return (progress * 100).toFixed(2) + '%';
+        };
+
+        return {
+            cur: calc(curChapIdx, curPgIdx, curPgTotal),
+            prev: (() => {
+                if (isFirstChapter.value && isChapterFirstPage.value) {
+                    return '';
                 }
-                case 'prev': {
-                    if (isFirstChapter.value) {
-                        return '';;
-                    }
-                    return isChapterFirstPage.value
-                        ? `${(((curChapterIndex.value - 1) / total!)*100).toFixed(2)}%`
-                        : `${(((curChapterIndex.value - 1) / total! + (curChapterIndex.value + 1) / (chapters.value.cur.pages.length * total!))*100).toFixed(2)}%`;
+
+                if (isChapterFirstPage.value) {
+                    const prevChapPages = chapters.value.prev?.pages?.length || 0;
+
+                    return calc(curChapIdx - 1, prevChapPages - 1, prevChapPages);
                 }
-                case 'next': {
-                    if (isLastChapter.value) {
-                        return '';
-                    }
-                    return isChapterLastPage.value
-                        ? `${(((curChapterIndex.value + 1) / total! + 1 / (chapters.value.next.pages.length * total!))*100).toFixed(2)}%`
-                        : `${(((curChapterIndex.value) / total! + (curPageIndex.value +2) / (chapters.value.cur.pages.length * total!))*100).toFixed(2)}%`
+                return calc(curChapIdx, curPgIdx - 1, curPgTotal);
+            })(),
+            next: (() => {
+                if (isLastChapter.value && isChapterLastPage.value) {
+                    return '';
                 }
-            }
-        }
+
+                if (isChapterLastPage.value) {
+                    const nextChapPages = chapters.value.next?.pages?.length || 0;
+                    return calc(curChapIdx + 1, 0, nextChapPages);
+                }
+                return calc(curChapIdx, curPgIdx + 1, curPgTotal);
+            })()
+        };
     });
 
     // lifetime

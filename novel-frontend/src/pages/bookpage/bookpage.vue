@@ -53,8 +53,8 @@
                 :style="`height: ${READER_LAYOUT.footerHeight}px; margin-top: ${READER_LAYOUT.gap}px`"
             >
                 <view class="left text-[12px] flex gap-2">
-                    <view>{{ state === 'success' ? pageProgress(key) : ' '  }}</view>
-                    <view>{{ state === 'success' ? chapterProgress(key) : ' ' }}</view>
+                    <view>{{ state === 'success' ? pageProgress[key] : ' '  }}</view>
+                    <view>{{ state === 'success' ? chapterProgress[key] : ' ' }}</view>
                 </view>
                 <view class="right flex items-center gap-1.5">
                     <view v-if="isSupportBatteryAPI" class="battery flex items-center">
