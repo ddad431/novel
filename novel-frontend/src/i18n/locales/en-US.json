@@ -37,7 +37,9 @@
         "已在书架": "Added",
         "加入书架": "Add in",
         "toast": {
-            "添加成功": "Added successfully"
+            "添加成功": "Added successfully",
+            "已经是第一页了": "Already at the beginning",
+            "没有下一页了": "No more pages"
         }
     },
     "bookgroup": {

@@ -102,6 +102,7 @@ import { useBattery } from '@/hooks/useBattery';
 import { useReaderPageConfig } from './hooks/useReaderPageConfig';
 import { useBookHisotry } from '../home/hooks';
 import { BookHistoryStorage } from '@/store/history';
+import { useI18n } from 'vue-i18n';
 
 const book = ref<Book>({} as Book);
 const state = ref<'loading' | 'success' | 'fail'>('loading');
@@ -115,6 +116,8 @@ const curPageTurningMode = computed(() => {
             return 'none';
     }
 })
+
+const { t } = useI18n();
 
 const { curTime } = useTime();
 const { batteryInfo, batteryStyle, isSupportBatteryAPI } = useBattery();
@@ -185,7 +188,7 @@ function handlePageClick(e: any): void {
 
     if (!isNext && isFirstChapterFirstPage.value || isNext && isLastChapterLastPage.value) {
         uni.showToast({ 
-            title: isFirstChapterFirstPage.value ? '已经是第一页了' : '没有下一页了',
+            title: isFirstChapterFirstPage.value ? t('bookpage.toast.已经是第一页了') : t('bookpage.toast.没有下一页了'),
             icon: 'none', 
             mask: false 
         });

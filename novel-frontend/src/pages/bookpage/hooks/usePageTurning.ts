@@ -2,10 +2,12 @@ import { nextTick, ref, Ref } from 'vue';
 import { useReader } from './useReader';
 import { PageTurning, PreferenceStore } from '@/store/preference';
 import { Book } from '@/store';
+import { useI18n } from 'vue-i18n';
 
 export function usePageTurning(book: Ref<Book>) {
     // dependencies
     const { goPrevPage, goNextPage, isFirstChapterFirstPage, isLastChapterLastPage } = useReader(book);
+    const { t } = useI18n();
 
     // states
     const pageTurningKinds = ['平移翻页', '覆盖翻页', '无动画'];
@@ -114,7 +116,7 @@ export function usePageTurning(book: Ref<Book>) {
         const isNext = offsetX.value < 0;
         const isEdge = (!isNext && isFirstChapterFirstPage.value)
             || (isNext && isLastChapterLastPage.value);
-        const isEnoughOffsetUnderEdge = offsetX.value > screenWidth * DRAG_SLOW_RATIO * 0.3;
+        const isEnoughOffsetUnderEdge = Math.abs(offsetX.value) > screenWidth * DRAG_SLOW_RATIO * 0.3;
         const updatePage = isNext ? goNextPage : goPrevPage;
 
         const triggerAnimation: (...args: any[]) => Promise<void> = (state: 'success' | 'fail') => {
@@ -153,7 +155,7 @@ export function usePageTurning(book: Ref<Book>) {
                 .then(() => {
                     if (isEnoughOffsetUnderEdge) {
                         uni.showToast({ 
-                            title: isFirstChapterFirstPage.value ? '已经是第一页了' : '没有下一页了',
+                            title: isFirstChapterFirstPage.value ? t('bookpage.toast.已经是第一页了') : t('bookpage.toast.没有下一页了'),
                             icon: 'none', 
                             mask: false 
                         });
