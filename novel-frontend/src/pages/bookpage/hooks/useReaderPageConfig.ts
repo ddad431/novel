@@ -3,17 +3,17 @@ import { ReaderConfig } from "@/reader/reader";
 import { PreferenceStore } from "@/store/preference";
 
 const curFont = ref<string>('Arial');
-const curFontSize = ref<number>(16);
-const curLineHeightRatio = ref<number>(1.85);
+const curFontSize = ref<number>(18);
+const curLineHeightRatio = ref<number>(1.7);   // 1.88, 1.7
 
 const titleFontSize = computed(() => curFontSize.value * 1.5);
 const titleLineHeightRatio = computed(() => Math.max(1, curLineHeightRatio.value - 0.3));
 const titleGap = computed(() => 2 * curFontSize.value);
-const paragraphGap = computed(() => 1.8 * curFontSize.value);
+const paragraphGap = computed(() => 1.35 * curFontSize.value);   // 1.8, 1.35
 
 const READER_LAYOUT = {
     /** 阅读页左右边距 */
-    horizontalPadding: 16,
+    horizontalPadding: 20,
 
     /** 阅读页上下边距 */
     verticalPadding: 16,
