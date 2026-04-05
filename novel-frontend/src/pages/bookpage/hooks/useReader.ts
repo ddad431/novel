@@ -122,6 +122,9 @@ export function useReader(book: Ref<Book>) {
             const progress = (chapIdx / totalChapters) + ((pgIdx + 1) / (pgTotal * totalChapters));
 
             const res = (progress * 100).toFixed(2);
+            if (res === '0.00' && progress > 0) {   // 0.00
+                return '0.01%';
+            }
             if (res === '100.00' && progress < 1) { // 100.00
                 return '99.99%';
             }
