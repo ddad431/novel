@@ -298,8 +298,8 @@ export function useReader(book: Ref<Book>) {
             }
 
             // 初次加载，阅读进度是 0，加载成功后需要立刻更新进度。
-            if (curChapterIndex.value === 0) {
-                saveReadProgress(curChapterIndex.value + 1, 1);
+            if (book.value.progress === 0) {
+                saveReadProgress(1, 1);
             }
         }
         catch (err) {
