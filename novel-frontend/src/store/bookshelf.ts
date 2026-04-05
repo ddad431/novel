@@ -91,8 +91,6 @@ export const BookShelfStore = {
     changeBookGroup,
 };
 
-const { bookhistorys } = useBookHisotry();
-
 function getBookshelf(): BookShelf {
     return JSON.parse(uni.getStorageSync('bookshelf') || '[]');
 }
@@ -191,6 +189,7 @@ function addGroup(name: string, books: Book[]) {
 }
 
 function removeGroup(name: string) {   
+    const { bookhistorys } = useBookHisotry();
     const bookshelf = getBookshelf();
     const newBookShelf = bookshelf.filter(v => !(v.type === 'group' && v.name === name));
 
@@ -246,6 +245,7 @@ function addGroupBook(name: string, book: Book) {
 }
 
 function removeGroupBook(books: Book[]) {
+    const { bookhistorys } = useBookHisotry();
     const bookshelf = getBookshelf();
     const group = bookshelf.find(v => v.type === 'group' && v.name === books[0].group) as BookShelfGroup;
    

@@ -345,6 +345,10 @@ export function useReader(book: Ref<Book>) {
         // TODO
         // - 应该搞个全局的 book，然后只要监听到这个 book 就自动同步到书架、阅读历史
 
+        book.value.progress = progress;
+        book.value.pageProgress = pageProgress;
+        uni.setStorageSync('_curbook', book.value);
+
         const shelfBook = book.value.group
             ? (bookshelf.value.find(v => v.type === 'group' && v.name == book.value.group)?.data as Book[])?.find(v => v.origin === book.value.origin && v.id === book.value.id)
             : bookshelf.value.find(v => v.type === 'book' && v.data.origin === book.value.origin && v.data.id === book.value.id)?.data as Book

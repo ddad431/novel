@@ -316,7 +316,7 @@ async function handleClickBook(item: BookShelfBook) {
 
     const key = '_curbook';
     const book = item.data;
-    uni.setStorageSync(key, JSON.stringify(book));
+    uni.setStorageSync(key, book);
     
     const desc = book.progress === 0
         ? `/pages/bookcover/bookcover?data=${key}`

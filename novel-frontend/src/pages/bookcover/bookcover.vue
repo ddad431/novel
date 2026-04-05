@@ -127,7 +127,7 @@ function handleToggleAddToBookshelf() {
 
 async function handleReading() {
     const key = '_curbook';
-    uni.setStorageSync(key, JSON.stringify(bookinfo.value));
+    uni.setStorageSync(key, bookinfo.value);
 
     const desc = `/pages/bookpage/bookpage?data=${key}`;
     if (!document.startViewTransition) {    // NOTE 这个 api 比较新 (v12x)
@@ -152,7 +152,7 @@ const bookCoverStyles = computed((): any => {
 // lifetime
 onLoad((options) => {
     if (options?.data) {
-        bookinfo.value = JSON.parse(uni.getStorageSync(options.data));
+        bookinfo.value = uni.getStorageSync(options.data);
 
         bookinfo.value.visit = Date.now();
         BookHistoryStorage.addBookHistory(bookinfo.value);

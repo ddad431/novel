@@ -167,7 +167,7 @@ function handleNovelClick(novel: Novel) {
 
     const key = '_curbook';
     const desc = book.progress === 0 ? `/pages/bookcover/bookcover?data=${key}` : `/pages/bookpage/bookpage?data=${key}`;
-    uni.setStorageSync(key, JSON.stringify(book));
+    uni.setStorageSync(key, book);
 
     if (!document.startViewTransition) {
         uni.navigateTo({url: desc});

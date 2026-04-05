@@ -251,14 +251,12 @@ async function loadingNovelData() {
 }
 
 onLoad(async (options) => {
-    if (!options?.data) {
+    // TODO 重构。（这个 _curbook key 本来是通过 options 接收的，但是你页面刷新的时候 options 是空的，所以为了防止错误，只能这里先直接硬编码...)
+    const data = uni.getStorageSync('_curbook');
+    if (!data || Object.keys(data).length === 0) {
         throw new Error('加载书籍信息失败');
     }
-
-    book.value = JSON.parse(uni.getStorageSync(options.data));
-    if (!book.value) {
-        throw new Error('加载书籍信息失败');
-    }
+    book.value = data;
 
     // NOTE 更新历史记录
     book.value.visit = Date.now();
