@@ -21,6 +21,9 @@ export type Book = Novel & {
     /** 小说进度（本地） */
     progress: number,
 
+    /** 小说页进度 */
+    pageProgress: number,
+
     /** 小说选中状态（本地，小说管理） */
     select: boolean,
 

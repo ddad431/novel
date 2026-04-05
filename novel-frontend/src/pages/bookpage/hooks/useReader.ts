@@ -162,10 +162,6 @@ export function useReader(book: Ref<Book>) {
         updatePages();
     }, { deep: true });
 
-    watch(curChapterIndex, (value) => {
-        saveReadProgress(value + 1);
-    })
-
     // actions
     async function getNovelCatalog({origin, id}: {origin: string, id: string}) {
         const record = await catalogStore.get([origin, id]);
@@ -223,7 +219,7 @@ export function useReader(book: Ref<Book>) {
         }
 
         curPageIndex.value = 0;
-        saveReadProgress(curChapterIndex.value + 1);
+        saveReadProgress(curChapterIndex.value + 1, 1);
     }
 
     async function getNovelChapters({origin, id, progress, catalog}: {origin: string, id: string, progress: number, catalog: Catalog}): Promise<RawChapters> {
@@ -279,7 +275,7 @@ export function useReader(book: Ref<Book>) {
 
     async function initNovelChapters() {
         try {
-            curChapterIndex.value = Math.max(0, book.value.progress - 1); // 注意 progress 为 0 的情况
+            syncReadProgress();
 
             rawChapters.value = await getNovelChapters({origin: book.value.origin, id: book.value.id, progress: book.value.progress, catalog: catalog.value!});
             const { cur, next, prev } = rawChapters.value;
@@ -298,7 +294,10 @@ export function useReader(book: Ref<Book>) {
                 }
             }
 
-            saveReadProgress(curChapterIndex.value + 1);
+            // 初次加载，阅读进度是 0，加载成功后需要立刻更新进度。
+            if (curChapterIndex.value === 0) {
+                saveReadProgress(curChapterIndex.value + 1, 1);
+            }
         }
         catch (err) {
             throw err;
@@ -331,21 +330,24 @@ export function useReader(book: Ref<Book>) {
         BookHistoryStorage.updateBookHistory(bookhistorys.value);
     }
 
-    function saveReadProgress(progress: number) {
+    function saveReadProgress(progress: number, pageProgress: number) {
         // 保存时机
-        //   - curChapterIndex 更新
-        //   - 从封面页进来，即 progress 为 0。（这时要立即更新，不然用户退出去了，重新进入又来到封面页）
+        // 1. 章进度、页进度更新时保存（curChpaterIndex, curPageIndex)
+        // 2. 初次加载书籍时。（因为 progress 为 0 代表未阅读，所以初次加载后需要手动更新到 1。之后的加载，就是读取之前保存的了，不存在更新保存的问题）
         // 
-        // 保存后还需要同步给哪里？
-        //   - 书架
-        //   - 历史
+        // 数据同步（有些书籍依赖于这个 read progress，所以在同步时需要更新对应的数据）
+        // 1. 书架书籍章节进度
+        // 2. 阅读历史章节进度
         //
-        // 想法？这个 book 可以做成全局的。一更新就自动保存。
+        // TODO
+        // - 应该搞个全局的 book，然后只要监听到这个 book 就自动同步到书架、阅读历史
+
         const shelfBook = book.value.group
             ? (bookshelf.value.find(v => v.type === 'group' && v.name == book.value.group)?.data as Book[])?.find(v => v.origin === book.value.origin && v.id === book.value.id)
             : bookshelf.value.find(v => v.type === 'book' && v.data.origin === book.value.origin && v.data.id === book.value.id)?.data as Book
         if (shelfBook) {
             shelfBook.progress = progress;
+            shelfBook.pageProgress = pageProgress;
         }
         BookShelfStore.updateBookshelf(bookshelf.value);
 
@@ -353,13 +355,23 @@ export function useReader(book: Ref<Book>) {
         const historyBook = bookhistorys.value.find(v => v.origin === book.value.origin && v.id === book.value.id);
         if (historyBook) {
             historyBook.progress = progress;
+            historyBook.pageProgress = pageProgress;
         }
         BookHistoryStorage.updateBookHistory(bookhistorys.value);
+    }
+
+    /**
+     * 同步书籍阅读进度（章节进度、页进度）
+     */
+    function syncReadProgress() {
+        curChapterIndex.value = Math.max(0, book.value.progress - 1);   // 初次加载时，阅读进度是 0
+        curPageIndex.value = Math.max(0, book.value.pageProgress - 1);
     }
 
     async function goNextPage() {
         if (!isChapterLastPage.value) {
             curPageIndex.value += 1;
+            saveReadProgress(curChapterIndex.value + 1, curPageIndex.value + 1);
             return;
         }
 
@@ -371,19 +383,20 @@ export function useReader(book: Ref<Book>) {
         rawChapters.value.prev = rawChapters.value.cur;
         rawChapters.value.cur = rawChapters.value.next;
 
-        // TODO 保存进度
-
         const curChapter = curChapterIndex.value + 1;   // NOTE 在更新 cur 后请求新章节，防止阻塞 UI
         if (curChapter + 1 <= catalog.value?.length!) {
             const nextChapter = await getNovelChapter(curChapter + 1);
             rawChapters.value.next = nextChapter;  // NOTE 别忘了更新 rawChapters, 调整字体、布局时需要重新计算整个 chapters
             chapters.value.next = { title: nextChapter.title, pages: calcPages(nextChapter.title, nextChapter.content, readerPageConfig.value)};
         }
+
+        saveReadProgress(curChapterIndex.value + 1, 1);
     }
 
     async function goPrevPage() {
         if (!isChapterFirstPage.value) {
             curPageIndex.value -= 1;
+            saveReadProgress(curChapterIndex.value + 1, curPageIndex.value + 1);
             return;
         }
 
@@ -395,11 +408,11 @@ export function useReader(book: Ref<Book>) {
         rawChapters.value.next = rawChapters.value.cur;
         rawChapters.value.cur = rawChapters.value.prev;
 
-        // TODO 保存进度
-
         const newChapter = await getNovelChapter(curChapterIndex.value + 1);
         rawChapters.value.prev = newChapter;
         chapters.value.prev = { title: newChapter.title, pages: calcPages(newChapter.title, newChapter.content, readerPageConfig.value)}
+
+        saveReadProgress(curChapterIndex.value + 1, curPageIndex.value + 1);
 
         return;
     }

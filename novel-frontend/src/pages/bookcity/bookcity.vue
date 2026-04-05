@@ -130,7 +130,7 @@ async function handleInputConfirm(keyword: string) {
             const { data } = await fetchNovelList(keyword);
             state.value = 'success';
             sourceBookList.value = (data as Novel[])
-                .map(v => ({ ...v, progress: 0, select: false, isadded: false, ispined: false, group: '', total: 0, visit: Date.now() }));
+                .map(v => ({ ...v, progress: 0, pageProgress: 1, select: false, isadded: false, ispined: false, group: '', total: 0, visit: Date.now() }));
 
             state.value = 'success';
         }
@@ -162,7 +162,7 @@ function handleNovelClick(novel: Novel) {
     // NOTE 先检查一下本地有没有保存该书籍信息
     let book: Book | undefined = BookShelfStore.findBook(novel.origin, novel.id)?.data;
     if (!book) {
-        book = {...novel, group: '', select: false, isadded: false, ispined: false, progress: 0, visit: Date.now()}
+        book = {...novel, group: '', select: false, isadded: false, ispined: false, progress: 0, pageProgress: 1, visit: Date.now()}
     }
 
     const key = '_curbook';

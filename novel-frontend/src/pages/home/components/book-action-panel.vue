@@ -68,7 +68,7 @@ async function handleImportBook() {
         UploadStore.updateBooklUploadRecord(file);
 
         // (5.3) 更新本地存储的用户书架数据
-        const book = { ...data, progress: 0, select: false, isadded: true } as Book;
+        const book = { ...data, progress: 0, pageProgress: 1, select: false, isadded: true } as Book;
         BookShelfStore.addBook(book);
 
         // (5.4) 更新书架 UI（重新读取本地存储的书架数据，更新书架响应式数据）
