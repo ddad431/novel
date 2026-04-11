@@ -48,10 +48,10 @@
          <view class="z-1 bg-[var(--bookcover-action-bg)] fixed bottom-0 w-full h-[64px] box-border p-[12px_16px] flex justify-between items-center text-[15px]">
             <view v-if="bookinfo?.isadded" class="h-full flex gap-[4px] items-center color-[var(--bookcover-action-added-color)]">
                 <view class="icon-book-added text-[1.4em]" />
-                <view @click="handleToggleAddToBookshelf"><view class="translate-y-[-1.5px]">{{ $t('bookcover.已在书架') }}</view></view>
+                <view @click="handleAddToBookshelf"><view class="translate-y-[-1.5px]">{{ $t('bookcover.已在书架') }}</view></view>
             </view>
             <view v-else class="h-full flex gap-[4px] items-center color-[var(--bookcover-action-add-color)]">
-                <view @click="handleToggleAddToBookshelf"><view class="translate-y-[-1.5px] ">{{ $t('bookcover.加入书架') }}</view></view>
+                <view @click="handleAddToBookshelf"><view class="translate-y-[-1.5px] ">{{ $t('bookcover.加入书架') }}</view></view>
             </view>
 
             <view class="bg-[var(--bookcover-action-reading-bg)] color-[var(--bookcover-action-reading-color)] w-[50%] h-full rounded-full flex justify-center items-center" @click="handleReading">
@@ -104,25 +104,15 @@ function handleNavBack() {
     });
 }
 
-function handleToggleAddToBookshelf() {
-    bookinfo.value.visit = Date.now();
-    
+function handleAddToBookshelf() {
+    // NOTE 只允许加入书架，不允许移除书架
     if (bookinfo.value.isadded) {
-        bookinfo.value.isadded = false;
-        const book = BookShelfStore.findBook(bookinfo.value.origin, bookinfo.value.id) as BookShelfBook;
-        BookShelfStore.removeBook([book]);
-    }
-    else {
-        bookinfo.value.isadded = true;
-        BookShelfStore.addBook(bookinfo.value);
+       return;
     }
 
-    // NOTE
-    // - 更新书架。
-    // - 更新历史。本来直接进入 bookcover 就添加历史，但这里又更改了状态，为了保证状态同步，所以需要再次添加历史。
-    bookshelf.value = BookShelfStore.getBookshelf();
-    BookHistoryStorage.addBookHistory(bookinfo.value);
-    bookhistorys.value= BookHistoryStorage.getBookHistory();
+    bookinfo.value.visit = Date.now();
+    bookinfo.value.isadded = true;
+    BookShelfStore.addBook(bookinfo.value);
 }
 
 async function handleReading() {
