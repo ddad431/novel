@@ -411,7 +411,7 @@ function handleClickBook(book: Book) {
     }
 
     const key = '_curbook';
-    uni.setStorageSync(key, JSON.stringify(book));
+    uni.setStorageSync(key, book);
     
     const desc = book.progress === 0
         ? `/pages/bookcover/bookcover?data=${key}`

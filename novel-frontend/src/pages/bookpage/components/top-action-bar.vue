@@ -63,7 +63,7 @@ function handleNavBack() {
 async function handleGotoBookcover() {
     const key = '_curbook';
     const book = props.book;
-    uni.setStorageSync(key, JSON.stringify(book));
+    uni.setStorageSync(key, book);
 
     if (!document.startViewTransition) {    // NOTE 这个 api 比较新 (v12x)
         uni.navigateTo({url: `/pages/bookcover/bookcover?data=${key}`});
