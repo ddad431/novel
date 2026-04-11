@@ -40,6 +40,15 @@
             "添加成功": "Added successfully",
             "已经是第一页了": "Already at the beginning",
             "没有下一页了": "No more pages"
+        },
+        "bottom": {
+            "白天": "DAY",
+            "夜晚": "NIGHT",
+            "偏好": "SETTING",
+            "目录": "TOC",
+            "间距": "Spacing",
+            "翻页方式": "Paging",
+            "更多设置": "More Settings"
         }
     },
     "bookgroup": {

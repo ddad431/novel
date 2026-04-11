@@ -21,6 +21,8 @@ const props = defineProps<{
     height?: string,
     bg?: string,
     activeBg?: string,
+    color?: string,
+    activeColor?: string,
 }>();
 
 const value = defineModel<string>();

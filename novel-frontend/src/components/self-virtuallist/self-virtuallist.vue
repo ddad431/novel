@@ -43,9 +43,10 @@
         </view>
      </scroll-view>
     <view 
-        v-if="!isCurChapterItemRender" 
-        class="anchor absolute bottom-[8px] right-0 p-[8px] rounded-[20px] flex justify-center"
-        :style="{'background-color': 'var(--bookpage-bottom-chapterlist-anchor-bg)', 'color': 'var(--bookpage-bottom-chapterlist-anchor-color)' }"
+        v-if="!isCurChapterItemRender"
+        class="anchor absolute bottom-[24px] right-[24px] p-[8px] rounded-[20px] flex justify-center"
+        :class="[!isCurChapterItemRender ? 'anchor-hidden' : '']"
+        :style="{}"
         @click="handleClickAnchor"
     >
         <view class="icon-crosshair"></view>
@@ -130,4 +131,16 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.anchor {
+    scale: 1;
+    transition: all .3s;
+
+    background-color: var(--bookpage-bottom-chapterlist-anchor-bg);
+    color: var(--bookpage-bottom-chapterlist-anchor-color);
+}
+
+.anchor-hidden {
+    scale: 0;
+}
+
 </style>

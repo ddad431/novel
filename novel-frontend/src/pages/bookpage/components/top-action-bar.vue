@@ -1,19 +1,32 @@
 <template>
     <view 
-        class="top-action-bar fixed top-0 z-[99] h-[48px] w-full box-border p-[16px] bg-[var(--bookpage-top-bar-bg)] color-[var(--bookpage-top-bar-color)] flex justify-between items-center"
+        class="top-action-bar fixed top-[12px] z-[99]  h-[40px] w-full box-border p-[16px] rounded-[0]  flex justify-between items-center gap-[8px]"
         @click.stop
     >
         <!--
             nav
             - nav 图标浪费了部分左侧空间，使得视觉上 nav 图标距离边界过远。（借助相对定位向左调整）
         -->
-        <view class="icon-nav relative right-[8px]" @click="handleNavBack"/>
+        <view class="h-[30px] w-[30px] rounded-full bg-[var(--bookpage-top-bar-bg)] flex items-center justify-center">
+            <view class="icon-nav color-[var(--bookpage-top-bar-color)]" @click="handleNavBack"/>
+        </view>
+        
+        <!-- <view class="truncate color-[gray] text-[15px] relative bottom-[1px]">第二十章 哈哈哈哈哈哈哈</view> -->
+
 
         <!-- actions -->
-        <view class="flex items-center gap-[16px]">
-            <view v-if="props.book.isadded" class="text-[15px] relative bottom-[1px] color-[gray]">{{ $t('bookpage.已在书架')}}</view>
-            <view v-else class="text-[15px] relative bottom-[1px]" @click="handleAddToBookshelf">{{ $t('bookpage.加入书架') }}</view>
-            <view class="icon-dots" @click="handleGotoBookcover"></view>
+        <view class="color-[var(--bookpage-top-bar-color)] flex items-center justify-center rounded-full gap-[8px]">
+            <!-- <view class="icon-plus"></view> -->
+            <!-- <view v-if="props.book.isadded" class="text-[15px] relative bottom-[1px] color-[gray]">{{ $t('bookpage.已在书架')}}</view>
+            <view v-else class="text-[15px] relative bottom-[1px]" @click="handleAddToBookshelf">{{ $t('bookpage.加入书架') }}</view> -->
+            <view class="h-[30px] rounded-full bg-[var(--bookpage-top-bar-bg)] flex items-center justify-center box-border" :class="[props.book.isadded ? 'p-[0_12px]' : 'w-[30px]']">
+                <!-- <view class="icon-plus color-[gray]"></view> -->
+                <view v-if="props.book.isadded" class="text-[13px]">{{ $t('bookpage.已在书架')}}</view>
+                <view v-else class="icon-plus" @click="handleAddToBookshelf"></view>
+            </view>
+            <view class="h-[30px] w-[30px] rounded-full bg-[var(--bookpage-top-bar-bg)] flex items-center justify-center">
+                <view class="icon-dots" @click="handleGotoBookcover"></view>
+            </view>
         </view> 
     </view>
 </template>
@@ -29,7 +42,7 @@ const props = defineProps<{
     book: Book,
 }>();
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const { bookshelf } = useBookshelf();
 const { bookhistorys } = useBookHisotry();
 

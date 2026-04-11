@@ -81,7 +81,7 @@
         />
      
     
-        <Transition name="slide-top">
+        <Transition name="fade">
             <TopActionBar v-show="actionBarVisible" :hideActionBar :book="book!"/>
         </Transition>
         

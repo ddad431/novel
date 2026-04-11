@@ -1,6 +1,6 @@
  <template>
     <!-- NOTE bottom-action-bar 的 z-index 必须高于 overlay，否则会被蒙层遮挡 -->
-    <Transition name="slide-bottom">
+    <!-- <Transition name="slide-bottom">
         <view
             v-show="actionBarVisible"
             class="bg-[var(--bookpage-bottom-bar-bg)] color-[var(--bookpage-bottom-bar-color)] fixed bottom-0 z-9999 w-screen h-[72px]  box-border p-[16px] flex items-center transition-colors"
@@ -12,58 +12,88 @@
                 <view :class="[preferencePanelVisible === true ? 'icon-adjustment-actived' : 'icon-adjustment']" @click.stop="togglePreferencePanel"></view>
             </view>
         </view>
-     </Transition>
+     </Transition> -->
 
-    <self-overlay v-model="preferencePanelVisible" :mask="false" position="bottom" offsetBottom="72px">
+       
+    <view         
+        class="bottom-action-bar fixed bottom-[8px] z-9999 h-[100px] w-[calc(100vw-16px)] m-l-[8px] box-border p-[16px] rounded-[12px] flex justify-around items-center"
+        :class="[actionBarVisible ? '' : 'bottom-action-bar-hidden']"
+    >
+        <view class="w-[48px] h-[50px] flex flex-col items-center justify-between gap-[8px]" @click="toggleChapterListPanel">
+            <view class="icon-list"></view>
+            <view class="text-[12px] color-[var(--action-panel-text-color)]">{{ $t('bookpage.bottom.目录') }}</view>
+        </view>
+        <view class="w-[48px] h-[50px] flex flex-col items-center justify-between gap-[8px]" @click="toggleLightDarkMode">
+            <view :class="[props.curMode === 'dark' ? 'icon-moon' : 'icon-sun']"></view>
+            <view class="text-[12px] color-[var(--action-panel-text-color)]">{{ props.curMode === 'dark' ? $t('bookpage.bottom.夜晚') : $t('bookpage.bottom.白天') }}</view>
+        </view>
+        <view class="w-[48px] h-[50px] flex flex-col items-center justify-between gap-[8px]" @click="togglePreferencePanel">
+            <view class="icon-adjustment"></view>
+            <view class="text-[12px] color-[var(--action-panel-text-color)]">{{ $t('bookpage.bottom.偏好') }}</view>
+        </view>
+    </view>
+
+    <self-overlay v-model="preferencePanelVisible" :mask="false" position="bottom">
         <view 
-            class="bg-[var(--bookpage-bottom-preference-bg)] color-[var(--bookpage-bottom-preference-color)] h-[216px] w-full box-border p-[24px] p-b-0 rounded-t-[16px] flex flex-col justify-between items-center gap-[24px]"
-            @touchmove.prevent
+            class="bg-[var(--bookpage-bottom-preference-bg)] color-[var(--bookpage-bottom-preference-color)] w-full m-[8px] box-border p-[24px] rounded-[16px]"
+            @touchmove.stop
         >
 		
-            <!-- <view class="preference-font h-[42px] flex items-center w-full rounded-[8px]" style="background: #fff;"></view> -->
-            <SelfSlider 
-                class="preference-font"
-                v-model="fontSize"
-                @change="props.changeFontSize"
-                :trackHeight="42"
-                trackBg="var(--bookpage-bottom-preference-item-bg)"
-                :thumbHeight="36"
-                thumbBg="var(--bookpage-bottom-preference-item-active-bg)"
-                :min="12"
-                :max="36"
-                :step="2"
-                :left-lable="'A'"
-                :right-lable="'A'"
-                :left-lable-size="14"
-                :right-lable-size="24"
-            />
-
-            <view class="preference-theme h-[60px] w-full flex items-center justify-between">
+            <view class="preference-font w-full m-b-[16px]">
+                <SelfSlider 
+                    class="preference-font"
+                    v-model="fontSize"
+                    @change="props.changeFontSize"
+                    :trackHeight="46"
+                    trackBg="var(--bookpage-bottom-preference-item-bg)"
+                    :thumbHeight="36"
+                    thumbBg="var(--bookpage-bottom-preference-item-active-bg)"
+                    :min="12"
+                    :max="36"
+                    :step="2"
+                    :left-lable="'A'"
+                    :right-lable="'A'"
+                    :left-lable-size="14"
+                    :right-lable-size="24"
+                />
+            </view>
+          
+            <view class="preference-theme h-[60px] w-full  m-b-[16px] flex items-center justify-between">
                 <view
                     v-for="(value, key) in props.themes" :key
-                    class="w-[48px] h-[48px] rounded-[8px]"
-                    :class="props.curReaderTheme === key ? 'active-theme' : ''"
+                    class="w-[44px] h-[44px] rounded-full"
+                    :class="props.curReaderTheme === key ? 'preference-theme-active' : ''"
                     :style="`background-color: ${value}`"
                     @click="props.changeReaderTheme(key)"
                 >
                 </view>
             </view>
 
-            <view class="preference-turing w-full h-[42px]">
-                <self-segmented
-                    v-model="pageTurning"
-                    @change="props.changePageTurning"
-                    :options="props.pageTurningKinds.map(v => $t(`bookpage.${v}`))"
-                    height="42px" 
-                    bg="var(--bookpage-bottom-preference-item-bg)" 
-                    active-bg="var(--bookpage-bottom-preference-item-active-bg)"  
-                />
+            <view class="flex flex-col gap-[16px] m-b-[20px]">
+                <view class="turing h-[36px] flex items-center text-[14px]">
+                    <view class="w-[80%]">{{ $t('bookpage.bottom.翻页方式') }}</view>
+                    <view class="preference-turing w-full">
+                        <self-segmented
+                            v-model="pageTurning"
+                            @change="props.changePageTurning"
+                            :options="props.pageTurningKinds.map(v => $t(`bookpage.${v}`))"
+                            height="36px" 
+                            bg="var(--bookpage-bottom-preference-item-bg)" 
+                            active-bg="var(--bookpage-bottom-preference-item-active-bg)"  
+                        />
+                    </view>
+                </view>
+            </view>
+
+            <view class="preference-more text-[14px] flex justify-between">
+                <view>{{ $t('bookpage.bottom.更多设置') }}</view>
+                <view class="icon-next"></view>
             </view>
         </view>
     </self-overlay>
 
-    <self-overlay v-model="chapterlistPanelVisible" position="bottom" offsetBottom="72px">
-        <view class="book-info bg-[var(--bookpage-bottom-chapterlist-bg)] color-[var(--bookpage-bottom-chapterlist-color)]  h-[calc(90px+300px+24px+16px)] w-full box-border p-[24px] p-b-[0] rounded-t-[16px]">
+    <self-overlay v-model="chapterlistPanelVisible" position="bottom">
+        <view class="book-info bg-[var(--bookpage-bottom-chapterlist-bg)] color-[var(--bookpage-bottom-chapterlist-color)] m-[8px] w-full box-border p-[24px] p-b-[8px] rounded-[16px] flex flex-col justify-between" @touchmove.stop>
             <view class="book-meta h-[90px] m-b-[16px] flex gap-[12px]">
                 <view class="cover h-[90px] w-[70px] rounded-[4px]" :style="bookCoverStyles(props.book)"></view>
                 <view class="info flex-grow flex flex-col justify-between" >
@@ -80,7 +110,7 @@
                 </view>
             </view>
 
-            <view class="book-chapter flex-grow relative h-[300px]">
+            <view class="book-chapter flex-grow">
                 <self-virtuallist 
                     :reverse="isReverseChapterList" 
                     :data="props.catalog?.map((v, index) => ({...v, index}))" 
@@ -161,11 +191,13 @@ const preferencePanelVisible = ref<boolean>(false);
 const isReverseChapterList = ref<boolean>(false);
 
 function toggleChapterListPanel() {
+    actionBarVisible.value = false;
     preferencePanelVisible.value = false;
     chapterlistPanelVisible.value = !chapterlistPanelVisible.value;
 }
 
 function togglePreferencePanel() {
+    actionBarVisible.value = false;
     chapterlistPanelVisible.value = false;
     preferencePanelVisible.value = !preferencePanelVisible.value;
 }
@@ -174,6 +206,7 @@ function toggleLightDarkMode() {
     preferencePanelVisible.value = false;
     chapterlistPanelVisible.value = false;
     props.toggleReaderDarkMode();
+    actionBarVisible.value = false;
 }
 
 // TODO: 在关闭 preference panel 的时候执行副作用，即隐藏 bottom-action-bar。具体的在 self-overlay 的 :close 执行
@@ -209,10 +242,28 @@ onMounted(() => {
 </script>
 
 <style scoped>
-   .active-theme {
-        outline: 1px solid var(--bookpage-bottom-preference-item-outline-color);
-        outline-offset: 3px;
-    }
+.preference-theme {
+    transition: all .3s;
+}
+
+.preference-theme-active {
+    outline: 1px solid var(--bookpage-bottom-preference-item-outline-color);
+    outline-offset: 3px;
+    transform: scale(0.9);
+}
+
+.bottom-action-bar {
+    background-color: var(--bookpage-bottom-bar-bg);
+    color: var(--bookpage-bottom-bar-color);
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bottom-action-bar-hidden {
+    transform: translateY(120px) scale(0.9);
+    opacity: 0;
+}
 </style>
 
  

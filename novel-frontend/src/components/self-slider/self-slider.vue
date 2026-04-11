@@ -21,7 +21,7 @@
 -->
 <template>
     <view 
-        class="slider-track relative w-full rounded-[8px]"
+        class="slider-track relative w-full rounded-[10px]"
         :style="trackStyles"
         @click="onClick"
         @touchstart.passive="onTouchStart"
@@ -49,14 +49,14 @@
         </view>
 
         <view 
-            class="left-lable h-full absolute left-[8px] z-2 flex justify-center items-center"
+            class="left-lable h-full absolute left-[16px] z-2 flex justify-center items-center"
             :style="`font-size: ${props.leftLableSize}px`"
         >
             {{  props.leftLable }}
         </view>
 
         <view 
-            class="right-lable h-full absolute right-[8px] z-2 flex justify-center items-center"
+            class="right-lable h-full absolute right-[16px] z-2 flex justify-center items-center"
             :style="`font-size: ${props.rightLableSize}px`"
         >
             {{  props.rightLable }}
