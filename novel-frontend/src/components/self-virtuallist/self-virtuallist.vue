@@ -122,7 +122,8 @@ watch(() => props.data, () => {
 
 onMounted(() => {
     // NOTE 每次打开虚拟列表时跳转到 curIndex
-    scrollTopVal.value = props.curIndex * props.itemHeight;
+    const _pos = !props.reverse ? props.curIndex : props.data.length - props.curIndex - 1;
+    scrollTopVal.value = _pos * props.itemHeight;
     updateRenderListStartIdx(scrollTopVal.value);
 })
 </script>
