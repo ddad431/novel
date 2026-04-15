@@ -93,7 +93,7 @@
     </self-overlay>
 
     <self-overlay v-model="chapterlistPanelVisible" position="bottom">
-        <view class="book-info bg-[var(--bookpage-bottom-chapterlist-bg)] color-[var(--bookpage-bottom-chapterlist-color)] m-[8px] w-full box-border p-[24px] p-b-[8px] rounded-[16px] flex flex-col justify-between" @touchmove.stop>
+        <view class="book-info bg-[var(--bookpage-bottom-chapterlist-bg)] color-[var(--bookpage-bottom-chapterlist-color)] m-[8px] min-w-0 w-full box-border p-[24px] p-b-[8px] rounded-[16px] flex flex-col justify-between" @touchmove.stop>
             <view class="book-meta h-[90px] m-b-[16px] flex gap-[12px]">
                 <view class="cover h-[90px] w-[70px] rounded-[4px]" :style="bookCoverStyles(props.book)"></view>
                 <view class="info flex-grow flex flex-col justify-between" >
