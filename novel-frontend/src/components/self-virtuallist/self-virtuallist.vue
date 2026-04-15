@@ -86,7 +86,8 @@ const renderListData = computed(() => {
     return props.data.slice(renderListStartIdx.value, endIdx);
 });
 const isCurChapterItemRender = computed(() => {
-    return props.curIndex >= renderListStartIdx.value && props.curIndex <= renderListStartIdx.value + renderListCount.value
+    const _pos = !props.reverse ? props.curIndex : props.data.length - props.curIndex; // curItem 在 total list 中的位置
+    return _pos >= renderListStartIdx.value && _pos <= renderListStartIdx.value + renderListCount.value
 });
 
 function updateRenderListStartIdx(scrollTop: number): void  {
