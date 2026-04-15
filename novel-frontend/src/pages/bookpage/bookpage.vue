@@ -108,11 +108,11 @@ const book = ref<Book>({} as Book);
 const state = ref<'loading' | 'success' | 'fail'>('loading');
 const curPageTurningMode = computed(() => {
     switch (curPageTurning.value) {
-        case '平移翻页':
+        case '平移':
             return 'slide';
-        case '覆盖翻页':
+        case '覆盖':
             return 'cover';
-        case '无动画':
+        case '无':
             return 'none';
     }
 })
@@ -197,7 +197,7 @@ function handlePageClick(e: any): void {
     }
 
     const updatePage = isNext ? goNextPage : goPrevPage;
-    if (curPageTurning.value === '无动画') {
+    if (curPageTurning.value === '无') {
         updatePage();
         return;
     }

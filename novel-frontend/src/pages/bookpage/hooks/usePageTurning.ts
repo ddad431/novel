@@ -10,8 +10,8 @@ export function usePageTurning(book: Ref<Book>) {
     const { t } = useI18n();
 
     // states
-    const pageTurningKinds = ['平移翻页', '覆盖翻页', '无动画'];
-    const curPageTurning = ref<'无动画' | '平移翻页' | '覆盖翻页'>('覆盖翻页');
+    const pageTurningKinds = ['平移', '覆盖', '无'];
+    const curPageTurning = ref<'无' | '平移' | '覆盖'>('覆盖');
     const offsetX = ref<number>(0);
     const offsetY = ref<number>(0);
     const isDragging = ref<boolean>(false); // 拖拽动画不需要 transition，用一个全局变量来区分
@@ -35,9 +35,9 @@ export function usePageTurning(book: Ref<Book>) {
 
         // NOTE 需要优化
         const _maps: Record<string, PageTurning> = {
-            'Cover': '覆盖翻页',
-            'Slide': '平移翻页',
-            'None': '无动画',
+            'Cover': '覆盖',
+            'Slide': '平移',
+            'None': '无',
         };
         
         if (Object.keys(_maps).includes(style)) {

@@ -1,7 +1,7 @@
 export type PageTurning = 
-    | '覆盖翻页' 
-    | '平移翻页' 
-    | '无动画';
+    | '覆盖' 
+    | '平移' 
+    | '无';
 export type ReaderTheme = 
     | 'white'
     | 'green'
@@ -21,7 +21,7 @@ export type Preference = {
 
 const DEFAULT_PREFERENCE: Preference = {
     fontSize: 16,
-    pageTurning: '覆盖翻页',
+    pageTurning: '覆盖',
     theme: 'white',
     mode: 'light',
     colorscheme: {

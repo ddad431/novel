@@ -31,9 +31,9 @@
         "开始阅读": "Reading"
     },
     "bookpage": {
-        "平移翻页": "Slide",
-        "覆盖翻页": "Cover",
-        "无动画": "None",
+        "平移": "Slide",
+        "覆盖": "Cover",
+        "无": "None",
         "已在书架": "Added",
         "加入书架": "Add in",
         "toast": {
