@@ -32,7 +32,7 @@
             <view class="text-[12px] color-[var(--action-panel-text-color)]">{{ $t('bookpage.bottom.偏好') }}</view>
         </view>
     </view>
-
+ 
     <self-overlay v-model="preferencePanelVisible" :mask="false" position="bottom">
         <view 
             class="bg-[var(--bookpage-bottom-preference-bg)] color-[var(--bookpage-bottom-preference-color)] w-full m-[8px] box-border p-[24px] rounded-[16px]"
@@ -113,7 +113,7 @@
             <view class="book-chapter flex-grow">
                 <self-virtuallist 
                     :reverse="isReverseChapterList" 
-                    :data="props.catalog?.map((v, index) => ({...v, index}))" 
+                    :data="catalogs"
                     :height="300" 
                     :itemHeight="30" 
                     :curIndex="props.curChapterIndex"
@@ -189,6 +189,12 @@ const lightDarkMode = ref<'light' | 'dark'>('dark');
 const chapterlistPanelVisible = ref<boolean>(false);
 const preferencePanelVisible = ref<boolean>(false);
 const isReverseChapterList = ref<boolean>(false);
+
+
+const catalogs = computed(() => {
+    const _catalogs = props.catalog?.map((v, index) => ({...v, index}));
+    return !isReverseChapterList.value ? _catalogs : _catalogs.reverse();
+})
 
 function toggleChapterListPanel() {
     actionBarVisible.value = false;

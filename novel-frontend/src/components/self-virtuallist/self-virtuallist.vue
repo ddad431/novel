@@ -108,19 +108,15 @@ function handleClickAnchor() {
         return;
     }
     
-    scrollTopVal.value = props.curIndex * props.itemHeight;
+    const _dest = !props.reverse ? props.curIndex : props.data.length - props.curIndex - 1;
+    scrollTopVal.value = _dest * props.itemHeight;
     updateRenderListStartIdx(scrollTopVal.value);
 }
 
-watch(() => props.reverse, (newVal) => {
-    if (newVal) {
-        renderListStartIdx.value = props.data.length <= renderListCount.value ? 0 : props.data.length - renderListCount.value;
-        scrollTopVal.value = renderListStartIdx.value * props.itemHeight;
-    }
-    else {
-        renderListStartIdx.value = 0;
-        scrollTopVal.value = 0;
-    }
+watch(() => props.data, () => {
+    // NOTE 每次 data 变化都需要重置滚动位置与 startIdx （因为这时候触发了逆序、正序)
+    renderListStartIdx.value = 0;
+    scrollTopVal.value = 0;
 })
 
 onMounted(() => {
