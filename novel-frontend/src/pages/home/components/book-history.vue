@@ -275,7 +275,7 @@ function getBookVisitTime(book: Book) {
         } else if (diff < T_LAST_WEEK) {
             return t('history.最近一周看过');
         } else if (diff < T_LAST_MONTH) {
-            return t('history.最近一月看过');
+            return t('history.最近一个月看过');
         }
     }
 
