@@ -45,7 +45,7 @@
     <view 
         v-if="!isCurChapterItemRender"
         class="anchor absolute bottom-[24px] right-[24px] p-[8px] rounded-[20px] flex justify-center"
-        :class="[!isCurChapterItemRender ? 'anchor-hidden' : '']"
+        :class="[isCurChapterItemRender ? 'anchor-hidden' : '']"
         :style="{}"
         @click="handleClickAnchor"
     >
