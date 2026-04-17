@@ -74,6 +74,9 @@ export function calcPages(_title: string, paragraphs: string[], options: ReaderC
     const minTLineChras = Math.floor(page.width / title.size);  // NOTE: 向下取整。向上取整会导致有时多出子一个字符，进而出现文本超宽，软换行。
     const minPLineChars = Math.floor(page.width / paragraph.size);
 
+    let paragraphLineNums = 0;
+    let paragraphNums = 0;
+
     // 页最少行数
     // - 首页最少行数（
     // - 普通页最少行数（我们不知道有
@@ -116,6 +119,8 @@ export function calcPages(_title: string, paragraphs: string[], options: ReaderC
         const _paragraph = paragraphs[i];
         if (_paragraph.length <= minPLineChars) {
             lines.push({ text: _paragraph , type: 'paragraph-last-line', pid: i });  // NOTE：id 是段落 id，不要写错
+            paragraphNums++;
+            paragraphLineNums++;
             addPage();  // NOTE: 每次有新行的时候都要检查（或许可以优化？）
             continue;
         }
@@ -125,6 +130,7 @@ export function calcPages(_title: string, paragraphs: string[], options: ReaderC
 
             if (lwidth + cwidth > page.width) {
                 lines.push({ text: lchars.join(''), type: 'paragraph-line', pid: i });
+                paragraphLineNums++;
                 lchars = [char];
                 lwidth = cwidth; 
                 addPage();
@@ -136,15 +142,15 @@ export function calcPages(_title: string, paragraphs: string[], options: ReaderC
         }
         if (lchars.length > 0) {
             lines.push({ text: lchars.join('') , type: 'paragraph-last-line', pid: i }); 
+            paragraphNums++;
+            paragraphLineNums++;
             lwidth = 0;
             lchars = [];
             addPage();
         }
         
         function addPage() {
-            const plnum = pages.length === 0 ? lines.filter(l => l.type.startsWith('paragraph')).length : lines.length;
-            const pnum = lines.filter(l => l.type === 'paragraph-last-line').length || 0;
-            const pheight = plnum * (paragraph.ratio * paragraph.size) + pnum * paragraph.gap;
+            const pheight = paragraphLineNums * (paragraph.ratio * paragraph.size) + paragraphNums * paragraph.gap;
             const height = pages.length === 0 ? pheight + theight : pheight;
 
             if (height > page.height) {
@@ -155,6 +161,7 @@ export function calcPages(_title: string, paragraphs: string[], options: ReaderC
                 const lastLine = lines[lines.length-1];
                 if (lastLine.type === 'paragraph-last-line' && height - paragraph.gap <= page.height) {
                     lastLine.type = 'paragraph-line';
+                    paragraphNums -= 1;
                     return;
                 }
 
@@ -164,6 +171,8 @@ export function calcPages(_title: string, paragraphs: string[], options: ReaderC
 
                 lwidth = 0;
                 lchars = [];
+                paragraphNums = lines[0].type === 'paragraph-last-line' ? 1 : 0;
+                paragraphLineNums = 1;
             }
         }
        
