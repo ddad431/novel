@@ -45,6 +45,7 @@ function createReaderConfig(width: Ref<number>, height: Ref<number>) {
             size: curFontSize.value,
             ratio: curLineHeightRatio.value,
             gap: paragraphGap.value,
+            indent: false,
         }
     }));
 }
@@ -72,8 +73,25 @@ export function useReaderPageConfig() {
             'line-height': `${curLineHeightRatio.value}em`,
         }
     });
+    const paragraphIndentLineStyles = computed(() => {
+        return {
+            'text-indent': '2em',
+            'font-family': curFont.value,
+            'font-size': `${curFontSize.value}px`,
+            'line-height': `${curLineHeightRatio.value}em`,
+        }
+    });
     const paragraphLastLineStyles = computed(() => {
         return {
+            'font-family': curFont.value,
+            'font-size': `${curFontSize.value}px`,
+            'line-height': `${curLineHeightRatio.value}em`,
+            'margin-bottom': `${paragraphGap.value}px`,
+        }
+    });
+    const paragraphIndentLastLineStyles = computed(() => {
+        return {
+            'text-indent': '2em',
             'font-family': curFont.value,
             'font-size': `${curFontSize.value}px`,
             'line-height': `${curLineHeightRatio.value}em`,
@@ -110,5 +128,7 @@ export function useReaderPageConfig() {
         paragraphLineStyles,
         paragraphLastLineStyles,
         paragraphCompressLineStyles,
+        paragraphIndentLineStyles,
+        paragraphIndentLastLineStyles,
     }
 }

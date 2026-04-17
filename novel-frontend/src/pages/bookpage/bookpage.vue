@@ -43,7 +43,8 @@
                     <view v-else-if="line.type === 'title-last-line'" :style="titleLastLineStyles">{{ line.text }}</view>
                     <view v-else-if="line.type === 'paragraph-line'" :style="paragraphLineStyles"> {{ line.text }}</view>
                     <view v-else-if="line.type === 'paragraph-last-line'" :style="paragraphLastLineStyles"> {{ line.text }}</view>
-                    <view v-else-if="line.type === 'paragraph-compress-line'" :style="paragraphCompressLineStyles"> {{ line.text }}</view>
+                    <view v-else-if="line.type === 'paragraph-indent-line'" :style="paragraphIndentLineStyles"> {{ line.text }}</view>
+                    <view v-else-if="line.type === 'paragraph-indent-last-line'" :style="paragraphIndentLastLineStyles"> {{ line.text }}</view>
                 </template>
             </view>
 
@@ -121,7 +122,7 @@ const { t } = useI18n();
 
 const { curTime } = useTime();
 const { batteryInfo, batteryStyle, isSupportBatteryAPI } = useBattery();
-const { READER_LAYOUT, curFontSize, initFontSize, changeFontSize, titleLineStyles, titleLastLineStyles, paragraphLineStyles, paragraphLastLineStyles, paragraphCompressLineStyles } = useReaderPageConfig();
+const { READER_LAYOUT, curFontSize, initFontSize, changeFontSize, titleLineStyles, titleLastLineStyles, paragraphLineStyles, paragraphLastLineStyles, paragraphIndentLineStyles, paragraphIndentLastLineStyles } = useReaderPageConfig();
 const { pages, curPageIndex, curChapterIndex, catalog, gotoChapter, isChapterFirstPage, isChapterLastPage, isFirstChapterFirstPage, isLastChapterLastPage, initNovelCatalog, initNovelChapters, resetNovelChapters, goPrevPage, goNextPage, pageProgress, chapterProgress } = useReader(book);
 const { actionBarVisible, toggleActionBar } = useActionBar();
 const { offsetX, isDragging, isAnimation, gestureDirection, curPageTurning, pageTurningKinds, changePageTurning, initPageTurning, onTouchStart, onTouchEnd, onTouchMove, onTouchCancel } = usePageTurning(book);

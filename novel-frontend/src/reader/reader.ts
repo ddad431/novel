@@ -36,16 +36,27 @@ export type ReaderConfig = {
 
         /** 段间距 (px) */
         gap: number,
+
+        /** 段首缩进 (2em) */
+        indent?: boolean,
     }
 
 };
+
+type LineType =
+    | 'title-line'
+    | 'title-last-line'
+    | 'paragraph-indent-line'
+    | 'paragraph-line'
+    | 'paragraph-last-line'
+    | 'paragraph-indent-last-line';
 
 export type Line = {
     /** 行内容 */
     text: string,
 
-    /** 行类型（标题行、标题尾行、段落行、段落尾行）*/
-    type: 'title-line' | 'paragraph-line' | 'title-last-line' | 'paragraph-last-line' | 'paragraph-compress-line',
+    /** 行类型 */
+    type: LineType,
 
     /** 段 ID（段落行所属段） */
     pid?: number,
@@ -55,7 +66,6 @@ export type Page = Line[];
 
 export function calcPages(_title: string, paragraphs: string[], options: ReaderConfig) {
     const { page, title, paragraph } = options; 
-
 
     // TODO：lines 需要在传入前 trimStart, trimEnd.
 
@@ -117,22 +127,35 @@ export function calcPages(_title: string, paragraphs: string[], options: ReaderC
     // 段落分行，聚行成页
     for (let i = 0; i < paragraphs.length; ++i) {
         const _paragraph = paragraphs[i];
-        if (_paragraph.length <= minPLineChars) {
-            lines.push({ text: _paragraph , type: 'paragraph-last-line', pid: i });  // NOTE：id 是段落 id，不要写错
+        const _minPLineChars = paragraph.indent ? minPLineChars - 2 : minPLineChars;
+        if (_paragraph.length <= _minPLineChars) {
+            lines.push({
+                text: _paragraph,
+                type: paragraph.indent ? 'paragraph-indent-last-line' : 'paragraph-last-line',
+                pid: i, // NOTE：id 是段落 id，不要写错
+            });
             paragraphNums++;
             paragraphLineNums++;
             addPage();  // NOTE: 每次有新行的时候都要检查（或许可以优化？）
             continue;
         }
-       
+
+        lwidth = paragraph.indent ? lwidth + 2 * paragraph.size : lwidth;
+        let isParagraphFirstLine = true;
         for (const char of _paragraph)  {
             const cwidth = getCharWidth({font: paragraph.font, size: paragraph.size, char});
 
             if (lwidth + cwidth > page.width) {
-                lines.push({ text: lchars.join(''), type: 'paragraph-line', pid: i });
+                lines.push({
+                    text: lchars.join(''),
+                    type: paragraph.indent && isParagraphFirstLine ? 'paragraph-indent-line' : 'paragraph-line',
+                    pid: i
+                });
+
                 paragraphLineNums++;
+                isParagraphFirstLine = false;
                 lchars = [char];
-                lwidth = cwidth; 
+                lwidth = cwidth;
                 addPage();
             }
             else {
@@ -159,8 +182,8 @@ export function calcPages(_title: string, paragraphs: string[], options: ReaderC
                 // - 我们只在最后一行是段最后一行的情况下舍去段间距
                 // 
                 const lastLine = lines[lines.length-1];
-                if (lastLine.type === 'paragraph-last-line' && height - paragraph.gap <= page.height) {
-                    lastLine.type = 'paragraph-line';
+                if (['paragraph-last-line', 'paragraph-indent-last-line'].includes(lastLine.type) && height - paragraph.gap <= page.height) {
+                    lastLine.type = lastLine.type === 'paragraph-last-line' ? 'paragraph-line' : 'paragraph-indent-line';
                     paragraphNums -= 1;
                     return;
                 }
@@ -171,7 +194,7 @@ export function calcPages(_title: string, paragraphs: string[], options: ReaderC
 
                 lwidth = 0;
                 lchars = [];
-                paragraphNums = lines[0].type === 'paragraph-last-line' ? 1 : 0;
+                paragraphNums = ['paragraph-last-line', 'paragraph-indent-last-line'].includes(lines[0].type) ? 1 : 0;
                 paragraphLineNums = 1;
             }
         }
