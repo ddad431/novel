@@ -1,4 +1,5 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
+import { playwright } from '@vitest/browser-playwright';
 
 import Uni from '@dcloudio/vite-plugin-uni';
 import Unocss from 'unocss/vite';
@@ -15,5 +16,20 @@ export default defineConfig({
     ],
     define: {
         'import.meta.env.VERSION': JSON.stringify(process.env.npm_package_version),
+    },
+    test: {
+        benchmark: {
+            include: ['benchmarks/**/*.bench.ts'],
+        },
+        browser: {
+            enabled: true,
+            provider: playwright(),
+            instances: [
+                {
+                    browser: 'chromium',
+                    headless: true,
+                }
+            ]
+        }
     },
 });
