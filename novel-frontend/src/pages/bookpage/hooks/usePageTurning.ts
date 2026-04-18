@@ -35,9 +35,9 @@ export function usePageTurning(book: Ref<Book>) {
 
         // NOTE 需要优化
         const _maps: Record<string, PageTurning> = {
-            'Cover': '覆盖',
-            'Slide': '平移',
-            'None': '无',
+            [t('bookpage.覆盖')]: '覆盖',
+            [t('bookpage.平移')]: '平移',
+            [t('bookpage.无')]: '无',
         };
         
         if (Object.keys(_maps).includes(style)) {
