@@ -1,15 +1,34 @@
-import { computed, Ref, ref } from "vue";
+import { computed, ComputedRef, Ref, ref } from "vue";
 import { ReaderConfig } from "@/reader/reader";
-import { PreferenceStore } from "@/store/preference";
+import { usePreferenceStore } from "@/store/preference";
 
-const curFont = ref<string>('Arial');
-const curFontSize = ref<number>(18);
-const curLineHeightRatio = ref<number>(1.7);   // 1.88, 1.7
+const { preference } = usePreferenceStore();
 
-const titleFontSize = computed(() => curFontSize.value * 1.5);
+const curLineHeightRatio = computed(() => {
+    switch (preference.value.lineSpacing!) {
+        case 'large':
+            return 2;
+        case 'middle':
+            return 1.88;
+        case 'small':
+            return 1.7
+    }
+});
+const curParagraphSpacingRatio = computed(() => {
+    switch (preference.value.paragraphSpacing!) {
+        case 'large':
+            return 2;
+        case 'middle':
+            return 1.8;
+        case 'small':
+            return 1.35;
+    }   
+});
+
+const titleFontSize = computed(() => preference.value.fontSize * 1.5);
 const titleLineHeightRatio = computed(() => Math.max(1, curLineHeightRatio.value - 0.3));
-const titleGap = computed(() => 2 * curFontSize.value);
-const paragraphGap = computed(() => 1.35 * curFontSize.value);   // 1.8, 1.35
+const titleGap = computed(() => 2 * preference.value.fontSize);
+const paragraphGap = computed(() => curParagraphSpacingRatio.value * preference.value.fontSize);
 
 const READER_LAYOUT = {
     /** 阅读页左右边距 */
@@ -28,24 +47,39 @@ const READER_LAYOUT = {
     gap: 16,
 }
 
-function createReaderConfig(width: Ref<number>, height: Ref<number>) {
+function calcPageHeight(height: number, hasHeader: boolean, hasFooter: boolean) {
+    const { verticalPadding, gap, headerHeight, footerHeight } = READER_LAYOUT;
+    let diff = 2 * verticalPadding;
+
+    if (hasHeader && hasFooter) {
+        diff += (2 * gap + headerHeight + footerHeight);
+    } else if (hasFooter) {
+        diff += (gap + footerHeight);
+    } else if (hasHeader) {
+        diff += (gap + headerHeight);
+    }
+    
+    return height - diff;
+};
+
+function createReaderConfig(width: Ref<number>, height: Ref<number>): ComputedRef<ReaderConfig> {
     return computed(() => ({
         page: {
             width: width.value - 2 * READER_LAYOUT.horizontalPadding,
-            height: height.value - (2 * READER_LAYOUT.verticalPadding + 2 * READER_LAYOUT.gap + READER_LAYOUT.headerHeight + READER_LAYOUT.footerHeight),
+            height: calcPageHeight(height.value, preference.value.header, preference.value.footer),
         },
         title: {
-            font: curFont.value,
+            font: preference.value.font,
             size: titleFontSize.value,
             ratio: titleLineHeightRatio.value,
             bgap: titleGap.value,
         },
         paragraph: {
-            font: curFont.value,
-            size: curFontSize.value,
+            font: preference.value.font,
+            size: preference.value.fontSize,
             ratio: curLineHeightRatio.value,
             gap: paragraphGap.value,
-            indent: false,
+            indent: preference.value.indent,
         }
     }));
 }
@@ -53,14 +87,14 @@ function createReaderConfig(width: Ref<number>, height: Ref<number>) {
 export function useReaderPageConfig() {
     const titleLineStyles = computed(() => {
         return {
-            'font-family': curFont.value,
+            'font-family': preference.value.font,
             'font-size': `${titleFontSize.value}px`,
             'line-height': `${titleLineHeightRatio.value}em`,
         }
     });
     const titleLastLineStyles = computed(() => {
         return {
-            'font-family': curFont.value,
+            'font-family': preference.value.font,
             'font-size': `${titleFontSize.value}px`,
             'line-height': `${titleLineHeightRatio.value}em`,
             'margin-bottom': `${titleGap.value}px`,
@@ -68,23 +102,23 @@ export function useReaderPageConfig() {
     });
     const paragraphLineStyles = computed(() => {
         return {
-            'font-family': curFont.value,
-            'font-size': `${curFontSize.value}px`,
+            'font-family': preference.value.font,
+            'font-size': `${preference.value.fontSize}px`,
             'line-height': `${curLineHeightRatio.value}em`,
         }
     });
     const paragraphIndentLineStyles = computed(() => {
         return {
             'text-indent': '2em',
-            'font-family': curFont.value,
-            'font-size': `${curFontSize.value}px`,
+            'font-family': preference.value.font,
+            'font-size': `${preference.value.fontSize}px`,
             'line-height': `${curLineHeightRatio.value}em`,
         }
     });
     const paragraphLastLineStyles = computed(() => {
         return {
-            'font-family': curFont.value,
-            'font-size': `${curFontSize.value}px`,
+            'font-family': preference.value.font,
+            'font-size': `${preference.value.fontSize}px`,
             'line-height': `${curLineHeightRatio.value}em`,
             'margin-bottom': `${paragraphGap.value}px`,
         }
@@ -92,36 +126,21 @@ export function useReaderPageConfig() {
     const paragraphIndentLastLineStyles = computed(() => {
         return {
             'text-indent': '2em',
-            'font-family': curFont.value,
-            'font-size': `${curFontSize.value}px`,
+            'font-family': preference.value.font,
+            'font-size': `${preference.value.fontSize}px`,
             'line-height': `${curLineHeightRatio.value}em`,
             'margin-bottom': `${paragraphGap.value}px`,
         }
     });
     const paragraphCompressLineStyles = computed(() => {
         return {
-            'font-family': curFont.value,
-            'font-size': `${curFontSize.value}px`,
+            'font-family': preference.value.font,
+            'font-size': `${preference.value.fontSize}px`,
         }
     })
 
-    function initFontSize() {
-        curFontSize.value = PreferenceStore.getPreference().fontSize;
-    }
-
-    function changeFontSize(size: number) {
-        curFontSize.value = size;
-
-        const preference = PreferenceStore.getPreference();
-        preference.fontSize = size;
-        PreferenceStore.updatePreference(preference);
-    }
-
     return {
         READER_LAYOUT,
-        curFontSize,
-        initFontSize,
-        changeFontSize,
         createReaderConfig,
         titleLineStyles,
         titleLastLineStyles,

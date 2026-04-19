@@ -6,7 +6,7 @@
         <template v-for="(item, index) in props.options" :key="index">
             <view
                 class="flex-1 flex justify-center items-center"
-                :style="`${item === value ? `background: ${props.activeBg}; border-radius: 8px;` : ''}`"
+                :style="`${item === props.value ? `background: ${props.activeBg}; border-radius: 8px;` : ''}`"
                 @click="onSelect(item)"
             >
                 {{ item }}
@@ -17,6 +17,7 @@
 
 <script setup lang="ts">
 const props = defineProps<{
+    value: string,
     options: any[],
     height?: string,
     bg?: string,
@@ -25,13 +26,13 @@ const props = defineProps<{
     activeColor?: string,
 }>();
 
-const value = defineModel<string>();
+// const value = defineModel<string>();
 const emit = defineEmits<{
     change: [select: string],
 }>()
 
 function onSelect(select: string) {
-    value.value = select;
+    // value.value = select;
     emit('change', select);
 }
 </script>

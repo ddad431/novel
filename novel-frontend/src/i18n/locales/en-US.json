@@ -44,11 +44,23 @@
         "bottom": {
             "白天": "DAY",
             "夜晚": "NIGHT",
-            "偏好": "SETTING",
+            "偏好": "PREFERENCE",
             "目录": "TOC",
-            "间距": "Spacing",
+            "行间距": "Line Spacing",
+            "段间距": "Paragraph Spacing",
             "翻页方式": "Paging",
-            "更多设置": "More Settings"
+            "更多设置": "More Settings",
+            "large": "L",
+            "middle": "M",
+            "small": "S",
+            "首行缩进": "Paragraph Indent",
+            "页眉": "Page Header",
+            "页脚": "Page Footer",
+            "页脚章进度": "Chapter Progress",
+            "页脚页进度": "Page Progress",
+            "页脚电量": "Battery",
+            "页脚时间": "Time",
+            "不支持电量显示": "Battery level display not supported"
         }
     },
     "bookgroup": {

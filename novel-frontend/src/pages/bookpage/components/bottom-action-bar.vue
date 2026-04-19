@@ -1,20 +1,4 @@
  <template>
-    <!-- NOTE bottom-action-bar 的 z-index 必须高于 overlay，否则会被蒙层遮挡 -->
-    <!-- <Transition name="slide-bottom">
-        <view
-            v-show="actionBarVisible"
-            class="bg-[var(--bookpage-bottom-bar-bg)] color-[var(--bookpage-bottom-bar-color)] fixed bottom-0 z-9999 w-screen h-[72px]  box-border p-[16px] flex items-center transition-colors"
-            @click.stop
-        >
-            <view class="h-full w-full flex items-center justify-around ">
-                <view :class="[chapterlistPanelVisible === true ? 'icon-list-actived' : 'icon-list']" @click.stop="toggleChapterListPanel"></view>
-                <view :class="[props.curMode === 'dark' ? 'icon-sun' : 'icon-moon']" @click="toggleLightDarkMode"></view>
-                <view :class="[preferencePanelVisible === true ? 'icon-adjustment-actived' : 'icon-adjustment']" @click.stop="togglePreferencePanel"></view>
-            </view>
-        </view>
-     </Transition> -->
-
-       
     <view         
         class="bottom-action-bar fixed bottom-[8px] z-9999 h-[100px] w-[calc(100vw-16px)] m-l-[8px] box-border p-[16px] rounded-[12px] flex justify-around items-center"
         :class="[actionBarVisible ? '' : 'bottom-action-bar-hidden']"
@@ -24,8 +8,8 @@
             <view class="text-[12px] color-[var(--action-panel-text-color)]">{{ $t('bookpage.bottom.目录') }}</view>
         </view>
         <view class="w-[48px] h-[50px] flex flex-col items-center justify-between gap-[8px]" @click="toggleLightDarkMode">
-            <view :class="[props.curMode === 'dark' ? 'icon-moon' : 'icon-sun']"></view>
-            <view class="text-[12px] color-[var(--action-panel-text-color)]">{{ props.curMode === 'dark' ? $t('bookpage.bottom.夜晚') : $t('bookpage.bottom.白天') }}</view>
+            <view :class="[preference.mode === 'dark' ? 'icon-moon' : 'icon-sun']"></view>
+            <view class="text-[12px] color-[var(--action-panel-text-color)]">{{ preference.mode === 'dark' ? $t('bookpage.bottom.夜晚') : $t('bookpage.bottom.白天') }}</view>
         </view>
         <view class="w-[48px] h-[50px] flex flex-col items-center justify-between gap-[8px]" @click="togglePreferencePanel">
             <view class="icon-adjustment"></view>
@@ -34,62 +18,152 @@
     </view>
  
     <self-overlay v-model="preferencePanelVisible" :mask="false" position="bottom">
-        <view 
-            class="bg-[var(--bookpage-bottom-preference-bg)] color-[var(--bookpage-bottom-preference-color)] w-full m-[8px] box-border p-[24px] rounded-[16px]"
-            @touchmove.stop
-        >
-		
-            <view class="preference-font w-full m-b-[16px]">
-                <SelfSlider 
-                    class="preference-font"
-                    v-model="fontSize"
-                    @change="props.changeFontSize"
-                    :trackHeight="46"
-                    trackBg="var(--bookpage-bottom-preference-item-bg)"
-                    :thumbHeight="36"
-                    thumbBg="var(--bookpage-bottom-preference-item-active-bg)"
-                    :min="12"
-                    :max="36"
-                    :step="2"
-                    :left-lable="'A'"
-                    :right-lable="'A'"
-                    :left-lable-size="14"
-                    :right-lable-size="24"
-                />
-            </view>
-          
-            <view class="preference-theme h-[60px] w-full  m-b-[16px] flex items-center justify-between">
-                <view
-                    v-for="(value, key) in props.themes" :key
-                    class="w-[44px] h-[44px] rounded-full"
-                    :class="props.curReaderTheme === key ? 'preference-theme-active' : ''"
-                    :style="`background-color: ${value}`"
-                    @click="props.changeReaderTheme(key)"
-                >
+        <view class="preference-panel-container w-screen flex" :class="[curPreferencePanelTab === 'main' ? 'slide-to-left' : 'slide-to-right']">
+            <view class="main z-99 w-[calc(100vw-16px)] shrink-0 m-[8px] box-border p-[24px] rounded-[16px]" @touchmove.stop>
+                <view class="preference-font w-full m-b-[16px]">
+                    <SelfSlider 
+                        class="preference-font"
+                        v-model="preference.fontSize"
+                        @change="changeFontSize"
+                        :trackHeight="44"
+                        trackBg="var(--bookpage-bottom-preference-item-bg)"
+                        :thumbHeight="32"
+                        thumbBg="var(--bookpage-bottom-preference-item-active-bg)"
+                        :min="12"
+                        :max="36"
+                        :step="2"
+                        :left-lable="'A'"
+                        :right-lable="'A'"
+                        :left-lable-size="14"
+                        :right-lable-size="24"
+                    />
                 </view>
-            </view>
-
-            <view class="flex flex-col gap-[16px] m-b-[20px]">
-                <view class="turing h-[36px] flex items-center text-[14px]">
-                    <view class="w-[80%]">{{ $t('bookpage.bottom.翻页方式') }}</view>
-                    <view class="preference-turing w-full">
-                        <self-segmented
-                            v-model="pageTurning"
-                            @change="props.changePageTurning"
-                            :options="props.pageTurningKinds.map(v => $t(`bookpage.${v}`))"
-                            height="36px" 
-                            bg="var(--bookpage-bottom-preference-item-bg)" 
-                            active-bg="var(--bookpage-bottom-preference-item-active-bg)"  
-                        />
+            
+                <view class="preference-theme h-[60px] w-full  m-b-[16px] flex items-center justify-between">
+                    <view
+                        v-for="(value, key) in themes" :key
+                        class="w-[44px] h-[44px] rounded-full"
+                        :class="preference.theme === key ? 'preference-theme-active' : ''"
+                        :style="`background-color: ${value}`"
+                        @click="changeReaderTheme(key)"
+                    >
                     </view>
                 </view>
+
+                <view class="flex flex-col gap-[16px] m-b-[20px]">
+                    <view class="turing h-[36px] flex items-center text-[14px]">
+                        <view class="w-[80%]">{{ $t('bookpage.bottom.翻页方式') }}</view>
+                        <view class="preference-turing w-full">
+                            <self-segmented
+                                :value="$t(`bookpage.${preference.pageTurning}`)"
+                                @change="props.changePageTurning"
+                                :options="props.pageTurningKinds.map(v => $t(`bookpage.${v}`))"
+                                height="36px"
+                                bg="var(--bookpage-bottom-preference-item-bg)" 
+                                active-bg="var(--bookpage-bottom-preference-item-active-bg)"  
+                            />
+                        </view>
+                    </view>
+                </view>
+
+                <view class="preference-more text-[14px] flex justify-between" @click="curPreferencePanelTab = 'sub'">
+                    <view>{{ $t('bookpage.bottom.更多设置') }}</view>
+                    <view class="icon-next"></view>
+                </view>
             </view>
 
-            <view class="preference-more text-[14px] flex justify-between">
-                <view>{{ $t('bookpage.bottom.更多设置') }}</view>
-                <view class="icon-next"></view>
+            <view class="sub z-99 h-[264px] w-[calc(100vw-16px)] shrink-0 m-[8px] box-border p-[20px] rounded-[16px]" @touchmove.stop>
+                <view 
+                    class="title text-[14px] flex items-center relative left-[-8px] m-b-[12px]"
+                    @click="curPreferencePanelTab = 'main'"
+                    :class="{'font-bold': $t('bookpage.bottom.更多设置') === 'More Settings'}"
+                >
+                    <view class="icon-nav scale-80"></view>
+                    <view>{{ $t('bookpage.bottom.更多设置') }}</view>
+                </view>
+                <scroll-view scroll-y="true" :show-scrollbar="false" style="height: 200px" class="h-[230px] w-full">
+                    <view class="text-[14px] m-b-[8px] h-[32px] flex justify-between items-center ">
+                        <view>{{ $t('bookpage.bottom.首行缩进') }}</view>
+                        <view class="bg-[--bookpage-bottom-preference-item-bg] rounded-[8px] box-border p-[4px_8px] flex gap-[8px] items-center">
+                            <view 
+                                class="h-[24px] w-[32px] flex justify-center items-center"
+                                :class="{ 'bg-[var(--bookpage-bottom-preference-item-active-bg)] rounded-[6px]': !preference.indent}"
+                                @click="changeParagraphIndent(false)"
+                            >
+                                <view class="icon-paragraph-no-indent"></view>
+                            </view>
+                            <view 
+                                class="h-[24px] w-[32px] flex justify-center items-center"
+                                :class="{ 'bg-[var(--bookpage-bottom-preference-item-active-bg)] rounded-[6px]': preference.indent}"
+                                @click="changeParagraphIndent(true)"
+                            >
+                                <view class="icon-paragraph-indent"></view>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="flex flex-col gap-[16px] m-b-[6px]">
+                        <view class="turing h-[36px] flex items-center text-[14px]">
+                            <view class="w-[90%]">{{ $t('bookpage.bottom.行间距') }}</view>
+                            <view class="preference-turing w-full">
+                                <self-segmented
+                                    :value="$t(`bookpage.bottom.${preference.lineSpacing}`)"
+                                    @change="handleChangeLineSpacing"
+                                    :options="['large', 'middle', 'small'].map(v => $t(`bookpage.bottom.${v}`))"
+                                    height="32px"
+                                    bg="var(--bookpage-bottom-preference-item-bg)" 
+                                    active-bg="var(--bookpage-bottom-preference-item-active-bg)"  
+                                />
+                            </view>
+                        </view>
+                    </view>
+                    <view class="flex flex-col gap-[16px] m-b-[6px]">
+                        <view class="turing h-[36px] flex items-center text-[14px]">
+                            <view class="w-[90%]">{{ $t('bookpage.bottom.段间距') }}</view>
+                            <view class="preference-turing w-full">
+                                <self-segmented
+                                    :value="$t(`bookpage.bottom.${preference.paragraphSpacing}`)"
+                                    @change="handleChangeParagraphSpacing"
+                                    :options="['large', 'middle', 'small'].map(v => $t(`bookpage.bottom.${v}`))"
+                                    height="32px"
+                                    bg="var(--bookpage-bottom-preference-item-bg)" 
+                                    active-bg="var(--bookpage-bottom-preference-item-active-bg)"  
+                                />
+                            </view>
+                        </view>
+                    </view>
+
+                    <view class="text-[14px] m-b-[12px] flex justify-between items-center">
+                        <view>{{ $t('bookpage.bottom.页眉') }}</view>
+                        <switch :checked="preference.header" @change="handleToggleHeader" color="var(--bookpage-bottom-preference-item-bg)" class="relative right-[-8px] scale-70"/>
+                    </view>
+                    <view class="text-[14px] m-b-[8px] flex justify-between items-center" @click="isFooterOptionFolded = !isFooterOptionFolded">
+                        <view>{{ $t('bookpage.bottom.页脚') }}</view>
+                        <view :class="[isFooterOptionFolded ? 'icon-down' : 'icon-up']"></view>
+                    </view>
+
+                    <view v-if="!isFooterOptionFolded" class="flex flex-col gap-[8px]">
+                        <view class="text-[14px] flex justify-between items-center">
+                            <view class="indent-[1em]">{{ $t('bookpage.bottom.页脚章进度') }}</view>
+                            <switch :checked="preference.totalProgress"  @change="handleToggleFooterTotalProgress" color="var(--bookpage-bottom-preference-item-bg)" class="relative right-[-8px] scale-70"/>
+                        </view>
+                        <view class="text-[14px] flex justify-between items-center">
+                            <view class="indent-[1em]">{{ $t('bookpage.bottom.页脚页进度') }}</view>
+                            <switch :checked="preference.pageProgress"  @change="handleToggleFooterPageProgress" color="var(--bookpage-bottom-preference-item-bg)" class="relative right-[-8px] scale-70"/>
+                        </view>
+                        <view v-if="isSupportBatteryAPI" class="text-[14px] flex justify-between items-center">
+                            <view class="indent-[1em]">{{ $t('bookpage.bottom.页脚电量') }}</view>
+                            <switch :checked="preference.battery"  @change="handleToggleFooterBattery" color="var(--bookpage-bottom-preference-item-bg)" class="relative right-[-8px] scale-70"/>
+                        </view>
+                        <view class="text-[14px] flex justify-between items-center">
+                            <view class="indent-[1em]">{{ $t('bookpage.bottom.页脚时间') }}</view>
+                            <switch :checked="preference.time" @change="handleToggleFooterTime" color="var(--bookpage-bottom-preference-item-bg)" class="relative right-[-8px] scale-70"/>
+                        </view>
+                    </view>
+                   
+                </scroll-view>
             </view>
         </view>
+
     </self-overlay>
 
     <self-overlay v-model="chapterlistPanelVisible" position="bottom">
@@ -104,7 +178,6 @@
                     <view class="w-full flex justify-between text-[13px]">
                         <view v-if="props.book.status">{{ `共 ${book.total} 章` + props.book.status && props.book.status }}</view>
                         <view v-else>{{  `共 ${book.total} 章`}}</view>
-                        <!-- TODO 倒序 -->
                         <view @click="isReverseChapterList = !isReverseChapterList">{{ !isReverseChapterList ? '倒序' : '正序'}}</view>
                     </view>
                 </view>
@@ -117,16 +190,14 @@
                     :height="300" 
                     :itemHeight="30" 
                     :curIndex="props.curChapterIndex"
-                    :anchorBg="props.curMode === 'light' ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.25)'"
-                    :anchorColor="props.curMode === 'light' ? '' : ''"
+                    :anchorBg="preference.mode === 'light' ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.25)'"
+                    :anchorColor="preference.mode === 'light' ? '' : ''"
                 >
+                    <!-- @vue-ignore -->
                     <template #default="{ data }">
                         <div class="h-[30px] truncate text-[14px]" :style="data.index === props.curChapterIndex ? 'color: var(--bookpage-bottom-chapterlist-active-color); font-weight: bold;' : ''" @click="handleCatalogClick(data.index + 1)"> {{ data.title }}</div>
                     </template>
                 </self-virtuallist>
-                <!-- <view class="jumpto absolute bottom-[8px] right-0 bg-white/25 color-dark/80 p-[8px] rounded-[20px] flex justify-center">
-                    <view class="icon-crosshair"></view>
-                </view> -->
             </view>
         </view>
     </self-overlay>
@@ -135,36 +206,26 @@
 <script setup lang="ts">
 import SelfSlider from '@/components/self-slider/self-slider.vue';
 import { Book, Catalog } from '@/store';
-import { PageTurning, ReaderTheme } from '@/store/preference';
-import { computed, onMounted, ref } from 'vue';
-import { useReader } from '../hooks';
+import { LineSpacing, ParagraphSpacing, usePreferenceStore } from '@/store/preference';
+import { computed, ref, watch } from 'vue';
 
 import defaultBookCover from '@/static/default_cover.png';
+import { useReaderTheme } from '../hooks';
 import { useI18n } from 'vue-i18n';
+import { useBattery } from '@/hooks/useBattery';
 
 const { t } = useI18n();
+const { preference, changeFontSize, changeReaderTheme, toggleReaderDarkMode, changeLineSpacing, changeParagraphSpacing, changeParagraphIndent, toggleFooterTotalProgress, toggleFooterPageProgress, toggleFooterTime, toggleFooterBattery, toggleHeader } = usePreferenceStore();
+const { themes } = useReaderTheme();
+const { isSupportBatteryAPI } = useBattery();
 
 interface Props {
     // page
     curChapterIndex: number,
 
     // page turning
-    curPageTurning: PageTurning,
     pageTurningKinds: string[],
     changePageTurning: (value: string) => void,
-
-    // reader theme
-    themes: Record<ReaderTheme, string>,
-    curReaderTheme: ReaderTheme,
-    changeReaderTheme: (value: ReaderTheme) => void,
-
-    // dark mode
-    curMode: 'light' | 'dark', 
-    toggleReaderDarkMode: () => void,
-
-    // font size
-    curFontSize: number,
-    changeFontSize: (value: number) => void,
 
     // book
     book: Book,
@@ -177,24 +238,22 @@ interface Props {
 const actionBarVisible = defineModel('visible');
 const props = defineProps<Props>();
 
+const chapterlistPanelVisible = ref<boolean>(false);
+const preferencePanelVisible = ref<boolean>(false);
+const isReverseChapterList = ref<boolean>(false);
+const catalogs = computed(() => {
+    const _catalogs = props.catalog?.map((v, index) => ({...v, index}));
+    return !isReverseChapterList.value ? _catalogs : _catalogs.reverse();
+})
+
+const curPreferencePanelTab = ref<'main' | 'sub'>('main');
+const isFooterOptionFolded = ref<boolean>(true);
+
 function handleCatalogClick(progress: number) {
     props.handleCatalogClick(progress);
     chapterlistPanelVisible.value = false;
     actionBarVisible.value = false;
 }
-
-const fontSize = ref<number>(0);   // fontSize 副本
-const pageTurning = ref<string>('');    // pageTurning 副本（由于是 props 拿到的是只读的，分段器使用 v-model的，同时 v-model 不允许传入只读数据，所以我们这里需要做一个副本。
-const lightDarkMode = ref<'light' | 'dark'>('dark');
-const chapterlistPanelVisible = ref<boolean>(false);
-const preferencePanelVisible = ref<boolean>(false);
-const isReverseChapterList = ref<boolean>(false);
-
-
-const catalogs = computed(() => {
-    const _catalogs = props.catalog?.map((v, index) => ({...v, index}));
-    return !isReverseChapterList.value ? _catalogs : _catalogs.reverse();
-})
 
 function toggleChapterListPanel() {
     actionBarVisible.value = false;
@@ -211,18 +270,46 @@ function togglePreferencePanel() {
 function toggleLightDarkMode() {
     preferencePanelVisible.value = false;
     chapterlistPanelVisible.value = false;
-    props.toggleReaderDarkMode();
+    toggleReaderDarkMode();
     actionBarVisible.value = false;
 }
 
-// TODO: 在关闭 preference panel 的时候执行副作用，即隐藏 bottom-action-bar。具体的在 self-overlay 的 :close 执行
-function onPreferencePaneClose() {
-    preferencePanelVisible.value = false;
+function handleChangeLineSpacing(size: LineSpacing) {
+    const _map: Record<string, LineSpacing> = {
+        [t('bookpage.bottom.large')]: 'large',
+        [t('bookpage.bottom.middle')]: 'middle',
+        [t('bookpage.bottom.small')]: 'small',
+    };
+    changeLineSpacing(_map[size]);
 }
 
-// TODO: 同上
-function onChapterListPaneClose() {
-    preferencePanelVisible.value = false;
+function handleChangeParagraphSpacing(size: ParagraphSpacing) {
+    const _map: Record<string, ParagraphSpacing> = {
+        [t('bookpage.bottom.large')]: 'large',
+        [t('bookpage.bottom.middle')]: 'middle',
+        [t('bookpage.bottom.small')]: 'small',
+    };
+    changeParagraphSpacing(_map[size])
+}
+
+function handleToggleFooterTotalProgress(e: any) {
+    toggleFooterTotalProgress(e.detail.value);
+}
+
+function handleToggleFooterPageProgress(e: any) {
+    toggleFooterPageProgress(e.detail.value);
+}
+
+function handleToggleFooterBattery(e: any) {
+    toggleFooterBattery(e.detail.value);
+}
+
+function handleToggleFooterTime(e: any) {
+    toggleFooterTime(e.detail.value);
+}
+
+function handleToggleHeader(e: any) {
+    toggleHeader(e.detail.value);
 }
 
 const bookCoverStyles = computed((): any => { 
@@ -237,13 +324,11 @@ const bookCoverStyles = computed((): any => {
     }
 });
 
-function init() {
-    fontSize.value = props.curFontSize;
-    pageTurning.value = t(`bookpage.${props.curPageTurning}`);  // NOTE 传入的 pagTurning 也需要 i18n
-}
-
-onMounted(() => {
-    init();
+watch(preferencePanelVisible, (newVal) => {
+    if (!newVal) {
+        curPreferencePanelTab.value = 'main';
+        isFooterOptionFolded.value = true;
+    }
 })
 </script>
 
@@ -270,7 +355,21 @@ onMounted(() => {
     transform: translateY(120px) scale(0.9);
     opacity: 0;
 }
-</style>
 
- 
- 
+.preference-panel-container {
+    transition: transform .3s ease-in-out;
+}
+
+.preference-panel-container.slide-to-right {
+    transform: translateX(-100vw);
+}
+.preference-panel-container.slide-to-left {
+    transform: translateX(0);
+}
+
+.preference-panel-container .main,
+.preference-panel-container .sub {
+    background: var(--bookpage-bottom-preference-bg);
+    color: var(--bookpage-bottom-preference-color);
+}
+</style>

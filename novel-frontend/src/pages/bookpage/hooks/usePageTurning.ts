@@ -1,6 +1,6 @@
-import { nextTick, ref, Ref } from 'vue';
+import { computed, nextTick, ref, Ref } from 'vue';
 import { useReader } from './useReader';
-import { PageTurning, PreferenceStore } from '@/store/preference';
+import { PageTurning, usePreferenceStore } from '@/store/preference';
 import { Book } from '@/store';
 import { useI18n } from 'vue-i18n';
 
@@ -8,10 +8,10 @@ export function usePageTurning(book: Ref<Book>) {
     // dependencies
     const { goPrevPage, goNextPage, isFirstChapterFirstPage, isLastChapterLastPage } = useReader(book);
     const { t } = useI18n();
+    const { preference } = usePreferenceStore();
 
     // states
     const pageTurningKinds = ['平移', '覆盖', '无'];
-    const curPageTurning = ref<'无' | '平移' | '覆盖'>('覆盖');
     const offsetX = ref<number>(0);
     const offsetY = ref<number>(0);
     const isDragging = ref<boolean>(false); // 拖拽动画不需要 transition，用一个全局变量来区分
@@ -26,11 +26,8 @@ export function usePageTurning(book: Ref<Book>) {
     let ticking = false;
     
     // actions
-    function initPageTurning() {
-        curPageTurning.value = PreferenceStore.getPreference().pageTurning;
-    }
     function changePageTurning(style: string): void {
-        isDragging.value = true;    // 关闭动画（尽管我们确保不同 mode 的 cur 位于视图，但由于不同 mode 的页面关系不同，导致触发变更动画）
+        isDragging.value = true;    // 关闭动画（尽管我们确保不同 mode 的 cur 位于同一视图，但由于不同 mode 的页面关系不同，导致更改翻页类型时会触发动画）
         offsetX.value = 0;
 
         // NOTE 需要优化
@@ -43,11 +40,7 @@ export function usePageTurning(book: Ref<Book>) {
         if (Object.keys(_maps).includes(style)) {
             style = _maps[style];
         }
-        curPageTurning.value = style as PageTurning;
-
-        const preference = PreferenceStore.getPreference();
-        preference.pageTurning = style as PageTurning;
-        PreferenceStore.updatePreference(preference);
+        preference.value.pageTurning = style as PageTurning;
     }
     function onTouchStart(event: TouchEvent) {
         if (isAnimation.value) {
@@ -176,9 +169,7 @@ export function usePageTurning(book: Ref<Book>) {
 
     return {
         offsetX,
-        curPageTurning,
         pageTurningKinds,
-        initPageTurning,
         changePageTurning,
         onTouchStart,
         onTouchMove,

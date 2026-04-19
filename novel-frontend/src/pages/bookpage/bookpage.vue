@@ -15,7 +15,8 @@
             @click.stop="handlePageClick"
         >
             <!-- Page header  -->
-            <view 
+            <view
+                v-if="preference.header"
                 class="page-header text-[12px] flex items-center"
                 :style="`height: ${READER_LAYOUT.headerHeight}px; margin-bottom: ${READER_LAYOUT.gap}px`"
             >
@@ -29,15 +30,15 @@
 
             <!-- Page body -->
             <!-- NOTE loading 禁止 click 事件冒泡。防止在 catalog 已存在，但是用户可能 loading 中又去跳到其他章节。如果其他章节加载的快，那么会先跳到那里，但由于之前请求没有被中断，这会造成过一段时间拿到数据后，chapters 被修改，出现页面跳变 -->
-            <view v-if="state === 'loading'" @click.stop class="page-body w-full flex flex-col gap-[12px] items-center justify-center" :style="`height: calc(100% - ${READER_LAYOUT.headerHeight}px - ${READER_LAYOUT.footerHeight}px - 2*${READER_LAYOUT.gap}px)`">
+            <view v-if="state === 'loading'" @click.stop class="page-body w-full flex flex-col gap-[12px] items-center justify-center" :style="pageBodyLayoutStyles">
                 <view class="icon-loading"></view>
             </view>
-            <view v-else-if="state === 'fail'"  class="page-body w-full flex items-center justify-center" :style="`height: calc(100% - ${READER_LAYOUT.headerHeight}px - ${READER_LAYOUT.footerHeight}px - 2*${READER_LAYOUT.gap}px)`">
+            <view v-else-if="state === 'fail'"  class="page-body w-full flex items-center justify-center" :style="pageBodyLayoutStyles">
                 <view class="flex items-center text" @click.stop="loadingNovelData">
                     <view>获取失败，请点击重试</view>
                 </view>
             </view>
-            <view v-else-if="state === 'success'" class="page-body w-full" :style="`height: calc(100% - ${READER_LAYOUT.headerHeight}px - ${READER_LAYOUT.footerHeight}px - 2*${READER_LAYOUT.gap}px)`">
+            <view v-else-if="state === 'success'" class="page-body w-full" :style="pageBodyLayoutStyles">
                 <template v-for="(line, index) in page.lines" :key="index">
                     <view v-if="line.type === 'title-line'" :style="titleLineStyles">{{ line.text }}</view>
                     <view v-else-if="line.type === 'title-last-line'" :style="titleLastLineStyles">{{ line.text }}</view>
@@ -49,20 +50,21 @@
             </view>
 
             <!-- Page footer -->
-            <view 
+            <view
+                v-if="preference.footer"
                 class="page-footer w-full text-[12px] flex items-cenetr justify-between"
                 :style="`height: ${READER_LAYOUT.footerHeight}px; margin-top: ${READER_LAYOUT.gap}px`"
             >
                 <view class="left text-[12px] flex gap-2">
-                    <view>{{ state === 'success' ? pageProgress[key] : ' '  }}</view>
-                    <view>{{ state === 'success' ? chapterProgress[key] : ' ' }}</view>
+                    <view v-if="preference.footer && preference.pageProgress">{{ state === 'success' ? pageProgress[key] : ' '  }}</view>
+                    <view v-if="preference.footer && preference.totalProgress">{{ state === 'success' ? chapterProgress[key] : ' ' }}</view>
                 </view>
                 <view class="right flex items-center gap-1.5">
-                    <view v-if="isSupportBatteryAPI" class="battery flex items-center">
+                    <view v-if="preference.footer && preference.battery && isSupportBatteryAPI" class="battery flex items-center">
                         <view :class="batteryStyle" class="scale-120"></view>
                         <view v-if="batteryInfo.isCharging" class="battery-charging scale-70"></view>
                     </view>
-                    <view class="time text-[12px]">
+                    <view v-if="preference.footer && preference.time" class="time text-[12px]">
                         {{ curTime }}
                     </view>
                 </view>
@@ -73,15 +75,11 @@
             v-if="catalog"
             v-model:visible="actionBarVisible"
             :curChapterIndex
-            :curPageTurning :pageTurningKinds :changePageTurning
-            :curReaderTheme :themes  :changeReaderTheme
-            :curMode :toggleReaderDarkMode
-            :curFontSize :changeFontSize
+            :pageTurningKinds :changePageTurning
             :catalog :handleCatalogClick
             :book
         />
      
-    
         <Transition name="fade">
             <TopActionBar v-show="actionBarVisible" :hideActionBar :book="book!"/>
         </Transition>
@@ -90,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, ref, } from 'vue';
+import { computed, CSSProperties, nextTick, ref, } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
 import type { Book, Catalog } from '@/store';
 
@@ -104,11 +102,27 @@ import { useReaderPageConfig } from './hooks/useReaderPageConfig';
 import { useBookHisotry } from '../home/hooks';
 import { BookHistoryStorage } from '@/store/history';
 import { useI18n } from 'vue-i18n';
+import { usePreferenceStore } from '@/store/preference';
 
 const book = ref<Book>({} as Book);
+
+const { t } = useI18n();
+
+const { curTime } = useTime();
+const { batteryInfo, batteryStyle, isSupportBatteryAPI } = useBattery();
+
+const { READER_LAYOUT, titleLineStyles, titleLastLineStyles, paragraphLineStyles, paragraphLastLineStyles, paragraphIndentLineStyles, paragraphIndentLastLineStyles } = useReaderPageConfig();
+const { pages, curPageIndex, curChapterIndex, catalog, gotoChapter, isChapterFirstPage, isChapterLastPage, isFirstChapterFirstPage, isLastChapterLastPage, initNovelCatalog, initNovelChapters, resetNovelChapters, goPrevPage, goNextPage, pageProgress, chapterProgress } = useReader(book);
+const { actionBarVisible, toggleActionBar } = useActionBar();
+const { offsetX, isDragging, isAnimation, gestureDirection, pageTurningKinds, changePageTurning, onTouchStart, onTouchEnd, onTouchMove, onTouchCancel } = usePageTurning(book);
+const { readerThemeClass } = useReaderTheme();
+
+const { bookhistorys } = useBookHisotry();
+const { preference } = usePreferenceStore();
+
 const state = ref<'loading' | 'success' | 'fail'>('loading');
 const curPageTurningMode = computed(() => {
-    switch (curPageTurning.value) {
+    switch (preference.value.pageTurning) {
         case '平移':
             return 'slide';
         case '覆盖':
@@ -118,17 +132,30 @@ const curPageTurningMode = computed(() => {
     }
 })
 
-const { t } = useI18n();
+const pageBodyLayoutStyles = computed((): CSSProperties => {
+    const { footer, header } = preference.value;
 
-const { curTime } = useTime();
-const { batteryInfo, batteryStyle, isSupportBatteryAPI } = useBattery();
-const { READER_LAYOUT, curFontSize, initFontSize, changeFontSize, titleLineStyles, titleLastLineStyles, paragraphLineStyles, paragraphLastLineStyles, paragraphIndentLineStyles, paragraphIndentLastLineStyles } = useReaderPageConfig();
-const { pages, curPageIndex, curChapterIndex, catalog, gotoChapter, isChapterFirstPage, isChapterLastPage, isFirstChapterFirstPage, isLastChapterLastPage, initNovelCatalog, initNovelChapters, resetNovelChapters, goPrevPage, goNextPage, pageProgress, chapterProgress } = useReader(book);
-const { actionBarVisible, toggleActionBar } = useActionBar();
-const { offsetX, isDragging, isAnimation, gestureDirection, curPageTurning, pageTurningKinds, changePageTurning, initPageTurning, onTouchStart, onTouchEnd, onTouchMove, onTouchCancel } = usePageTurning(book);
-const { themes, curReaderTheme, readerThemeClass, initReaderTheme, changeReaderTheme, curMode, toggleReaderDarkMode } = useReaderTheme();
-
-const { bookhistorys } = useBookHisotry();
+    if (footer && header) {
+        return {
+            'height': `calc(100% - ${READER_LAYOUT.headerHeight}px - ${READER_LAYOUT.footerHeight}px - 2*${READER_LAYOUT.gap}px)`
+        }
+    }
+    else if (header) {
+        return {
+            'height': `calc(100% - ${READER_LAYOUT.headerHeight}px - ${READER_LAYOUT.gap}px)`
+        }    
+    }
+    else if (footer) {
+        return {
+            'height': `calc(100% - ${READER_LAYOUT.footerHeight}px - ${READER_LAYOUT.gap}px)`
+        } 
+    }
+    else {
+        return {
+            'height': '100%',
+        }
+    }
+});
 
 function handleTouchStart(e: any) {
     if (actionBarVisible.value) {
@@ -156,12 +183,6 @@ function handleTouchCancel() {
         return;
     }
     onTouchCancel();
-}
-
-function initReaderPreference() {
-    initFontSize();
-    initReaderTheme();
-    initPageTurning();
 }
 
 function hideActionBar() {
@@ -198,7 +219,7 @@ function handlePageClick(e: any): void {
     }
 
     const updatePage = isNext ? goNextPage : goPrevPage;
-    if (curPageTurning.value === '无') {
+    if (preference.value.pageTurning === '无') {
         updatePage();
         return;
     }
@@ -263,8 +284,6 @@ onLoad(async (options) => {
     book.value.visit = Date.now();
     BookHistoryStorage.addBookHistory(book.value);
     bookhistorys.value = BookHistoryStorage.getBookHistory();
-
-    initReaderPreference();
     
     await loadingNovelData();
 });
