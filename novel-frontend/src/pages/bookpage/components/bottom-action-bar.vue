@@ -18,8 +18,8 @@
     </view>
  
     <self-overlay v-model="preferencePanelVisible" :mask="false" position="bottom">
-        <view class="preference-panel-container w-screen flex" :class="[curPreferencePanelTab === 'main' ? 'slide-to-left' : 'slide-to-right']">
-            <view class="main z-99 w-[calc(100vw-16px)] shrink-0 m-[8px] box-border p-[24px] rounded-[16px]" @touchmove.stop>
+        <view class="preference-panel-container w-[200vw] p-[8px] flex gap-[16px] bg-[var(--bookpage-reader-bg)]" :class="[curPreferencePanelTab === 'main' ? 'slide-to-left' : 'slide-to-right']">
+            <view class="main z-99 w-[calc(100vw-16px)] shrink-0 box-border p-[24px] rounded-[16px]" @touchmove.stop>
                 <view class="preference-font w-full m-b-[16px]">
                     <SelfSlider 
                         class="preference-font"
@@ -72,7 +72,7 @@
                 </view>
             </view>
 
-            <view class="sub z-99 h-[264px] w-[calc(100vw-16px)] shrink-0 m-[8px] box-border p-[20px] rounded-[16px]" @touchmove.stop>
+            <view class="sub z-99 h-[264px] w-[calc(100vw-16px)] shrink-0 box-border p-[20px] rounded-[16px]" @touchmove.stop>
                 <view 
                     class="title text-[14px] flex items-center relative left-[-8px] m-b-[12px]"
                     @click="curPreferencePanelTab = 'main'"
@@ -361,10 +361,10 @@ watch(preferencePanelVisible, (newVal) => {
 }
 
 .preference-panel-container.slide-to-right {
-    transform: translateX(-100vw);
+    transform: translateX(-50vw);
 }
 .preference-panel-container.slide-to-left {
-    transform: translateX(0);
+    transform: translateX(calc(50vw));
 }
 
 .preference-panel-container .main,
