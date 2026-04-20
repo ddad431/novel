@@ -21,7 +21,7 @@
                         :style="bookCoverStyles"
                     >
                         <Transition name="zoom">
-                            <view v-if="!isEditing" class="status bg-[var(--bookgroup-cover-status-bg)] color-[var(--bookgroup-cover-status-color)] absolute top-0 right-0 p-[4px_6px] rounded-bl-[6px] rounded-tr-[6px]">
+                            <view v-if="!isEditing && book.status" class="status bg-[var(--bookgroup-cover-status-bg)] color-[var(--bookgroup-cover-status-color)] absolute top-0 right-0 p-[4px_6px] rounded-bl-[6px] rounded-tr-[6px]">
                                 <view class="text-[10px]">{{ getBookStatusLable(book) }}</view>
                             </view>
                             <view v-else-if="isEditing" class="select color-[var(--bookshelf-cover-select-color)] absolute right-[4px] bottom-[-1px] ">

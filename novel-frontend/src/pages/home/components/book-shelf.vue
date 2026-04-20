@@ -13,7 +13,7 @@
                     >
                         <Transition name="zoom">
                             <!-- 书籍状态（完结、连载、本地） -->
-                            <view v-if="!isEditing" class="status bg-[var(--bookshelf-cover-status-bg)] color-[--bookshelf-cover-status-color] absolute top-0 right-0 p-[4px_6px] rounded-bl-[6px] rounded-tr-[6px]">
+                            <view v-if="!isEditing && bookshelfItem.data.status" class="status bg-[var(--bookshelf-cover-status-bg)] color-[--bookshelf-cover-status-color] absolute top-0 right-0 p-[4px_6px] rounded-bl-[6px] rounded-tr-[6px]">
                                 <view class="text-[10px]">{{ getBookStatusLable(bookshelfItem.data) }}</view>
                             </view>
                             <!-- 管理书籍 -->
