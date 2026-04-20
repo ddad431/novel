@@ -81,7 +81,7 @@
                 <view class="group-title text-[13px] m-[24px_0_8px_16px] color-[#919094]">{{ $t('profile.已加载书源')}}</view>
                     <view v-if="booksource!.loaded.length" class="setting-group features">
                         <template v-for="(item, index) in booksource!.loaded" :key="index">
-                            <view class="setting-item">
+                            <view class="setting-item" style="height: 60px">
                                 <view class="setting-label flex-col gap-[10px]">
                                     <view class="label">{{ item.name }}</view>
                                     <view class="desc text-[13px]  color-[var(--profile-setting-group-title-color)]">{{ item.origin }}</view>
@@ -94,7 +94,7 @@
                 <view class="group-title text-[13px] m-[24px_0_8px_16px] color-[#919094]">{{ $t('profile.添加书源') }}</view>
                 <view v-if="booksource!.unload.length > 0" class="setting-group features">
                     <template v-for="(item, index) in booksource!.unload" :key="index">
-                        <view class="setting-item">
+                        <view class="setting-item" style="height: 60px">
                             <view class="setting-label flex-col gap-[10px]">
                                 <view class="label">{{ item.name }}</view>
                                 <view class="desc text-[13px]  color-[var(--profile-setting-group-title-color)]">{{ item.origin }}</view>
@@ -449,6 +449,7 @@ onShow(() => {
     }
 
     .group-title {
+        height: 15px;
         font-size: 13px;
         margin: 24px 0 8px 16px;
         color: var(--profile-setting-group-title-color);
@@ -463,6 +464,8 @@ onShow(() => {
     }
 
     .setting-item {
+        height: 48px;
+        box-sizing: border-box;
         padding: 12px 16px;
         display: flex;
         align-items: center;
