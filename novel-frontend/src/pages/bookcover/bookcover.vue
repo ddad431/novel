@@ -112,6 +112,7 @@ function handleAddToBookshelf() {
 
     bookinfo.value.visit = Date.now();
     bookinfo.value.isadded = true;
+    bookshelf.value.push({ type: 'book', pinned: false, selected: false, data: bookinfo.value })
     BookShelfStore.addBook(bookinfo.value);
 }
 
