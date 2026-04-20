@@ -17,7 +17,8 @@
                         :class="book.select ? 'filter-brightness-95' : ''"
                         @longpress="handleLongPress"
                         @click="handleClickBook(book)"
-                        :style="bookCoverStyles(book)"
+                        v-bg-img-lazy="book.cover"
+                        :style="bookCoverStyles"
                     >
                         <Transition name="zoom">
                             <view v-if="!isEditing" class="status bg-[var(--bookgroup-cover-status-bg)] color-[var(--bookgroup-cover-status-color)] absolute top-0 right-0 p-[4px_6px] rounded-bl-[6px] rounded-tr-[6px]">
@@ -461,17 +462,11 @@ function getBookReadProgress(book: Book) {
 
 }
 
-const bookCoverStyles = computed((): any => { 
-    return function(book: Book) {
-        const img = book.cover || defaultBookCover;
-        return {
-            background: `url(${img}), url(${defaultBookCover})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            backgroundSize: '100% 100%'
-        }
-    }
-});
+const bookCoverStyles = {
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    backgroundSize: '100% 100%'
+};
 
 watch(isEditing, (value) => {
     if (!value) {

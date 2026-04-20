@@ -8,7 +8,8 @@
                         :class="bookshelfItem.selected ? 'filter-brightness-95' : ''"
                         @longpress="handleLongPress"
                         @click="handleClickBook(bookshelfItem)"
-                        :style="bookCoverStyles(bookshelfItem.data)"
+                        v-bg-img-lazy="bookshelfItem.data.cover"
+                        :style="bookCoverStyles"
                     >
                         <Transition name="zoom">
                             <!-- 书籍状态（完结、连载、本地） -->
@@ -48,7 +49,7 @@
                         @click="handleClickGroup(bookshelfItem)"
                     >
                         <template v-for="(value, index) in bookshelfItem.data"> 
-                            <view v-if="index + 1 <= 4" class="relative w-[46%] h-[46%] rounded-[4px]" :style="bookCoverStyles(value)"></view>
+                            <view v-if="index + 1 <= 4" class="relative w-[46%] h-[46%] rounded-[4px]" v-bg-img-lazy="value.cover" :style="bookCoverStyles"></view>
                         </template>
 
                         <!-- 编辑（选中书籍） -->
@@ -384,17 +385,11 @@ function getBookReadProgress(book: Book) {
 
 }
 
-const bookCoverStyles = computed((): any => { 
-    return function(book: Book) {
-        const img = book.cover || defaultBookCover;
-        return {
-            background: `url(${img}), url(${defaultBookCover})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            backgroundSize: '100% 100%'
-        }
-    }
-});
+const bookCoverStyles = {
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    backgroundSize: '100% 100%'
+};
 
 watch(isEditing, (value) => {
     // NOTE 每次在取消后清理选中状态

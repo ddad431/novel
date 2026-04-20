@@ -56,7 +56,7 @@
             </view>
             <template v-else-if="state === 'success'" v-for="(value, index) in sourceBookList" :key="index" >
                 <view class="color-[var(--bookcity-list-color)] h-[100px] m-[16px_0] flex gap-[12px]" :class="[index === 0 ? 'm-t-0' : '']" @click="handleNovelClick(value)">
-                    <view class="w-[80px] h-full rounded-[4px]" :style="bookCoverStyles(value)"></view>
+                    <view class="w-[80px] h-full rounded-[4px]" v-bg-img-lazy="value.cover" :style="bookCoverStyles""></view>
                     <view class="flex-1 info flex flex-col justify-around">
                         <view class="font-500 text-[15px]">{{ value.name }}</view>
                         <view class="text-[14px] line-clamp-2"> {{ value.desc }}</view>
@@ -86,18 +86,11 @@ const state = ref<'empty' | 'loading' | 'success' | 'fail'>('empty');
 
 const sourceBookList = ref<Book[]>([]);
 
-
-const bookCoverStyles = computed((): any => { 
-    return function(book: Book) {
-        const img = book.cover || defaultBookCover;
-        return {
-            background: `url(${img}), url(${defaultBookCover})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            backgroundSize: '100% 100%'
-        }
-    }
-});
+const bookCoverStyles = {
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    backgroundSize: '100% 100%'
+};
 
 const SEARCH_HISTORY_STORE_KEY = '_searchhistory';
 const searchHistory = ref<string[]>([]);

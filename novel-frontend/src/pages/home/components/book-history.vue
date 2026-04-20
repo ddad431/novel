@@ -14,7 +14,7 @@
 
                 <!-- 信息 -->
                 <view class="flex-grow-1 flex gap-[12px]">
-                    <view class="w-[60px] h-[75px] rounded-[4px]" :style="bookCoverStyles(book)"></view>
+                    <view class="w-[60px] h-[75px] rounded-[4px]" v-bg-img-lazy="book.cover" :style="bookCoverStyles"></view>
                     <view class="flex flex-col justify-between">
                         <view class="text-[13px] color-[var(--history-info-color-1)]">{{ book.name }}</view>
                         <!-- <view class="text-[14px] line-clamp-2"> {{ book.desc }}</view> -->
@@ -103,7 +103,7 @@ import { BookShelfStore, type Book } from '@/store';
 import { useBookHisotry, useBookshelf } from '../hooks';
 import { computed, ref, watch } from 'vue';
 
-import defaultBookCover from '../../../static/default_cover.png'
+import defaultBookCover from '@/static/default_cover.png'
 import { useI18n } from 'vue-i18n';
 import { BookHistoryStorage } from '@/store/history';
 
@@ -220,17 +220,11 @@ function handleDialogCancel() {
     confirmDialogVisible.value = false;
 }
 
-const bookCoverStyles = computed((): any => { 
-    return function(book: Book) {
-        const img = book.cover || defaultBookCover;
-        return {
-            background: `url(${img}), url(${defaultBookCover})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            backgroundSize: '100% 100%'
-        }
-    }
-});
+const bookCoverStyles = {
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    backgroundSize: '100% 100%'
+};
 
 function getBookReadProgress(book: Book) {
     // 未读、x章/y章、已读至最新章、已读完
