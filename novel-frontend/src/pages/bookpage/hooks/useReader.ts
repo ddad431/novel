@@ -2,7 +2,7 @@ import { ref, computed, watch, Ref, Raw, onMounted, onUnmounted } from 'vue';
 import { type Page, type Line, calcPages } from '@/reader/reader';
 import { useReaderPageConfig } from './useReaderPageConfig';
 import { type Book, BookShelfStore, type Catalog, catalogStore, chapterStore } from '@/store';
-import { fetchNovelCatalog, fetchNovelChapter } from '@/services/apis/novel.api';
+import { fetchNovelCatalog, fetchNovelChapter } from '@/api/novel.api';
 import { useBookHisotry, useBookshelf } from '@/pages/home/hooks';
 import { BookHistoryStorage } from '@/store/history';
 import { useWindowSize } from '@/hooks/useWindowSize';

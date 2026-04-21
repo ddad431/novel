@@ -78,7 +78,7 @@ import { onLaunch, onLoad, onShow } from '@dcloudio/uni-app';
 import { computed, nextTick, ref, watch } from 'vue';
 
 import defaultBookCover from '@/static/default_cover.png';
-import { fetchNovelList } from '@/services/apis/novel.api';
+import { fetchNovelList } from '@/api/novel.api';
 
 const inputVal = defineModel<string>({default: ''});
 const inputFocus = ref<boolean>(false);
