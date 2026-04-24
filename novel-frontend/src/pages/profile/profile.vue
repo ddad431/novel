@@ -12,7 +12,10 @@
                     <template v-for="setting in group.settings" :key="setting.label.name">
                             <view v-if="setting.type === 'string'" class="setting-item border-b-[1px_solid] flex justify-between" >
                                 <view class="setting-label">{{ $t(`profile.${setting.label.name}`) }}</view>
-                                <view class="setting-value">{{ setting.value }}</view>
+                                <view class="setting-value">
+                                    <view v-if="setting.label.name !== 'ICP'">{{ setting.value }}</view>
+                                    <view v-else><a class="no-underline color-[--profile-setting-value-color]" href="https://beian.miit.gov.cn/" target="_blank">陕ICP备2026009614号-1</a></view>
+                                </view>
                             </view>
                             <view v-else-if="setting.type === 'button'" class="setting-item border-b-[1px_solid] flex justify-between" >
                                 <view class="setting-label">{{ $t(`profile.${setting.label.name}`) }}</view>
@@ -32,6 +35,7 @@
                     </template>
                 </view>
             </template>
+
         </view>
         
         <view 
@@ -316,6 +320,13 @@ function generateUISettings(store: ProfileStroage): Settings {
                         name: '开发者',
                     },
                     value: DEVELOPER,
+                },
+                {
+                    type: 'string',
+                    label: {
+                        name: 'ICP',
+                    },
+                    value: '陕ICP备2026009614号-1'
                 }
             ]
         }
