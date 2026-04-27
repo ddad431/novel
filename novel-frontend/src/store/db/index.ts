@@ -21,8 +21,40 @@ function createStore<T extends NoIndexSignature<NovelDB>, K extends keyof NoInde
             (await connection()).put(store, data);
         },
 
+        async setAll(items: T[K]['value'][]) {
+            const db = await connection();
+            const tx = db.transaction(store, 'readwrite');
+            const os = tx.objectStore(store);
+
+            try {
+                await Promise.all([
+                    ...items.map(item => os.put(item)),
+                    tx.done
+                ]);
+            } catch (e) {
+                console.error(`批量写入 ${store} 失败:`, e);
+                tx.abort(); // 回滚
+            }
+        },
+
         async delete(key: T[K]['key']) {
             (await connection()).delete(store, key);
+        },
+
+        async deleteAll(keys: T[K]['key'][]) {
+            const db = await connection();
+            const tx = db.transaction(store, 'readwrite');
+            const os = tx.objectStore(store);
+
+            try {
+                await Promise.all([
+                    ...keys.map(key => os.delete(key)),
+                    tx.done
+                ]);
+            } catch (e) {
+                console.error(`批量删除 ${store} 失败:`, e);
+                tx.abort(); // 回滚
+            }
         },
 
         async clear() {
