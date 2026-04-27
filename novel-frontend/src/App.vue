@@ -54,7 +54,7 @@ const DEFAULT_PROFILE: ProfileStroage = {
         }
     }
 };
-const profile: ProfileStroage = uni.getStorageSync(PROFILE_STORAGE_KEY) ?? DEFAULT_PROFILE;
+const profile: ProfileStroage = uni.getStorageSync(PROFILE_STORAGE_KEY) || DEFAULT_PROFILE; // NOTE uni.getStorageSync 获取失败的值可能是 ''
 
 function applyLanguageSetting(lang: Languages) {
     locale.value = lang === '简体中文' ? 'zh' : 'en';
