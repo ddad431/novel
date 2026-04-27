@@ -379,7 +379,7 @@ function getBookReadProgress(book: Book) {
         return t('book.已读至最新章');
     }
 
-    if (book.status === '完结' && book.progress === book.total) {
+    if ((book.status === '完结' || book.status === '本地') && book.progress === book.total) {
         return t('book.已读完');
     }
 
