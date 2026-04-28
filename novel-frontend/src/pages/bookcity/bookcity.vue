@@ -45,7 +45,7 @@
             </view>
         </view>
         <scroll-view :scroll-y="true" :show-scrollbar="false" class="h-[calc(100vh-16px-40px-16px-56px)] flex justify-center items-center">
-            <view v-if="state === 'empty'" class="color-[var(--bookcity-placeholder-color)] h-full relative bottom-[32px] tracking-widest flex justify-center items-center ">{{ $t('bookcity.empty_search_list') }}</view>
+            <view v-if="state === 'nosearch'" class="color-[var(--bookcity-placeholder-color)] h-full relative bottom-[32px] tracking-widest flex justify-center items-center ">{{ $t('bookcity.nosearch') }}</view>
             <view v-if="state === 'loading'" class="color-[var(--bookcity-placeholder-color)] h-full relative bottom-[32px] tracking-widest flex justify-center items-center ">
                 <view class="icon-loading"></view>
             </view>
@@ -54,7 +54,8 @@
                     <view>{{ $t('bookcity.fail_search') }}</view>
                 </view>
             </view>
-            <template v-else-if="state === 'success'" v-for="(value, index) in sourceBookList" :key="index" >
+            <view v-else-if="state === 'success' && sourceBookList.length === 0" class="color-[var(--bookcity-placeholder-color)] h-full relative bottom-[32px] tracking-widest flex justify-center items-center ">{{ $t('bookcity.empty_search_result') }}</view>
+            <template v-else-if="state === 'success' && sourceBookList.length !== 0" v-for="(value, index) in sourceBookList" :key="index" >
                 <view class="color-[var(--bookcity-list-color)] h-[100px] m-[16px_0] flex gap-[12px]" :class="[index === 0 ? 'm-t-0' : '']" @click="handleNovelClick(value)">
                     <view class="w-[80px] shrink-0 h-full rounded-[4px]" v-bg-img-lazy="value.cover" :style="bookCoverStyles""></view>
                     <view class="flex-1 info flex flex-col justify-around">
@@ -82,7 +83,7 @@ import { fetchNovelList } from '@/api/novel.api';
 
 const inputVal = defineModel<string>({default: ''});
 const inputFocus = ref<boolean>(false);
-const state = ref<'empty' | 'loading' | 'success' | 'fail'>('empty');
+const state = ref<'nosearch' | 'loading' | 'success' | 'fail'>('nosearch');
 
 const sourceBookList = ref<Book[]>([]);
 
@@ -171,7 +172,7 @@ function handleNovelClick(novel: Novel) {
 
 watch(inputVal, (newVal) => {
     if (state.value === 'fail') {
-        state.value = 'empty';
+        state.value = 'nosearch';
     }
 })
 

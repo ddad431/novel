@@ -123,8 +123,8 @@
     },
     "bookcity": {
         "搜索小说": "Search Novel",
-        "empty_search_list": "Nothing but tumbleweeds...",
-        "empty_search_result": "No result found.",
+        "nosearch": "Nothing but tumbleweeds...",
+        "empty_search_result": "No result found",
         "fail_search": "Error loading. Tap to retry."
     },
     "profile": {
