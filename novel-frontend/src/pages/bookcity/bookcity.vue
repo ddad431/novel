@@ -58,7 +58,7 @@
                 <view class="color-[var(--bookcity-list-color)] h-[100px] m-[16px_0] flex gap-[12px]" :class="[index === 0 ? 'm-t-0' : '']" @click="handleNovelClick(value)">
                     <view class="w-[80px] h-full rounded-[4px]" v-bg-img-lazy="value.cover" :style="bookCoverStyles""></view>
                     <view class="flex-1 info flex flex-col justify-around">
-                        <view class="font-500 text-[15px]">{{ value.name }}</view>
+                        <view class="font-500 text-[15px] truncate">{{ value.name }}</view>
                         <view class="text-[14px] line-clamp-2"> {{ value.desc }}</view>
                         <view class="text-[14px] ">{{ value.status && value.status + ' · '}}{{ value.author }}{{ value.tag && ' · ' + value.tag }}</view>
                     </view>
