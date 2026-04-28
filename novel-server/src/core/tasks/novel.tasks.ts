@@ -50,7 +50,8 @@ export async function fetchNovelSearchList(keyword: string): Promise<Novel[]> {
     try {
         result = (await Promise.allSettled(promises))
             .filter(v => v.status === 'fulfilled')
-            .flatMap(v => v.value);
+            .flatMap(v => v.value)
+            .filter(v => v.id);
 
     }
     catch (err) {
