@@ -14,7 +14,7 @@
         "本地": "Local",
         "完结": "Completed",
         "连载": "On-going",
-        "chapter_progress": "Ch. {current} / {total}"
+        "chapter_progress": "Ch. {current}/{total}"
     },
     "group_panel": {
         "分组管理": "Group Edit",
