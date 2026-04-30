@@ -84,7 +84,7 @@
                 <scroll-view scroll-y="true" :show-scrollbar="false" style="height: 200px" class="h-[230px] w-full">
                     <view class="text-[14px] m-b-[8px] h-[32px] flex justify-between items-center ">
                         <view>{{ $t('bookpage.bottom.首行缩进') }}</view>
-                        <view class="bg-[--bookpage-bottom-preference-item-bg] rounded-[8px] box-border p-[4px_8px] flex gap-[8px] items-center">
+                        <view class="bg-[--bookpage-bottom-preference-item-bg] rounded-[8px] box-border p-[4px_8px] flex items-center">
                             <view 
                                 class="h-[24px] w-[32px] flex justify-center items-center"
                                 :class="{ 'bg-[var(--bookpage-bottom-preference-item-active-bg)] rounded-[6px]': !preference.indent}"
@@ -103,8 +103,8 @@
                     </view>
                     <view class="flex flex-col gap-[16px] m-b-[6px]">
                         <view class="turing h-[36px] flex items-center text-[14px]">
-                            <view class="w-[90%]">{{ $t('bookpage.bottom.行间距') }}</view>
-                            <view class="preference-turing w-full">
+                            <view class="flex-1 ">{{ $t('bookpage.bottom.行间距') }}</view>
+                            <view class="preference-turing w-[112px]">
                                 <self-segmented
                                     :value="$t(`bookpage.bottom.${preference.lineSpacing}`)"
                                     @change="handleChangeLineSpacing"
@@ -118,8 +118,8 @@
                     </view>
                     <view class="flex flex-col gap-[16px] m-b-[6px]">
                         <view class="turing h-[36px] flex items-center text-[14px]">
-                            <view class="w-[90%]">{{ $t('bookpage.bottom.段间距') }}</view>
-                            <view class="preference-turing w-full">
+                            <view class="flex-1">{{ $t('bookpage.bottom.段间距') }}</view>
+                            <view class="preference-turing w-[112px]">
                                 <self-segmented
                                     :value="$t(`bookpage.bottom.${preference.paragraphSpacing}`)"
                                     @change="handleChangeParagraphSpacing"
