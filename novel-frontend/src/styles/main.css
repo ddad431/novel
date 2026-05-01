@@ -200,3 +200,7 @@
     --input-dialog-action-color: #555;
     --input-dialog-action-active-confirm-color: #999;
 }
+
+.dark-mode [style*="background-image"] {
+        filter: brightness(0.7);
+};
