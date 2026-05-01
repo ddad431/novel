@@ -15,7 +15,7 @@
                 <!-- 信息 -->
                 <view class="w-full flex gap-[12px] justify-between">
                     <view class="flex gap-[12px] min-w-0">
-                        <view class="w-[60px] h-[75px] rounded-[4px]" v-bg-img-lazy="book.cover" :style="bookCoverStyles"></view>
+                        <view class="shrink-0 w-[60px] h-[75px] rounded-[4px]" v-bg-img-lazy="book.cover" :style="bookCoverStyles"></view>
                         <view class="min-w-0 flex flex-col justify-between">
                             <view class="text-[13px] truncate color-[var(--history-info-color-1)]">{{ book.name }}</view>
                             <!-- <view class="text-[14px] line-clamp-2"> {{ book.desc }}</view> -->
