@@ -28,6 +28,11 @@ const vBgImgLazy: Directive = {
         })
 
         intersectionObserver.observe(el);
+    },
+    updated: (el: HTMLElement, binding: DirectiveBinding) => {
+        if (binding.value !== binding.oldValue) {
+            el.style.backgroundImage = `url(${binding.value}), url(${defaultBookCover})`;
+        }
     }
 }
 

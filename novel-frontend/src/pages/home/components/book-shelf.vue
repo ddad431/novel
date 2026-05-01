@@ -1,6 +1,6 @@
 <template>
     <view class="bookshelf">
-        <template v-for="(bookshelfItem, index) in bookshelf" :key="index">
+        <template v-for="(bookshelfItem, index) in bookshelf" :key="(bookshelfItem.data as Book).id">
             <view class="book-container flex flex-col justify-between">
                 <template v-if="bookshelfItem.type === 'book'">
                     <view 
