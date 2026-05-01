@@ -14,7 +14,7 @@ export function useBookshelf() {
     const groups = computed(() => bookshelf.value.filter(v => v.type === 'group'));
     const selectedBooks = computed(() => bookshelf.value.filter(v => v.selected));
     const seletedBookCounts = computed(() => selectedBooks.value.length);
-    const isSelectAllBook = computed(() => seletedBookCounts.value === bookshelf.value.length);
+    const isSelectAllBook = computed(() => bookshelf.value.length !== 0 && seletedBookCounts.value === bookshelf.value.length);
     const isSelectContainGroup = computed(() => selectedBooks.value.find(v => v.type === 'group'));
 
     const isSelectedBookPined = computed(() => {
