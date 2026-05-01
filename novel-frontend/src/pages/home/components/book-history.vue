@@ -13,36 +13,34 @@
                 </view>
 
                 <!-- 信息 -->
-                <view class="flex-grow-1 flex gap-[12px]">
-                    <view class="w-[60px] h-[75px] rounded-[4px]" v-bg-img-lazy="book.cover" :style="bookCoverStyles"></view>
-                    <view class="flex flex-col justify-between">
-                        <view class="text-[13px] color-[var(--history-info-color-1)]">{{ book.name }}</view>
-                        <!-- <view class="text-[14px] line-clamp-2"> {{ book.desc }}</view> -->
-                        <view class="flex flex-col gap-[2px]">
-                            <view class="color-[var(--history-info-color-2)] text-[12px]">{{ getBookReadProgress(book) }}</view>
-                            <!-- TODO: 最近、昨天、三天前、一周前、一月前-->
-                            <view class="color-[var(--history-info-color-2)] text-[12px]">{{ getBookVisitTime(book) }}</view>
+                <view class="w-full flex gap-[12px] justify-between">
+                    <view class="flex gap-[12px] min-w-0">
+                        <view class="w-[60px] h-[75px] rounded-[4px]" v-bg-img-lazy="book.cover" :style="bookCoverStyles"></view>
+                        <view class="min-w-0 flex flex-col justify-between">
+                            <view class="text-[13px] truncate color-[var(--history-info-color-1)]">{{ book.name }}</view>
+                            <!-- <view class="text-[14px] line-clamp-2"> {{ book.desc }}</view> -->
+                            <view class="flex flex-col gap-[2px]">
+                                <view class="color-[var(--history-info-color-2)] text-[12px]">{{ getBookReadProgress(book) }}</view>
+                                <!-- TODO: 最近、昨天、三天前、一周前、一月前-->
+                                <view class="color-[var(--history-info-color-2)] text-[12px]">{{ getBookVisitTime(book) }}</view>
+                            </view>
+                        </view>
+                    </view>
+
+                    <view
+                        class="w-[75px] flex justify-end items-center" 
+                        :class="[isEditing ? 'translate-x-[100%] w-0 opacity-0' : 'w-[80px]']"
+                        style="transition: all .3s;"
+                        @click.stop="handleAddBookToBookshelf(book)"
+                    >
+                        <view
+                            class="text-[11px] bg-[var(--history-add-bg)] relative left-[-8px] h-[24px] p-[0_10px] rounded-[20px] flex items-center"
+                            :class="[book.isadded ? `color-[var(--history-add-active-color)]` : `color-[var(--history-add-color)]`]"
+                        >
+                            {{ book.isadded ? $t('history.已在书架') : $t('history.加入书架') }}
                         </view>
                     </view>
                 </view>
-                
-                <!-- 
-                    NOTE
-                    - 这里我们需要在 edit 时让出这部分空间，所以这里涉及到了：shrink-0 min-w-0 overflow-hidden whitespace-nowrap
-                -->
-                <view 
-                    class="shrink-0 min-w-0 overflow-hidden whitespace-nowrap flex justify-end items-center" 
-                    :class="[isEditing ? 'translate-x-[100%] w-0 opacity-0' : 'w-[80px]']"
-                    style="transition: all .3s;"
-                    @click.stop="handleAddBookToBookshelf(book)"
-                >
-                    <view 
-                        class="text-[11px] bg-[var(--history-add-bg)] relative left-[-8px] h-[24px] p-[0_10px] rounded-[20px] flex items-center"
-                        :class="[book.isadded ? `color-[var(--history-add-active-color)]` : `color-[var(--history-add-color)]`]"
-                    >
-                        {{ book.isadded ? $t('history.已在书架') : $t('history.加入书架') }}
-                    </view>
-                </view> 
             </view>
         </template>
     </view>
