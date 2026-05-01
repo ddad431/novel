@@ -4,8 +4,13 @@
             <view class="book-container flex flex-col justify-between">
                 <template v-if="bookshelfItem.type === 'book'">
                     <view 
-                        class="relative h-[75%] rounded-[6px] hover:filter-brightness-95"
-                        :class="bookshelfItem.selected ? 'filter-brightness-95' : ''"
+                        class="relative h-[75%] rounded-[6px]"
+                        :class="{
+                            'brightness-90': !isDarkMode && bookshelfItem.selected,
+                            '!brightness-50': isDarkMode && bookshelfItem.selected,
+                            'active:brightness-95': !isDarkMode && !isEditing,
+                            '!active:brightness-55': isDarkMode && !isEditing,
+                        }"
                         @longpress="handleLongPress"
                         @click="handleClickBook(bookshelfItem)"
                         v-bg-img-lazy="bookshelfItem.data.cover"
@@ -190,10 +195,12 @@ import defaultBookCover from '@/static/default_cover.png';
 import BookActionPanel from './book-action-panel.vue';
 import SelfOverlay from '@/components/self-overlay/self-overlay.vue';
 import { useI18n } from 'vue-i18n';
+import { useProfileStore } from '@/store/profile';
 
 const { t } = useI18n();
 
 const { bookshelf, groups, removeBook, togglePinBook, moveBookToGroup, isSelectAllBook, isSelectedBookPined, isSelectContainGroup, seletedBookCounts, toggleSelectAllBook, clearSelectState } = useBookshelf();
+const { isDarkMode } = useProfileStore();
 
 const isEditing = defineModel<boolean>('editing');
 const actionPanelVisible = ref<boolean>(false);

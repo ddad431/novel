@@ -61,6 +61,7 @@ const DEFAULT_PROFILE: Profile = {
         }
     }
 };
+const isDarkMode = ref<boolean>(window.matchMedia('(prefers-color-scheme: dark)').matches);
 
 
 function getLocalProfileStorage() {
@@ -90,9 +91,11 @@ function applyApperanceSetting(preference: ProfileAppearance) {
     const setDarkMode = (isDarkMode: boolean) => isDarkMode ? root.classList.add('dark-mode') : root.classList.remove('dark-mode');
 
     if (preference === '浅色') {
+        isDarkMode.value = false;
         setDarkMode(false);
     }
     else if (preference === '深色') {
+        isDarkMode.value = true;
         setDarkMode(true);
     }
     else {
@@ -101,6 +104,7 @@ function applyApperanceSetting(preference: ProfileAppearance) {
 
         mediaQuery.addEventListener('change', (e) => {
             if (preference === '跟随系统') {
+                isDarkMode.value = e.matches;
                 setDarkMode(e.matches);
             }
         })
@@ -175,6 +179,7 @@ export function useProfileStore() {
 
     return {
         profile,
+        isDarkMode,
         initProfile,
         toggleAnimation,
         setLanguage,

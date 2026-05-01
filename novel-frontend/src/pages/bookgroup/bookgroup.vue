@@ -13,9 +13,13 @@
             <view class="wrapper flex flex-wrap justify-between">
                 <view v-for="(book, index) in bookgroup?.data" :key="index" class="book-container flex flex-col justify-between">
                     <view 
-                        class="relative h-[75%] rounded-[6px] hover:filter-brightness-95"
-                        :class="book.select ? 'filter-brightness-95' : ''"
-                        @longpress="handleLongPress"
+                        class="relative h-[75%] rounded-[6px]"
+                        :class="{
+                            'brightness-90': !isDarkMode && book.select,
+                            '!brightness-50': isDarkMode && book.select,
+                            'active:brightness-95': !isDarkMode && !isEditing,
+                            '!active:brightness-55': isDarkMode && !isEditing,
+                        }"                        @longpress="handleLongPress"
                         @click="handleClickBook(book)"
                         v-bg-img-lazy="book.cover"
                         :style="bookCoverStyles"
@@ -191,8 +195,10 @@ import { useBookGroup } from './hooks/useBookGroup';
 import SelfOverlay from '@/components/self-overlay/self-overlay.vue';
 import defaultBookCover from '@/static/default_cover.png';
 import { useI18n } from 'vue-i18n';
+import { useProfileStore } from '@/store/profile';
 
 const { t } = useI18n();
+const { isDarkMode } = useProfileStore();
 
 const isEditing = ref<boolean>(false);
 const { bookgroup, groups, selectedGroupBookCounts, isSelectedGropAllBooks, renameGroup, removeGroup, cleanGroup, removeGroupBook, changeBookGroup, moveGroupBookToBookshelf, toggleSelectGroupAllBook, clearGroupBookSelectStates } = useBookGroup();
